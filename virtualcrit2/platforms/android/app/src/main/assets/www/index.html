@@ -29,13 +29,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- Color theme for statusbar (Android only) -->
-    <meta name="theme-color" content="#2196f3">
+    <!-- <meta name="theme-color" content="#2196f3"> -->
     <!-- Your app title -->
     <title>VirtualCrit</title>
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7/css/framework7.bundle.min.css">
     <!-- Path to your custom app styles-->
+    <!-- <link rel="stylesheet" href="css/framework7-icons.css"> -->
+    <link rel="stylesheet" href="lib/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/index.css">
+    
+    
 </head> 
 
 <body>
@@ -51,25 +55,44 @@
                 <div class="navbar">
                   <div class="navbar-bg"></div>
                   <div class="navbar-inner">
-                    <div class="title">VirtualCrit</div>
+                      <div class="left">
+                          <a href="#" class="link icon-only">
+                              <i class="fa fa-bars"></i>
+                          </a>
+                      </div>
+                      <div class="title">Title</div>
+                      <div class="right">
+                          <a href="#" class="link icon-only">
+                              <i class="fa fa-home fa-lg"></i>
+                          </a>
+                      </div>
                   </div>
-                </div>
+              </div>
+                
       
                 <!-- Bottom Toolbar -->
                 <div class="toolbar toolbar-bottom">
                   <div class="toolbar-inner">
                     <!-- Toolbar links -->
-                    <a href="#" class="link">Link 1</a>
-                    <a href="#" class="link">Link 2</a>
+                    <a href="#" class="link"><i class="fa fa-bluetooth-b fa-lg"></i></a>
+                    <a href="#" class="link"><i class="fa fa-trophy fa-lg"></i></a>
                   </div>
                 </div>
       
                 <!-- Scrollable page content -->
                 <div class="page-content">
-                  <p class="p1"> Page content goes here</p>
-                  <!-- Link to another page -->
-                  <!-- <a href="/about/">About app</a> -->
+                  <div class="block">
+                    <p class="p1">Here is your blank Framework7 app.</p>
+                    <p>Here is your blank Framework7 app.</p>
+                    <p>Here is your blank Framework7 app.</p>
+                    <p>Here is your blank Framework7 app.</p>
+                    <!-- <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i> -->
+
+                  </div>
                 </div>
+
+
+
               </div>
             </div>
           </div>
