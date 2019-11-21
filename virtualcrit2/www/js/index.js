@@ -24,7 +24,7 @@ function postScan() {
 
     scannedDevices.forEach(element => {
         console.log(element.id + ", " + element.rssi);
-        $$('.p1').html(element.id);
+        // $$('.p1').html(element.id);
     });
 }
 
