@@ -2,7 +2,7 @@ var app = new Framework7({
     root: '#app',
     name: 'app',
     id: 'app',
-    
+
     material: true,
     cache: true,
     init: true,
@@ -31,14 +31,14 @@ function postScan() {
 function startup() {
     console.log('startup function');
     scannedDevices = [];
-    ble.scan([], 5, function(device) {
+    ble.scan([], 5, function (device) {
         console.log(JSON.stringify(device));
         scannedDevices.push(device);
-    }, function(e) {
+    }, function (e) {
         console.log('failure, ' + e);
     });
 
-    setTimeout(function() {
+    setTimeout(function () {
         console.log('scan complete, calling postScan');
         postScan();
     },

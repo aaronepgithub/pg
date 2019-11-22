@@ -136,7 +136,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="item-link item-content">
+                  <a href="#" data-login-screen=".my-login-screen" class="login-screen-open item-link item-content no-chevron">
                     <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
                     <div class="item-inner">
                       <div class="item-title">
@@ -152,11 +152,12 @@
             </div>
 
             <li class="item-divider">User Information</li>
+            
 
             <div class="list-group">
               <ul>
                 <li>
-                  <a href="#" class="item-link item-content">
+                  <a href="#" class="item-link item-content no-chevron">
                     <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
                     <div class="item-inner">
                       <div class="item-title">
@@ -210,6 +211,61 @@
             <li class="item-divider">Divider</li>
           </div>
         </div>
+
+<!-- And somewhere in DOM, loginscreen -->
+<div class="login-screen my-login-screen">
+  <div class="view">
+    <div class="page">
+      <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+          <div class="title">Login Screen</div>
+          <div class="right">
+            <!-- Link to close login screen -->
+            <a class="link login-screen-close">Close</a>
+          </div>
+        </div>
+      </div>
+      <!-- Inside of Page... -->
+      <div class="page-content login-screen-content">
+        <div class="login-screen-title">My App</div>
+        <!-- Login form -->
+        <form>
+          <div class="list">
+            <ul>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <div class="item-title item-label">Username</div>
+                  <div class="item-input-wrap">
+                    <input type="text" name="username" placeholder="Username">
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <div class="item-title item-label">Password</div>
+                  <div class="item-input-wrap">
+                    <input type="password" name="password" placeholder="Password">
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="list">
+            <ul>
+              <li>
+                <a href="#" class="item-link list-button">Sign In</a>
+              </li>
+            </ul>
+            <div class="block-footer">Some text with login information.</div>
+          </div>
+        </form>
+      </div>
+      <!-- Inside of Page End... -->
+    </div>
+
 
       </div>
     </div>
