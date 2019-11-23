@@ -99,9 +99,9 @@
                     <div class="item-inner">
                       <div class="item-title">
                         <div class="item-header">System</div>
-                        Stopped
+                        <span class="system-status">Stopped</span>
                       </div>
-                      <div class="item-after">00:00:00</div>
+                      <div class="item-after total-time"></div>
                     </div>
                   </a>
                 </li>
@@ -219,21 +219,21 @@
       <div class="navbar">
         <div class="navbar-bg"></div>
         <div class="navbar-inner">
-          <div class="title">Login Screen</div>
+          <div class="title">Bluetooth Devices</div>
           <div class="right">
             <!-- Link to close login screen -->
-            <a class="link login-screen-close">Close</a>
+            <a class="link login-screen-close"><i class="fa fa-home fa-lg"></i></a>
           </div>
         </div>
       </div>
       <!-- Inside of Page... -->
       <div class="page-content login-screen-content">
-        <div class="login-screen-title">My App</div>
+        <!-- <div class="login-screen-title">Devices</div> -->
         <!-- Login form -->
         <form>
-          <div class="list">
-            <ul>
-              <li class="item-content item-input">
+          <div class="list device-list">
+            <ul class="device-ul">
+              <!-- <li class="item-content item-input">
                 <div class="item-inner">
                   <div class="item-title item-label">Username</div>
                   <div class="item-input-wrap">
@@ -241,8 +241,8 @@
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
-              </li>
-              <li class="item-content item-input">
+              </li> -->
+              <!-- <li class="item-content item-input">
                 <div class="item-inner">
                   <div class="item-title item-label">Password</div>
                   <div class="item-input-wrap">
@@ -250,17 +250,32 @@
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
+              </li> -->
+              <li class="device-li">
+                <a href="#" class="item-link item-content no-chevron">
+                  <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                  <div class="item-inner">
+                    <div class="item-title">
+                      <div class="item-header device-char">device-char</div>
+                      <span class="device-name">device-name</span>
+                      <!-- <div class="item-footer device-status">device-status</div> -->
+                    </div>
+                    <div class="item-after device-status">device-status</div>
+                  </div>
+                </a>
               </li>
+
+              
             </ul>
           </div>
-          <div class="list">
+          <!-- <div class="list">
             <ul>
               <li>
                 <a href="#" class="item-link list-button">Sign In</a>
               </li>
             </ul>
             <div class="block-footer">Some text with login information.</div>
-          </div>
+          </div> -->
         </form>
       </div>
       <!-- Inside of Page End... -->

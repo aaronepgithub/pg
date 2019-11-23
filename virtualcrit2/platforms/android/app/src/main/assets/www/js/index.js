@@ -45,15 +45,12 @@ function startup() {
         5000
     );
 
+    var totalTime = '00:00:00';
+    var systemStatus = "Stopped";
+    $$('.total-time').text(totalTime);
+    $$('.system-status').text(systemStatus);
+
 }
 
-
-
-
-// Handle Cordova Device Ready Event
-// $$(document).on('deviceready', function () {
-//     console.log('Device is ready!');
-//     startup();
-// });
 
 
