@@ -22,12 +22,13 @@
       "cordova-plugin-device": {},
       "cordova-plugin-battery-status": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-dialogs": {}
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-compat": {}
     },
     "platforms": [
       "ios",
-      "android",
-      "browser"
+      "browser",
+      "android"
     ]
   },
   "dependencies": {
@@ -36,7 +37,7 @@
     "cordova-ios": "^5.0.1",
     "cordova-plugin-battery-status": "2.0.3",
     "cordova-plugin-ble-central": "1.2.4",
-    "cordova-plugin-compat": "^1.2.0",
+    "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-inappbrowser": "3.1.0",

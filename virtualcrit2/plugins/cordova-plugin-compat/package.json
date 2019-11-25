@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-compat@^1.1.0",
+  "_from": "cordova-plugin-compat@1.2.0",
   "_id": "cordova-plugin-compat@1.2.0",
   "_inBundle": false,
   "_integrity": "sha1-C8ZXVyduvZIMASzpIOJ0F3V2Nz4=",
   "_location": "/cordova-plugin-compat",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "cordova-plugin-compat@^1.1.0",
+    "raw": "cordova-plugin-compat@1.2.0",
     "name": "cordova-plugin-compat",
     "escapedName": "cordova-plugin-compat",
-    "rawSpec": "^1.1.0",
+    "rawSpec": "1.2.0",
     "saveSpec": null,
-    "fetchSpec": "^1.1.0"
+    "fetchSpec": "1.2.0"
   },
   "_requiredBy": [
     "#USER",
@@ -21,8 +21,8 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-compat/-/cordova-plugin-compat-1.2.0.tgz",
   "_shasum": "0bc65757276ebd920c012ce920e274177576373e",
-  "_spec": "cordova-plugin-compat@^1.1.0",
-  "_where": "/Users/aaronep/Desktop/Dev/PG/virtualcrit2",
+  "_spec": "cordova-plugin-compat@1.2.0",
+  "_where": "/Users/aaronep/Desktop/DEV/pg/virtualcrit2",
   "author": {
     "name": "Apache Software Foundation"
   },

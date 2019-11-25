@@ -426,7 +426,6 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "cordova-plugin-ble-central": "1.2.4",
-    "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-camera": "2.4.1",
     "cordova-plugin-file": "4.3.3",
     "cordova-plugin-geolocation": "2.4.3",
@@ -437,7 +436,8 @@ module.exports.metadata =
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-battery-status": "2.0.3",
     "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-dialogs": "2.0.2"
+    "cordova-plugin-dialogs": "2.0.2",
+    "cordova-plugin-compat": "1.2.0"
 }
 // BOTTOM OF METADATA
 });
