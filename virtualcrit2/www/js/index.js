@@ -174,7 +174,7 @@ var bleServices = {
 function startBluetoothScan() {
 
     $$('.status-alerts').html('Scanning...');
-    ble.scan(['180d'], 2, function (device) {
+    ble.scan(['180d'], 3, function (device) {
         console.log(JSON.stringify(device));
         if (device.name) {
             scannedDevices.push(device);
@@ -187,33 +187,32 @@ function startBluetoothScan() {
     setTimeout(function () {
         console.log('scan complete, calling postScan');
         scannedDevices = _.uniqBy(scannedDevices, 'name');
-        postScan();
-        //startBluetoothScanCSC();
+        postScan();  //TODO, CONNECT AND FIND SERVICES BEFORE DISPLAY
     },
-        2100
+        3100
     );
 }
 
-function startBluetoothScanCSC() {
+// function startBluetoothScanCSC() {
 
-    $$('.status-alerts').html('Scanning...');
-    ble.scan(['1816'], 2, function (device) {
-        console.log(JSON.stringify(device));
-        if (device.name) {
-            scannedDevices.push(device);
-            $$('.status-alerts').text('Found: ' + device.name);
-        }
-    }, function (e) {
-        console.log('failure, ' + e);
-    });
+//     $$('.status-alerts').html('Scanning...');
+//     ble.scan(['1816'], 2, function (device) {
+//         console.log(JSON.stringify(device));
+//         if (device.name) {
+//             scannedDevices.push(device);
+//             $$('.status-alerts').text('Found: ' + device.name);
+//         }
+//     }, function (e) {
+//         console.log('failure, ' + e);
+//     });
 
-    setTimeout(function () {
-        console.log('scan complete, calling postScan');
-        scannedDevices = _.uniqBy(scannedDevices, 'name');
-        postScan();
-    },
-        2100
-    );
-}
+//     setTimeout(function () {
+//         console.log('scan complete, calling postScan');
+//         scannedDevices = _.uniqBy(scannedDevices, 'name');
+//         postScan();
+//     },
+//         2100
+//     );
+// }
 
 
