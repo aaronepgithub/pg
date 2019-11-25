@@ -1,28 +1,28 @@
 {
-  "_from": "cordova-plugin-battery-status@~1.2.4",
-  "_id": "cordova-plugin-battery-status@1.2.5",
+  "_from": "cordova-plugin-battery-status",
+  "_id": "cordova-plugin-battery-status@2.0.3",
   "_inBundle": false,
-  "_integrity": "sha1-bGSPmzz1qwNLlcXP/lhPVXbULKk=",
+  "_integrity": "sha512-H1vSLWbDb/qivGPVV/sjAaDnF8VEoa1uOYdrTJpYrs9vRAe3S37y8Fa5LoBuKkspWiQ5P3D8q+iTnsPF0UAO7g==",
   "_location": "/cordova-plugin-battery-status",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "tag",
     "registry": true,
-    "raw": "cordova-plugin-battery-status@~1.2.4",
+    "raw": "cordova-plugin-battery-status",
     "name": "cordova-plugin-battery-status",
     "escapedName": "cordova-plugin-battery-status",
-    "rawSpec": "~1.2.4",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "~1.2.4"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
-    "#DEV:/",
-    "#USER"
+    "#USER",
+    "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-battery-status/-/cordova-plugin-battery-status-1.2.5.tgz",
-  "_shasum": "6c648f9b3cf5ab034b95c5cffe584f5576d42ca9",
-  "_spec": "cordova-plugin-battery-status@~1.2.4",
-  "_where": "/Users/aaronep/Desktop/Dev/PG/virtualcrit2",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-battery-status/-/cordova-plugin-battery-status-2.0.3.tgz",
+  "_shasum": "68924b329b644ddcd76b2be7ec4e00b9801effb7",
+  "_spec": "cordova-plugin-battery-status",
+  "_where": "/Users/aaronep/Desktop/DEV/pg/virtualcrit2",
   "author": {
     "name": "Apache Software Foundation"
   },
@@ -34,14 +34,9 @@
     "id": "cordova-plugin-battery-status",
     "platforms": [
       "android",
-      "amazon-fireos",
-      "ubuntu",
       "ios",
-      "blackberry10",
-      "wp7",
-      "wp8",
-      "tizen",
-      "firefoxos"
+      "browser",
+      "windows"
     ]
   },
   "deprecated": false,
@@ -58,7 +53,7 @@
   },
   "engines": {
     "cordovaDependencies": {
-      "2.0.0": {
+      "3.0.0": {
         "cordova": ">100"
       }
     }
@@ -69,14 +64,7 @@
     "battery",
     "ecosystem:cordova",
     "cordova-android",
-    "cordova-amazon-fireos",
-    "cordova-ubuntu",
-    "cordova-ios",
-    "cordova-blackberry10",
-    "cordova-wp7",
-    "cordova-wp8",
-    "cordova-tizen",
-    "cordova-firefoxos"
+    "cordova-ios"
   ],
   "license": "Apache-2.0",
   "name": "cordova-plugin-battery-status",
@@ -89,5 +77,5 @@
     "test": "npm run eslint"
   },
   "types": "./types/index.d.ts",
-  "version": "1.2.5"
+  "version": "2.0.3"
 }
