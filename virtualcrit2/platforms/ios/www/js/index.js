@@ -63,7 +63,8 @@ function postScan() {
     $$('.device-ul').empty();
     scannedDevices.forEach(element => {
         console.log('postScan forEach Element:  ' + JSON.stringify(element));
-        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-char">'+element.id+'</div> <span class="device-name">'+element.name+'</span><div class="item-footer device-status-footer">device-status-footer</div></div> <div class="item-after device-status">device-status-connect</div> </div> </a> </li>');
+        // $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-char">'+element.id+'</div> <span class="device-name">'+element.name+'</span><div class="item-footer device-status-footer">device-status-footer</div></div> <div class="item-after device-status">device-status-connect</div> </div> </a> </li>');
+        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">'+element.name+'</span><div class="item-footer device-id">'+element.id+'</div></div> <div class="item-after device-value"></div>CONNECT</div> </a> </li>');
     });
     console.log('postScan Complete');
     $$('.status-alerts').text('Updated');
@@ -131,11 +132,12 @@ function startBluetoothConnection(i) {
         console.log('connected callback:  ' + JSON.stringify(p));
         connectedDevices.push(deviceClicked);
         //TODO CHECK/START ONLY SERVICES/CHAR
+        //CHECK TO SEE IF HR VS CSC
         ble.startNotification(iD, "180d", "2a37", function(b) {
             var data = new Uint8Array(b);
             console.log('success: ' + data[1] );
             //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
-            updateHeartrateChip();
+            updateHeartrateChip(iD, data[1]);
         }, function(e) {
             console.log('failure:  ' + e);
         });
@@ -144,15 +146,18 @@ function startBluetoothConnection(i) {
     });
 }
 
-function updateHeartrateChip() {
-    console.log('updateHeartrateChip');
+function updateHeartrateChip(i, d) {
+    console.log('updateHeartrateChip:  ' + i + ', ' + d);
+
     $$('.chip-hr').empty();
     $$('.chip-hr').html('<div class="chip-media bg-color-green"><i class="fa fa-heartbeat fa-lg"></i></div><div class="chip-label">Heartrate</div>');
 }
 
-function bytesToString(buffer) {
-    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+function updateHeartrateUI() {
+    console.log('updateHeartrateChip');
 }
+
+
 
 var bleServices = {
 	serviceHR: '180d',
@@ -169,10 +174,34 @@ var bleServices = {
 function startBluetoothScan() {
 
     $$('.status-alerts').html('Scanning...');
-    ble.scan(['180d'], function (device) {
+    ble.scan(['180d'], 2, function (device) {
         console.log(JSON.stringify(device));
         if (device.name) {
             scannedDevices.push(device);
+            $$('.status-alerts').text('Found: ' + device.name);
+        }
+    }, function (e) {
+        console.log('failure, ' + e);
+    });
+
+    setTimeout(function () {
+        console.log('scan complete, calling postScan');
+        scannedDevices = _.uniqBy(scannedDevices, 'name');
+        postScan();
+        //startBluetoothScanCSC();
+    },
+        2100
+    );
+}
+
+function startBluetoothScanCSC() {
+
+    $$('.status-alerts').html('Scanning...');
+    ble.scan(['1816'], 2, function (device) {
+        console.log(JSON.stringify(device));
+        if (device.name) {
+            scannedDevices.push(device);
+            $$('.status-alerts').text('Found: ' + device.name);
         }
     }, function (e) {
         console.log('failure, ' + e);
@@ -183,7 +212,7 @@ function startBluetoothScan() {
         scannedDevices = _.uniqBy(scannedDevices, 'name');
         postScan();
     },
-        2500
+        2100
     );
 }
 
