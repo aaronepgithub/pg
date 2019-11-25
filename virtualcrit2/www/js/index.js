@@ -125,8 +125,7 @@ var blteServices = {
 	measurementCSC: '2A5B',
 	servicePOW: '1818',
 	measurementPOW: '2A63',
-	serviceHRwrist: '55FF',
-	measurementHRwrist: '000033F2-0000-1000-8000-00805F9B34FB'
+	serviceHRwrist: '55FF'
 };
 
 function startBluetoothScan() {
