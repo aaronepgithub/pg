@@ -118,10 +118,21 @@ function bytesToString(buffer) {
     return String.fromCharCode.apply(null, new Uint8Array(buffer));
 }
 
+var blteServices = {
+	serviceHR: '180d',
+	measurementHR: '2a37',
+	serviceCSC: '1816',
+	measurementCSC: '2A5B',
+	servicePOW: '1818',
+	measurementPOW: '2A63',
+	serviceHRwrist: '55FF',
+	measurementHRwrist: '000033F2-0000-1000-8000-00805F9B34FB'
+};
+
 function startBluetoothScan() {
 
     $$('.status-alerts').html('Scanning...');
-    ble.scan([], 2, function (device) {
+    ble.scan(['180d'], function (device) {
         console.log(JSON.stringify(device));
         if (device.name) {
             scannedDevices.push(device);
