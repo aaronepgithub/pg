@@ -20,9 +20,40 @@ var app = new Framework7({
 
 var $$ = Dom7;
 
+
+//START TOCK
+var timer = new Tock({
+    countdown: true,
+    interval: 1000,
+    callback: tockCallback,
+    complete: tockComplete
+});
+
+var secondsPerRound = 60;
+var roundsComplete = 0;
+function tockCallback() {
+    //console.log('tockCallback');
+    var countdownTime = timer.lap();  //elapsed in milli, per round
+    //var secondsInRound = secondsPerRound * 10000 - countdownTime; //round up to show
+    console.log('1a. tockCallback, countdownTime: ' + countdownTime + ', Rounded:  ' + Math.round(countdownTime/1000));
+    console.log('1b. tockCallback, roundCountdownTime: ' + timer.msToTimecode(countdownTime));
+
+    var elapsedTime = _.now() - startTime;
+    console.log('2. tockCallback, elapsedTime: ' + elapsedTime);
+    console.log('3. tockCallback, elapsedTime: ' + timer.msToTimecode(elapsedTime) + "\n");
+
+    $$('.total-time').text(timer.msToTimecode(elapsedTime));
+    $$('.system-status').text("Running");
+}
+
+function tockComplete() {
+    roundsComplete += 1;
+    console.log('4. tockComplete, roundsComplete: ' + roundsComplete);
+    timer.start( (secondsPerRound - 1) * 1000 );
+}
+
+
 var scannedDevices = [];
-
-
 function postScan() {
     console.log('starting postScan');
     // console.log("1:  " + JSON.stringify(scannedDevices));    
@@ -38,16 +69,21 @@ function postScan() {
     $$('.status-alerts').text('Updated');
 }
 
-
+var startTime;
 function startup() {
     console.log('startup function');
     var totalTime = '00:00:00';
     var systemStatus = "Stopped";
     $$('.total-time').text(totalTime);
     $$('.system-status').text(systemStatus);
-
 }
 
+$$('.start-system').on('click', function (e) {
+    console.log('click start-system');
+        //MOVE TO START BUTTON
+        startTime = _.now();
+        timer.start(secondsPerRound * 1000);
+});
 
 
 $$('.start-bluetooth-scan').on('click', function (e) {
@@ -118,10 +154,22 @@ function bytesToString(buffer) {
     return String.fromCharCode.apply(null, new Uint8Array(buffer));
 }
 
+var bleServices = {
+	serviceHR: '180d',
+	measurementHR: '2a37',
+	serviceCSC: '1816',
+	measurementCSC: '2A5B',
+	servicePOW: '1818',
+	measurementPOW: '2A63',
+	serviceHRwrist: '55FF'
+};
+
+
+
 function startBluetoothScan() {
 
     $$('.status-alerts').html('Scanning...');
-    ble.scan([], 2, function (device) {
+    ble.scan(['180d'], function (device) {
         console.log(JSON.stringify(device));
         if (device.name) {
             scannedDevices.push(device);

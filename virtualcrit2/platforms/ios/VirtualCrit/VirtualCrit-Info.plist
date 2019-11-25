@@ -60,5 +60,7 @@
 	<string/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string/>
+	<key>UILaunchStoryboardName</key>
+	<string>CDVLaunchScreen</string>
 </dict>
 </plist>
