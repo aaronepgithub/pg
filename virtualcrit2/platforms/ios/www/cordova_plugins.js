@@ -1,6 +1,22 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports = [
     {
+      "id": "cordova-plugin-battery-status.battery",
+      "file": "plugins/cordova-plugin-battery-status/www/battery.js",
+      "pluginId": "cordova-plugin-battery-status",
+      "clobbers": [
+        "navigator.battery"
+      ]
+    },
+    {
+      "id": "cordova-plugin-ble-central.ble",
+      "file": "plugins/cordova-plugin-ble-central/www/ble.js",
+      "pluginId": "cordova-plugin-ble-central",
+      "clobbers": [
+        "ble"
+      ]
+    },
+    {
       "id": "cordova-plugin-camera.Camera",
       "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
       "pluginId": "cordova-plugin-camera",
@@ -30,6 +46,22 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "pluginId": "cordova-plugin-camera",
       "clobbers": [
         "CameraPopoverHandle"
+      ]
+    },
+    {
+      "id": "cordova-plugin-device.device",
+      "file": "plugins/cordova-plugin-device/www/device.js",
+      "pluginId": "cordova-plugin-device",
+      "clobbers": [
+        "device"
+      ]
+    },
+    {
+      "id": "cordova-plugin-dialogs.notification",
+      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
       ]
     },
     {
@@ -254,6 +286,15 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-inappbrowser.inappbrowser",
+      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+      "pluginId": "cordova-plugin-inappbrowser",
+      "clobbers": [
+        "cordova.InAppBrowser.open",
+        "window.open"
+      ]
+    },
+    {
       "id": "cordova-plugin-media-capture.CaptureAudioOptions",
       "file": "plugins/cordova-plugin-media-capture/www/CaptureAudioOptions.js",
       "pluginId": "cordova-plugin-media-capture",
@@ -316,48 +357,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-vibration.notification",
-      "file": "plugins/cordova-plugin-vibration/www/vibration.js",
-      "pluginId": "cordova-plugin-vibration",
-      "merges": [
-        "navigator.notification",
-        "navigator"
-      ]
-    },
-    {
-      "id": "cordova-plugin-ble-central.ble",
-      "file": "plugins/cordova-plugin-ble-central/www/ble.js",
-      "pluginId": "cordova-plugin-ble-central",
-      "clobbers": [
-        "ble"
-      ]
-    },
-    {
-      "id": "cordova-plugin-inappbrowser.inappbrowser",
-      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-      "pluginId": "cordova-plugin-inappbrowser",
-      "clobbers": [
-        "cordova.InAppBrowser.open",
-        "window.open"
-      ]
-    },
-    {
-      "id": "cordova-plugin-device.device",
-      "file": "plugins/cordova-plugin-device/www/device.js",
-      "pluginId": "cordova-plugin-device",
-      "clobbers": [
-        "device"
-      ]
-    },
-    {
-      "id": "cordova-plugin-battery-status.battery",
-      "file": "plugins/cordova-plugin-battery-status/www/battery.js",
-      "pluginId": "cordova-plugin-battery-status",
-      "clobbers": [
-        "navigator.battery"
-      ]
-    },
-    {
       "id": "cordova-plugin-network-information.network",
       "file": "plugins/cordova-plugin-network-information/www/network.js",
       "pluginId": "cordova-plugin-network-information",
@@ -375,27 +374,28 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-dialogs.notification",
-      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
-      "pluginId": "cordova-plugin-dialogs",
+      "id": "cordova-plugin-vibration.notification",
+      "file": "plugins/cordova-plugin-vibration/www/vibration.js",
+      "pluginId": "cordova-plugin-vibration",
       "merges": [
-        "navigator.notification"
+        "navigator.notification",
+        "navigator"
       ]
     }
   ];
   module.exports.metadata = {
+    "cordova-plugin-battery-status": "2.0.3",
+    "cordova-plugin-ble-central": "1.2.4",
+    "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-camera": "2.4.1",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "4.3.3",
     "cordova-plugin-geolocation": "2.4.3",
     "cordova-plugin-globalization": "1.0.9",
-    "cordova-plugin-media-capture": "1.4.3",
-    "cordova-plugin-vibration": "2.1.6",
-    "cordova-plugin-ble-central": "1.2.4",
     "cordova-plugin-inappbrowser": "3.1.0",
-    "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-battery-status": "2.0.3",
+    "cordova-plugin-media-capture": "1.4.3",
     "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-dialogs": "2.0.2",
-    "cordova-plugin-compat": "1.2.0"
+    "cordova-plugin-vibration": "2.1.6"
   };
 });

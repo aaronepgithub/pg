@@ -26,14 +26,14 @@
       "cordova-plugin-compat": {}
     },
     "platforms": [
-      "ios",
-      "browser"
+      "browser",
+      "ios"
     ]
   },
   "dependencies": {
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
-    "cordova-ios": "^5.0.1",
+    "cordova-ios": "^5.1.0",
     "cordova-plugin-battery-status": "2.0.3",
     "cordova-plugin-ble-central": "1.2.4",
     "cordova-plugin-compat": "1.2.0",

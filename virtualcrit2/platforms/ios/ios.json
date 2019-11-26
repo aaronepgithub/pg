@@ -9,11 +9,23 @@
         "parents": {
           "/*": [
             {
+              "xml": "<feature name=\"Battery\"><param name=\"ios-package\" value=\"CDVBattery\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
               "count": 1
             },
             {
               "xml": "<preference name=\"CameraUsesGeolocation\" value=\"false\" />",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
               "count": 1
             },
             {
@@ -29,14 +41,6 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"Capture\"><param name=\"ios-package\" value=\"CDVCapture\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Vibration\"><param name=\"ios-package\" value=\"CDVVibration\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
@@ -49,11 +53,7 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Battery\"><param name=\"ios-package\" value=\"CDVBattery\" /></feature>",
+              "xml": "<feature name=\"Capture\"><param name=\"ios-package\" value=\"CDVCapture\" /></feature>",
               "count": 1
             },
             {
@@ -61,7 +61,7 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+              "xml": "<feature name=\"Vibration\"><param name=\"ios-package\" value=\"CDVVibration\" /></feature>",
               "count": 1
             }
           ],
@@ -75,6 +75,18 @@
       },
       "*-Info.plist": {
         "parents": {
+          "NSBluetoothPeripheralUsageDescription": [
+            {
+              "xml": "<string> </string>",
+              "count": 1
+            }
+          ],
+          "NSBluetoothAlwaysUsageDescription": [
+            {
+              "xml": "<string> </string>",
+              "count": 1
+            }
+          ],
           "NSCameraUsageDescription": [
             {
               "xml": "<string> </string>",
@@ -102,27 +114,31 @@
               "xml": "<string> </string>",
               "count": 1
             }
-          ],
-          "NSBluetoothPeripheralUsageDescription": [
-            {
-              "xml": "<string> </string>",
-              "count": 1
-            }
-          ],
-          "NSBluetoothAlwaysUsageDescription": [
-            {
-              "xml": "<string> </string>",
-              "count": 1
-            }
           ]
         }
       }
     }
   },
   "installed_plugins": {
+    "cordova-plugin-battery-status": {
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
+    "cordova-plugin-ble-central": {
+      "BLUETOOTH_USAGE_DESCRIPTION": " ",
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
+    "cordova-plugin-compat": {
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
     "cordova-plugin-camera": {
       "CAMERA_USAGE_DESCRIPTION": " ",
       "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
+    "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-file": {
@@ -135,40 +151,40 @@
     "cordova-plugin-globalization": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
     "cordova-plugin-media-capture": {
       "CAMERA_USAGE_DESCRIPTION": " ",
       "MICROPHONE_USAGE_DESCRIPTION": " ",
       "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "cordova-plugin-vibration": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-ble-central": {
-      "BLUETOOTH_USAGE_DESCRIPTION": " ",
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-battery-status": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
     "cordova-plugin-network-information": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-compat": {
+    "cordova-plugin-vibration": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
   "dependent_plugins": {},
   "modules": [
+    {
+      "id": "cordova-plugin-battery-status.battery",
+      "file": "plugins/cordova-plugin-battery-status/www/battery.js",
+      "pluginId": "cordova-plugin-battery-status",
+      "clobbers": [
+        "navigator.battery"
+      ]
+    },
+    {
+      "id": "cordova-plugin-ble-central.ble",
+      "file": "plugins/cordova-plugin-ble-central/www/ble.js",
+      "pluginId": "cordova-plugin-ble-central",
+      "clobbers": [
+        "ble"
+      ]
+    },
     {
       "id": "cordova-plugin-camera.Camera",
       "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
@@ -199,6 +215,22 @@
       "pluginId": "cordova-plugin-camera",
       "clobbers": [
         "CameraPopoverHandle"
+      ]
+    },
+    {
+      "id": "cordova-plugin-device.device",
+      "file": "plugins/cordova-plugin-device/www/device.js",
+      "pluginId": "cordova-plugin-device",
+      "clobbers": [
+        "device"
+      ]
+    },
+    {
+      "id": "cordova-plugin-dialogs.notification",
+      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
       ]
     },
     {
@@ -423,6 +455,15 @@
       ]
     },
     {
+      "id": "cordova-plugin-inappbrowser.inappbrowser",
+      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+      "pluginId": "cordova-plugin-inappbrowser",
+      "clobbers": [
+        "cordova.InAppBrowser.open",
+        "window.open"
+      ]
+    },
+    {
       "id": "cordova-plugin-media-capture.CaptureAudioOptions",
       "file": "plugins/cordova-plugin-media-capture/www/CaptureAudioOptions.js",
       "pluginId": "cordova-plugin-media-capture",
@@ -485,48 +526,6 @@
       ]
     },
     {
-      "id": "cordova-plugin-vibration.notification",
-      "file": "plugins/cordova-plugin-vibration/www/vibration.js",
-      "pluginId": "cordova-plugin-vibration",
-      "merges": [
-        "navigator.notification",
-        "navigator"
-      ]
-    },
-    {
-      "id": "cordova-plugin-ble-central.ble",
-      "file": "plugins/cordova-plugin-ble-central/www/ble.js",
-      "pluginId": "cordova-plugin-ble-central",
-      "clobbers": [
-        "ble"
-      ]
-    },
-    {
-      "id": "cordova-plugin-inappbrowser.inappbrowser",
-      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-      "pluginId": "cordova-plugin-inappbrowser",
-      "clobbers": [
-        "cordova.InAppBrowser.open",
-        "window.open"
-      ]
-    },
-    {
-      "id": "cordova-plugin-device.device",
-      "file": "plugins/cordova-plugin-device/www/device.js",
-      "pluginId": "cordova-plugin-device",
-      "clobbers": [
-        "device"
-      ]
-    },
-    {
-      "id": "cordova-plugin-battery-status.battery",
-      "file": "plugins/cordova-plugin-battery-status/www/battery.js",
-      "pluginId": "cordova-plugin-battery-status",
-      "clobbers": [
-        "navigator.battery"
-      ]
-    },
-    {
       "id": "cordova-plugin-network-information.network",
       "file": "plugins/cordova-plugin-network-information/www/network.js",
       "pluginId": "cordova-plugin-network-information",
@@ -544,27 +543,28 @@
       ]
     },
     {
-      "id": "cordova-plugin-dialogs.notification",
-      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
-      "pluginId": "cordova-plugin-dialogs",
+      "id": "cordova-plugin-vibration.notification",
+      "file": "plugins/cordova-plugin-vibration/www/vibration.js",
+      "pluginId": "cordova-plugin-vibration",
       "merges": [
-        "navigator.notification"
+        "navigator.notification",
+        "navigator"
       ]
     }
   ],
   "plugin_metadata": {
+    "cordova-plugin-battery-status": "2.0.3",
+    "cordova-plugin-ble-central": "1.2.4",
+    "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-camera": "2.4.1",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "4.3.3",
     "cordova-plugin-geolocation": "2.4.3",
     "cordova-plugin-globalization": "1.0.9",
-    "cordova-plugin-media-capture": "1.4.3",
-    "cordova-plugin-vibration": "2.1.6",
-    "cordova-plugin-ble-central": "1.2.4",
     "cordova-plugin-inappbrowser": "3.1.0",
-    "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-battery-status": "2.0.3",
+    "cordova-plugin-media-capture": "1.4.3",
     "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-dialogs": "2.0.2",
-    "cordova-plugin-compat": "1.2.0"
+    "cordova-plugin-vibration": "2.1.6"
   }
 }
