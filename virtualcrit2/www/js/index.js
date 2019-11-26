@@ -138,8 +138,10 @@ function startBluetoothConnection(i) {
         //TODO CHECK/START ONLY SERVICES/CHAR
         //CHECK TO SEE IF HR VS CSC
 
-        var t = _.includes(p.services, '180d');
-        if (t) {
+        var t1 = _.includes(p.services, '180d');
+        var t2 = _.includes(p.services, '180D');
+
+        if ((t1) || (t2)) {
             console.log('is HR');
             ble.startNotification(deviceClicked.id, "180d", "2a37", function(b) {
                 var data = new Uint8Array(b);
