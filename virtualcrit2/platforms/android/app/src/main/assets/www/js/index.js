@@ -35,12 +35,12 @@ function tockCallback() {
     //console.log('tockCallback');
     var countdownTime = timer.lap();  //elapsed in milli, per round
     //var secondsInRound = secondsPerRound * 10000 - countdownTime; //round up to show
-    console.log('1a. tockCallback, countdownTime: ' + countdownTime + ', Rounded:  ' + Math.round(countdownTime/1000));
-    console.log('1b. tockCallback, roundCountdownTime: ' + timer.msToTimecode(countdownTime));
+    // console.log('1a. tockCallback, countdownTime: ' + countdownTime + ', Rounded:  ' + Math.round(countdownTime/1000));
+    // console.log('1b. tockCallback, roundCountdownTime: ' + timer.msToTimecode(countdownTime));
 
     var elapsedTime = _.now() - startTime;
-    console.log('2. tockCallback, elapsedTime: ' + elapsedTime);
-    console.log('3. tockCallback, elapsedTime: ' + timer.msToTimecode(elapsedTime) + "\n");
+    // console.log('2. tockCallback, elapsedTime: ' + elapsedTime);
+    // console.log('3. tockCallback, elapsedTime: ' + timer.msToTimecode(elapsedTime) + "\n");
 
     $$('.total-time').text(timer.msToTimecode(elapsedTime));
     $$('.system-status').text("Running");
@@ -84,7 +84,12 @@ function startup() {
 
 $$('.start-system').on('click', function (e) {
     console.log('click start-system');
-        //MOVE TO START BUTTON
+        
+    if (startTime) {
+        console.log('running');
+        return;
+    };
+    
         startTime = _.now();
         timer.start(secondsPerRound * 1000);
 });
@@ -94,6 +99,8 @@ $$('.start-bluetooth-scan').on('click', function (e) {
     console.log('click ble link');
     startBluetoothScan();
 });
+
+// .refresh-bluetooth
 
 $$('.device-ul').on('click', 'li', function (e) {
     console.log('clicked a ble device');
@@ -185,10 +192,6 @@ function updateHeartrateChip(n, i, d) {
         $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
         '<i class="fa fa-heartbeat fa-lg"></i></div>' +
         ' <div class="chip-label">HR: ' + String(d) + ' </div>'); 
-
-
-        //$$('.chip-hr').empty();
-        //$$('.chip-hr').html('<div class="chip-media bg-color-green"><i class="fa fa-heartbeat fa-lg"></i></div><div class="chip-label">Heartrate ' + d + ' </div>');
     }
     if (i ==2) {
 
@@ -198,12 +201,6 @@ function updateHeartrateChip(n, i, d) {
 
     }
 
-}
-
-function testChipUpdate(c, v) {
-    $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
-    '<i class="fa fa-heartbeat fa-lg"></i></div>' +
-    ' <div class="chip-label">Heartrate</div>'); 
 }
 
 function updateHeartrateUI() {
