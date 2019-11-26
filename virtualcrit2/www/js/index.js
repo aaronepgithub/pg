@@ -226,7 +226,7 @@ var bleServices = {
 
 
 function startBluetoothScan() {
-    $$('.device-ul').empty();
+    // $$('.device-ul').empty();
     $$('.status-alerts').html('Scanning...');
     ble.scan([], 2, function (device) {
         console.log(JSON.stringify(device));
