@@ -54,49 +54,23 @@ function tockComplete() {
 
 
 var scannedDevices = [];
-var scannedDevicesHeartrate = [];
-var scannedDevicesSpeed = [];
 
-function postScan(v) {
-    //v ==1 is hr, v ==2 is speed
-    if (v == 2) {
-        console.log('is Speed, send to PostScanSpeed');
-        postScanSpeed(v);
-        return;
-    }
-    console.log('starting postScan');
-    // console.log("1:  " + JSON.stringify(scannedDevices));    
-    scannedDevices = _.uniqBy(scannedDevices, 'name');
-    scannedDevicesHeartrate = _.uniqBy(scannedDevicesHeartrate, 'name');
-    console.log("scannedDevices:  " + JSON.stringify(scannedDevicesHeartrate));
+function postScan() {
 
-    // $$('.device-ul').empty();
-    scannedDevicesHeartrate.forEach(element => {
+    console.log('starting postScan');  
+    scannedDevices = _.uniqBy(scannedDevices, 'id');
+    console.log("scannedDevices:  " + JSON.stringify(scannedDevices));
+
+    $$('.device-ul').empty();
+    scannedDevices.forEach(element => {
         console.log('postScan forEach Element:  ' + JSON.stringify(element));
-        // $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-char">'+element.id+'</div> <span class="device-name">'+element.name+'</span><div class="item-footer device-status-footer">device-status-footer</div></div> <div class="item-after device-status">device-status-connect</div> </div> </a> </li>');
         $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">'+element.name+'</span><div class="item-footer device-id">'+element.id+'</div></div> <div class="item-after device-value"></div>CONNECT</div> </a> </li>');
     });
     console.log('postScan Complete');
     $$('.status-alerts').text('Updated');
 }
 
-function postScanSpeed(v) {
-    
-    console.log('(Speed) starting postScan');
-    // console.log("1:  " + JSON.stringify(scannedDevices));    
-    scannedDevices = _.uniqBy(scannedDevices, 'name');
-    scannedDevicesSpeed = _.uniqBy(scannedDevicesSpeed, 'name');
-    console.log("scannedDevices:  " + JSON.stringify(scannedDevicesSpeed));
 
-    //$$('.device-ul').empty();
-    scannedDevicesSpeed.forEach(element => {
-        console.log('(Speed) postScan forEach Element:  ' + JSON.stringify(element));
-        // $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-char">'+element.id+'</div> <span class="device-name">'+element.name+'</span><div class="item-footer device-status-footer">device-status-footer</div></div> <div class="item-after device-status">device-status-connect</div> </div> </a> </li>');
-        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">'+element.name+'</span><div class="item-footer device-id">'+element.id+'</div></div> <div class="item-after device-value"></div>CONNECT</div> </a> </li>');
-    });
-    console.log('(Speed) postScan Complete');
-    $$('.status-alerts').text('Updated');
-}
 
 
 var startTime;
@@ -152,55 +126,82 @@ function startBluetoothDisconnection(i) {
 var connectedDevices = [];  //Peripheral Object
 
 function startBluetoothConnection(i) {
-    console.log('startBluetoothConnection: ' + i);
-    var deviceClicked = scannedDevices[i];
-    console.log(deviceClicked.id);
+    console.log('startBluetoothConnection for index: ' + i);
+    var deviceClicked = scannedDevices[i];  //TODO, MAYBE PUBLIC VAR?
+    console.log('deviceClicked:  ' + deviceClicked.id + ', ' + deviceClicked.name);
     connectedDevices.push(deviceClicked);
-    var iD = String(deviceClicked.id);
-    ble.connect(iD, function(p) {
-        console.log('connected callback:  ' + JSON.stringify(p));
+    ble.connect(deviceClicked.id, function(p) {
+        console.log('connected callback for ' + deviceClicked.id);
+        //TRY THIS TO ACCESS...
+        console.log('From connected callback, p.name, p.id, p.services, p.services[0]:  ' + p.name + ',' + p.id + ', ' + JSON.stringify(p.services) + ', ' + p.services[0]);
         connectedDevices.push(deviceClicked);
         //TODO CHECK/START ONLY SERVICES/CHAR
         //CHECK TO SEE IF HR VS CSC
-        ble.startNotification(p.id, "180d", "2a37", function(b) {
-            var data = new Uint8Array(b);
-            console.log('notify success HR: ' + data[1] );
-            //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
-            updateHeartrateChip(p.name, 1, data[1]);
-        }, function(e) {
-            console.log('notify failure HR:  ' + e);
-            setNotificationForSpd(i);
-        });
+
+        var t = _.includes(p.services, '180d');
+        if (t) {
+            console.log('is HR');
+            ble.startNotification(deviceClicked.id, "180d", "2a37", function(b) {
+                var data = new Uint8Array(b);
+                console.log('notify success HR: ' + data[1] );
+                //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
+                updateHeartrateChip(p.name, 1, data[1]);
+            }, function(e) {
+                console.log('notify failure HR, try speed:  ' + e);
+                //try to set speed notify...
+                // console.log('speed test for notify, ' + deviceClicked.id);
+                // ble.startNotification(deviceClicked.id), "1816", "2A5B", function(bb) {var datadata = new Uint8Array(bb);console.log('notify speed success, ' + JSON.stringify(bb));}, function(e) {console.log('e: ' + e);};
+            });
+
+        } else {
+            console.log('is CSC', + deviceClicked.name) ;
+            ble.startNotification(deviceClicked.id, "1816", "2A5B", function(bb) {
+                var data_csc = new Uint8Array(bb);
+                console.log('notify success CSC: ' + data_csc[1] );
+                //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
+                updateHeartrateChip(p.name, 2, data_csc[1]);
+            }, function(e) {
+                console.log('notify failure HR, try speed:  ' + e);
+            });
+            
+        }
+
     }, function(p) {
         console.log('disconnected callback:  ' + JSON.stringify(p));
-    });
-
-    function setNotificationForSpd(i) {
-        var deviceClicked = scannedDevices[i];
-        console.log('setNotificationForSpd: ' + deviceClicked.name);
-        ble.startNotification(deviceClicked.id, "1816", "2A5B", function(b) {
-            var data = new Uint8Array(b);
-            console.log('notify success, Speed/Cad: ' + JSON.stringify(data) );
-            //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
-            updateHeartrateChip(p.name, 2, data[1]);
-        }, function(e) {
-            console.log('notify failure Speed/Cad:  ' + e);
-        });
     }
-}
+
+    );
+
+    
+}  //end start bluetooth connection
 
 function updateHeartrateChip(n, i, d) {
-    console.log('updateHeartrateChip:  ' + i + ', ' + d);
+    console.log('updateHeartrateChip:  ' + n + ', ' + i + ', ' + d);
 
-    if (n ==2) {
-        $$('.chip-hr').empty();
-        $$('.chip-hr').html('<div class="chip-media bg-color-green"><i class="fa fa-heartbeat fa-lg"></i></div><div class="chip-label">Heartrate</div>');
+    if (i ==1) {
+
+        $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
+        '<i class="fa fa-heartbeat fa-lg"></i></div>' +
+        ' <div class="chip-label">HR: ' + String(d) + ' </div>'); 
+
+
+        //$$('.chip-hr').empty();
+        //$$('.chip-hr').html('<div class="chip-media bg-color-green"><i class="fa fa-heartbeat fa-lg"></i></div><div class="chip-label">Heartrate ' + d + ' </div>');
     }
-    if (n ==2) {
-        $$('.chip-csc').empty();
-        $$('.chip-csc').html('<div class="chip-media bg-color-green"><i class="fa fa-bluetooth-b fa-lg"></i></div><div class="chip-label">Speed/Cadence</div>');
+    if (i ==2) {
+
+        $$('.chip-csc').html('<div class="chip-media bg-color-green">' +
+        '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+        ' <div class="chip-label">Spd/Cad: '+ String(d) +' </div>'); 
+
     }
 
+}
+
+function testChipUpdate(c, v) {
+    $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
+    '<i class="fa fa-heartbeat fa-lg"></i></div>' +
+    ' <div class="chip-label">Heartrate</div>'); 
 }
 
 function updateHeartrateUI() {
@@ -225,11 +226,10 @@ var bleServices = {
 function startBluetoothScan() {
     $$('.device-ul').empty();
     $$('.status-alerts').html('Scanning...');
-    ble.scan(['180d'], 2, function (device) {
+    ble.scan([], 2, function (device) {
         console.log(JSON.stringify(device));
         if (device.name) {
             scannedDevices.push(device);
-            scannedDevicesHeartrate.push(device);
             $$('.status-alerts').text('Found: ' + device.name);
         }
     }, function (e) {
@@ -238,36 +238,10 @@ function startBluetoothScan() {
 
     setTimeout(function () {
         console.log('scan complete, calling postScan');
-        scannedDevices = _.uniqBy(scannedDevices, 'name');
-        scannedDevicesHeartrate = _.uniqBy(scannedDevicesHeartrate, 'name');
-        postScan(1);  //TODO, CONNECT AND FIND SERVICES BEFORE DISPLAY
-        startBluetoothScanSpeed();
+        scannedDevices = _.uniqBy(scannedDevices, 'id');
+        postScan(); 
+    
     },
         3000
     );
 }
-
-function startBluetoothScanSpeed() {
-    $$('.status-alerts').html('Scanning for Speed...');
-    ble.scan(['1816'], 2, function (device) {
-        console.log(JSON.stringify(device));
-        if (device.name) {
-            scannedDevicesSpeed.push(device);
-            scannedDevices.push(device);
-            $$('.status-alerts').text('Found: ' + device.name);
-        }
-    }, function (e) {
-        console.log('failure, ' + e);
-    });
-
-    setTimeout(function () {
-        console.log('Speed scan complete, calling postScan');
-        scannedDevicesSpeed = _.uniqBy(scannedDevicesSpeed, 'name');
-        scannedDevices = _.uniqBy(scannedDevices, 'name');
-        postScan(2);  //TODO, CONNECT AND FIND SERVICES BEFORE DISPLAY
-    },
-        3000
-    );
-}
-
-
