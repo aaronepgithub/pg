@@ -63,7 +63,7 @@ function postScan() {
     $$('.device-ul').empty();
     scannedDevices.forEach(element => {
         console.log('postScan forEach Element:  ' + JSON.stringify(element));
-        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">'+element.name+'</span><div class="item-footer device-id">'+element.id+'</div></div> <div class="item-after device-status"></div>CONNECT</div> </a> </li>');
+        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">'+element.name+'</span><div class="item-footer device-id">'+element.id+'</div></div> <div class="item-after device-status">.</div></div> </a> </li>');
     });
     console.log('postScan Complete');
     $$('.status-alerts').text('Updated');
@@ -90,7 +90,8 @@ $$('.device-ul').on('click', 'li', function (e) {
     console.log('clicked a ble device');
     var clickedDeviceIndex = $$(this).index();
     console.log(clickedDeviceIndex);
-    startBluetoothConnection(clickedDeviceIndex);
+    // startBluetoothConnection(clickedDeviceIndex);
+    setTimeout(startBluetoothConnection, 2000, clickedDeviceIndex);
 });
 
 
@@ -106,7 +107,7 @@ $$('.device-ul').on('taphold', 'li', function (e) {
 function startBluetoothDisconnection(i) {
     var deviceClicked = scannedDevices[i];
     console.log('startBluetoothDisconnection:  ' + scannedDevices[i].name);
-    //TODO:  CHECK FOR SERVICES/CHAR
+    //TODO:  CHANGE TO SERVICES/CHAR INUSE
     ble.stopNotification(deviceClicked.id, "180d", "2a37", function(s) {
         console.log('stop notify success, calling disconnect');
         ble.disconnect(deviceClicked.id, function() {console.log('disconnect success');}, function() {console.log('disconnect failed');} );
@@ -120,7 +121,7 @@ var connectedDevices = [];  //Peripheral Object
 
 function startBluetoothConnection(i) {
     console.log('startBluetoothConnection for index: ' + i);
-    changeLi(i, 'CONNECTING');
+    changeLi(i, '...');
     if (scannedDevices.length < 1) {return};
     var deviceClicked = scannedDevices[i];  //TODO, MAYBE PUBLIC VAR?
     console.log('deviceClicked:  ' + deviceClicked.id + ', ' + deviceClicked.name);
@@ -130,7 +131,8 @@ function startBluetoothConnection(i) {
         //TRY THIS TO ACCESS...
         console.log('From connected callback, p.name, p.id, p.services, p.services[0]:  ' + p.name + ',' + p.id + ', ' + JSON.stringify(p.services) + ', ' + p.services[0]);
         connectedDevices.push(deviceClicked);
-        changeLi(i, 'CONNECTED');
+        $$('.status-alerts').html('Connection: ' + p.name);
+        changeLi(i, '....');
         //TODO CHECK/START ONLY SERVICES/CHAR
         //CHECK TO SEE IF HR VS CSC
 
@@ -146,13 +148,11 @@ function startBluetoothConnection(i) {
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 updateChip(p.name, 1, data[1]);
             }, function(e) {
-                console.log('notify failure HR, try speed:  ' + e);
-                //try to set speed notify...
-                // console.log('speed test for notify, ' + deviceClicked.id);
-                // ble.startNotification(deviceClicked.id), "1816", "2A5B", function(bb) {var datadata = new Uint8Array(bb);console.log('notify speed success, ' + JSON.stringify(bb));}, function(e) {console.log('e: ' + e);};
+                console.log('notify failure HR:  ' + e);
             });
 
         } else {
+            if (isNaN(deviceClicked.name)) {return};
             console.log('is CSC', + deviceClicked.name) ;
             changeLi(i, 'SPD/CAD');
             ble.startNotification(deviceClicked.id, "1816", "2A5B", function(bb) {
@@ -161,19 +161,49 @@ function startBluetoothConnection(i) {
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 updateChip(p.name, 2, data_csc[1]);
             }, function(e) {
-                console.log('notify failure HR, try speed:  ' + e);
+                console.log('notify failure CSC:  ' + e);
             });
             
         }
 
     }, function(p) {
         console.log('disconnected callback:  ' + JSON.stringify(p));
+        $$('.status-alerts').html('Disconnection: ' + p.name);
+        var tt = _.findIndex(scannedDevices, ['id', p.id]);
+        console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
+        console.log('waiting 15 seconds before issuing a new start BluetoothConnection');
+        setTimeout(startBluetoothConnection, 15000, tt);
+
+
+        // var t = _.indexOf(reconnectRequests, p.id);
+        // if (t < 0) {
+        //     console.log('first disconnection, issue a new connect');
+        //     reconnectRequests.push(p.id);
+        //     //get index value of peripheral
+        //     var tt = _.findIndex(scannedDevices, ['id', p.id]);
+        //     console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
+        //     setTimeout(startBluetoothConnection, 30000, tt);
+        //     if (tt >= 0 ) {
+        //         console.log('request to restart connection for p.id, name: ' + p.id + ', ' + p.name);
+        //         $$('.status-alerts').html('Waiting for: ' + p.name);
+        //         setTimeout(startBluetoothConnection, 30000, tt);
+        //     } else {
+        //         console.log('couldnt find p.id, p.name in scanned devices: ' + p.id + ', ' + p.name);
+        //     }
+
+        // } else {
+        //     console.log('we have already issued a connect request following the initial disconnect');
+        // }
+
+
     }
 
     );
 
     
 }  //end start bluetooth connection
+
+var reconnectRequests = [];
 
 function updateChip(n, i, d) {
     console.log('updateChip:  ' + n + ', ' + i + ', ' + d);
@@ -245,7 +275,8 @@ function changeLi(i, v) {
     var a = $$( '.device-li' ).eq(i);
     console.log($$(a).find('.device-status').html());
     //SET THE VALUE...
-    var b = $$(a).find('.device-status').html(v);
+    // $$(a).find('.device-status').empty();
+    var b = $$(a).find('.device-status').text(v);
     // console.log('a:' + a);
     // console.log('a:' + b);
     //var c = $$(a).find('.device-status').html();
