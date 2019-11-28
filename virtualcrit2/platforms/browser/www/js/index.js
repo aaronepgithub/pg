@@ -131,6 +131,7 @@ function startBluetoothConnection(i) {
         //TRY THIS TO ACCESS...
         console.log('From connected callback, p.name, p.id, p.services, p.services[0]:  ' + p.name + ',' + p.id + ', ' + JSON.stringify(p.services) + ', ' + p.services[0]);
         connectedDevices.push(deviceClicked);
+        $$('.status-alerts').html('Connection: ' + p.name);
         changeLi(i, '....');
         //TODO CHECK/START ONLY SERVICES/CHAR
         //CHECK TO SEE IF HR VS CSC
@@ -160,7 +161,7 @@ function startBluetoothConnection(i) {
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 updateChip(p.name, 2, data_csc[1]);
             }, function(e) {
-                console.log('notify failure HR, try speed:  ' + e);
+                console.log('notify failure CSC:  ' + e);
             });
             
         }
@@ -168,26 +169,31 @@ function startBluetoothConnection(i) {
     }, function(p) {
         console.log('disconnected callback:  ' + JSON.stringify(p));
         $$('.status-alerts').html('Disconnection: ' + p.name);
-        var t = _.indexOf(reconnectRequests, p.id);
-        if (t < 0) {
-            console.log('first disconnection, issue a new connect');
-            reconnectRequests.push(p.id);
+        var tt = _.findIndex(scannedDevices, ['id', p.id]);
+        console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
+        console.log('waiting 15 seconds before issuing a new start BluetoothConnection');
+        setTimeout(startBluetoothConnection, 15000, tt);
 
-            //get index value of peripheral
-            var tt = _.findIndex(scannedDevices, ['id', p.id]);
-            console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
-            if (tt >= 0 ) {
-                console.log('request to restart connection for p.id, name: ' + p.id + ', ' + p.name);
-                $$('.status-alerts').html('Waiting for: ' + p.name);
-                setTimeout(startBluetoothConnection, 3000, tt);
-                //startBluetoothConnection(tt);
-            } else {
-                console.log('couldnt find p.id, p.name in scanned devices: ' + p.id + ', ' + p.name);
-            }
 
-        } else {
-            console.log('we have already issued a connect request following the initial disconnect');
-        }
+        // var t = _.indexOf(reconnectRequests, p.id);
+        // if (t < 0) {
+        //     console.log('first disconnection, issue a new connect');
+        //     reconnectRequests.push(p.id);
+        //     //get index value of peripheral
+        //     var tt = _.findIndex(scannedDevices, ['id', p.id]);
+        //     console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
+        //     setTimeout(startBluetoothConnection, 30000, tt);
+        //     if (tt >= 0 ) {
+        //         console.log('request to restart connection for p.id, name: ' + p.id + ', ' + p.name);
+        //         $$('.status-alerts').html('Waiting for: ' + p.name);
+        //         setTimeout(startBluetoothConnection, 30000, tt);
+        //     } else {
+        //         console.log('couldnt find p.id, p.name in scanned devices: ' + p.id + ', ' + p.name);
+        //     }
+
+        // } else {
+        //     console.log('we have already issued a connect request following the initial disconnect');
+        // }
 
 
     }
@@ -288,3 +294,8 @@ $$('.start-system').on('click', function (e) {
         startTime = _.now();
         timer.start(secondsPerRound * 1000);
 });
+
+function networkOfflineCallback() {
+    console.log('Network offline');
+}
+document.addEventListener("offline", networkOfflineCallback, false);

@@ -1,29 +1,30 @@
 {
   "devDependencies": {
-    "cordova-plugin-camera": "^2.4.1",
-    "cordova-plugin-file": "^4.3.3",
-    "cordova-plugin-geolocation": "^2.4.3",
-    "cordova-plugin-globalization": "^1.0.9",
-    "cordova-plugin-media-capture": "^1.4.3",
     "cordova-plugin-vibration": "^2.1.6"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-camera": {},
-      "cordova-plugin-media-capture": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-geolocation": {},
-      "cordova-plugin-globalization": {},
       "cordova-plugin-vibration": {},
       "cordova-plugin-ble-central": {
         "BLUETOOTH_USAGE_DESCRIPTION": " "
       },
-      "cordova-plugin-inappbrowser": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-battery-status": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-dialogs": {},
-      "cordova-plugin-compat": {}
+      "cordova-plugin-compat": {},
+      "cordova-plugin-background-geolocation": {
+        "GOOGLE_PLAY_SERVICES_VERSION": "11+",
+        "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
+        "ICON": "@mipmap/icon",
+        "SMALL_ICON": "@mipmap/icon",
+        "ACCOUNT_NAME": "@string/app_name",
+        "ACCOUNT_LABEL": "@string/app_name",
+        "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
+        "CONTENT_AUTHORITY": "$PACKAGE_NAME",
+        "ALWAYS_USAGE_DESCRIPTION": "This app always requires location tracking",
+        "MOTION_USAGE_DESCRIPTION": "This app requires motion detection"
+      },
+      "cordova-plugin-dialogs": {}
     },
     "platforms": [
       "browser",
@@ -32,15 +33,15 @@
     ]
   },
   "dependencies": {
+    "@mauron85/cordova-plugin-background-geolocation": "3.1.0",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.0",
-    "cordova-plugin-battery-status": "2.0.3",
     "cordova-plugin-ble-central": "1.2.4",
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-dialogs": "2.0.2",
-    "cordova-plugin-inappbrowser": "3.1.0",
+    "cordova-plugin-file": "^4.3.3",
     "cordova-plugin-network-information": "2.0.2"
   }
 }

@@ -294,3 +294,8 @@ $$('.start-system').on('click', function (e) {
         startTime = _.now();
         timer.start(secondsPerRound * 1000);
 });
+
+function networkOfflineCallback() {
+    console.log('Network offline');
+}
+document.addEventListener("offline", networkOfflineCallback, false);

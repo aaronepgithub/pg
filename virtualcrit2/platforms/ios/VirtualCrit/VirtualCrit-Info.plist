@@ -50,17 +50,32 @@
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>CDVLaunchScreen</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app always requires location tracking</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app always requires location tracking</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app always requires location tracking</string>
+	<key>NSMotionUsageDescription</key>
+	<string>This app requires motion detection</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>prefs</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string/>
-	<key>NSCameraUsageDescription</key>
-	<string/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>NSMicrophoneUsageDescription</key>
 	<string/>
 </dict>
 </plist>

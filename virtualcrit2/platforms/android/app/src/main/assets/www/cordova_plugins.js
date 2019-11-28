@@ -1,12 +1,17 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports = [
     {
-      "id": "cordova-plugin-battery-status.battery",
-      "file": "plugins/cordova-plugin-battery-status/www/battery.js",
-      "pluginId": "cordova-plugin-battery-status",
+      "id": "cordova-plugin-background-geolocation.BackgroundGeolocation",
+      "file": "plugins/cordova-plugin-background-geolocation/www/BackgroundGeolocation.js",
+      "pluginId": "cordova-plugin-background-geolocation",
       "clobbers": [
-        "navigator.battery"
+        "BackgroundGeolocation"
       ]
+    },
+    {
+      "id": "cordova-plugin-background-geolocation.radio",
+      "file": "plugins/cordova-plugin-background-geolocation/www/radio.js",
+      "pluginId": "cordova-plugin-background-geolocation"
     },
     {
       "id": "cordova-plugin-ble-central.ble",
@@ -14,38 +19,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "pluginId": "cordova-plugin-ble-central",
       "clobbers": [
         "ble"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.Camera",
-      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "Camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverOptions",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverOptions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.camera",
-      "file": "plugins/cordova-plugin-camera/www/Camera.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "navigator.camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverHandle",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverHandle"
       ]
     },
     {
@@ -246,113 +219,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "runs": true
     },
     {
-      "id": "cordova-plugin-geolocation.geolocation",
-      "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
-      "pluginId": "cordova-plugin-geolocation",
-      "clobbers": [
-        "navigator.geolocation"
-      ]
-    },
-    {
-      "id": "cordova-plugin-geolocation.PositionError",
-      "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
-      "pluginId": "cordova-plugin-geolocation",
-      "runs": true
-    },
-    {
-      "id": "cordova-plugin-globalization.GlobalizationError",
-      "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
-      "pluginId": "cordova-plugin-globalization",
-      "clobbers": [
-        "window.GlobalizationError"
-      ]
-    },
-    {
-      "id": "cordova-plugin-globalization.globalization",
-      "file": "plugins/cordova-plugin-globalization/www/globalization.js",
-      "pluginId": "cordova-plugin-globalization",
-      "clobbers": [
-        "navigator.globalization"
-      ]
-    },
-    {
-      "id": "cordova-plugin-inappbrowser.inappbrowser",
-      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-      "pluginId": "cordova-plugin-inappbrowser",
-      "clobbers": [
-        "cordova.InAppBrowser.open",
-        "window.open"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.CaptureAudioOptions",
-      "file": "plugins/cordova-plugin-media-capture/www/CaptureAudioOptions.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "CaptureAudioOptions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.CaptureImageOptions",
-      "file": "plugins/cordova-plugin-media-capture/www/CaptureImageOptions.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "CaptureImageOptions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.CaptureVideoOptions",
-      "file": "plugins/cordova-plugin-media-capture/www/CaptureVideoOptions.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "CaptureVideoOptions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.CaptureError",
-      "file": "plugins/cordova-plugin-media-capture/www/CaptureError.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "CaptureError"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.MediaFileData",
-      "file": "plugins/cordova-plugin-media-capture/www/MediaFileData.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "MediaFileData"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.MediaFile",
-      "file": "plugins/cordova-plugin-media-capture/www/MediaFile.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "MediaFile"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.helpers",
-      "file": "plugins/cordova-plugin-media-capture/www/helpers.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "runs": true
-    },
-    {
-      "id": "cordova-plugin-media-capture.capture",
-      "file": "plugins/cordova-plugin-media-capture/www/capture.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "clobbers": [
-        "navigator.device.capture"
-      ]
-    },
-    {
-      "id": "cordova-plugin-media-capture.init",
-      "file": "plugins/cordova-plugin-media-capture/www/android/init.js",
-      "pluginId": "cordova-plugin-media-capture",
-      "runs": true
-    },
-    {
       "id": "cordova-plugin-network-information.network",
       "file": "plugins/cordova-plugin-network-information/www/network.js",
       "pluginId": "cordova-plugin-network-information",
@@ -380,16 +246,11 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     }
   ];
   module.exports.metadata = {
-    "cordova-plugin-battery-status": "2.0.3",
+    "cordova-plugin-background-geolocation": "3.1.0",
     "cordova-plugin-ble-central": "1.2.4",
-    "cordova-plugin-camera": "2.4.1",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "4.3.3",
-    "cordova-plugin-geolocation": "2.4.3",
-    "cordova-plugin-globalization": "1.0.9",
-    "cordova-plugin-inappbrowser": "3.1.0",
-    "cordova-plugin-media-capture": "1.4.3",
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-vibration": "2.1.6"
   };
