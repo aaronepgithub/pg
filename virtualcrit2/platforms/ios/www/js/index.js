@@ -295,7 +295,91 @@ $$('.start-system').on('click', function (e) {
         timer.start(secondsPerRound * 1000);
 });
 
+
+$$('.start-gps').on('click', function (e) {
+    console.log('click start-gps');
+    $$('.gps-item-header').text('');
+    $$('.gps-item-after').text('ON');
+    startGPSTracking();
+});
+
+
+var isNetworkAvailable = true;
+
+document.addEventListener("offline", networkOfflineCallback, false);
+document.addEventListener("online", networkOnlineCallback, false);
+
+function networkOnlineCallback() {
+    console.log('Network online');
+    isNetworkAvailable = true;
+}
 function networkOfflineCallback() {
     console.log('Network offline');
+    isNetworkAvailable = false;
 }
-document.addEventListener("offline", networkOfflineCallback, false);
+
+
+
+function startGPSTracking() {
+    console.log('startGPSTracking');
+
+
+    BackgroundGeolocation.configure({
+        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
+        stationaryRadius: 50,
+        distanceFilter: 50,
+        notificationTitle: 'Background tracking',
+        notificationText: 'enabled',
+        debug: true,
+        interval: 5000,
+        fastestInterval: 2000,
+        activitiesInterval: 5000,
+      });
+
+      BackgroundGeolocation.on('start', () => {
+        console.log('[DEBUG] BackgroundGeolocation has been started');
+      });
+
+      BackgroundGeolocation.on('location', function(location) {
+        console.log('new location arrived');
+      });
+
+      BackgroundGeolocation.on('error', function(error) {
+        console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
+      });
+    
+      BackgroundGeolocation.on('stop', function() {
+        console.log('[INFO] BackgroundGeolocation service has been stopped');
+      });
+
+      BackgroundGeolocation.on('authorization', function(status) {
+        console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
+        if (status !== BackgroundGeolocation.AUTHORIZED) {
+          // we need to set delay or otherwise alert may not be shown
+          setTimeout(function() {
+            var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
+            if (showSettings) {
+              return BackgroundGeolocation.showAppSettings();
+            }
+          }, 1000);
+        }
+      });
+
+
+      BackgroundGeolocation.checkStatus(function(status) {
+        console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
+        console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
+        console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
+    
+        // you don't need to check status before start (this is just the example)
+        if (!status.isRunning) {
+            consonle.log('issue start command');
+          BackgroundGeolocation.start(); //triggers start on start event
+        }
+      });
+
+}
+
+
+

@@ -295,7 +295,123 @@ $$('.start-system').on('click', function (e) {
         timer.start(secondsPerRound * 1000);
 });
 
+
+$$('.start-gps').on('click', function (e) {
+    console.log('click start-gps');
+    $$('.gps-item-header').text('');
+    $$('.gps-item-after').text('ON');
+    startGPSTracking();
+});
+
+
+var isNetworkAvailable = true;
+
+document.addEventListener("offline", networkOfflineCallback, false);
+document.addEventListener("online", networkOnlineCallback, false);
+
+function networkOnlineCallback() {
+    console.log('Network online');
+    isNetworkAvailable = true;
+}
 function networkOfflineCallback() {
     console.log('Network offline');
+    isNetworkAvailable = false;
 }
-document.addEventListener("offline", networkOfflineCallback, false);
+
+
+
+function startGPSTracking() {
+    console.log('startGPSTracking');
+
+
+    BackgroundGeolocation.configure({
+        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
+        stationaryRadius: 50,
+        distanceFilter: 50,
+        notificationTitle: 'Background tracking',
+        notificationText: 'enabled',
+        debug: true,
+        interval: 5000,
+        fastestInterval: 2000,
+        activitiesInterval: 5000,
+      });
+
+      BackgroundGeolocation.on('start', () => {
+        console.log('[DEBUG] BackgroundGeolocation has been started');
+      });
+
+      BackgroundGeolocation.on('location', function(location) {
+        console.log('new location arrived');
+        //onBackgroundSuccess(location);
+      });
+
+      BackgroundGeolocation.on('error', function(error) {
+        console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
+      });
+    
+      BackgroundGeolocation.on('stop', function() {
+        console.log('[INFO] BackgroundGeolocation service has been stopped');
+      });
+
+    //   BackgroundGeolocation.on('authorization', function(status) {
+    //     console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
+    //     if (status !== BackgroundGeolocation.AUTHORIZED) {
+    //       // we need to set delay or otherwise alert may not be shown
+    //       setTimeout(function() {
+    //         var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
+    //         if (showSettings) {
+    //           return BackgroundGeolocation.showAppSettings();
+    //         }
+    //       }, 1000);
+    //     }
+    //   });
+
+
+      BackgroundGeolocation.checkStatus(function(status) {
+        console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
+        console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
+        console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
+    
+        // you don't need to check status before start (this is just the example)
+        if (!status.isRunning) {
+            console.log('issue start command');
+          BackgroundGeolocation.start(); //triggers start on start event
+        }
+      });
+
+//       Create a directory : platforms\android\app\src\main\res\mipmap.
+// Then copy resources\splash.png to icon.png in the new mipmap directory.
+
+}
+
+var lastLatitude = -1.0;
+var lastLongitude = -1.0;
+
+// function onBackgroundSuccess(location) {
+
+//     if (lastLatitude == -1) {
+//         lastLatitude = location.latitude;
+//         lastLongitude = location.longitude;
+//         return;
+//     }
+// 	var R = 6371; // Radius of the earth in km
+// 	var dLat = (location.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
+// 	var dLon = (location.longitude-lastLongitude) * (Math.PI/180);
+// 	var a =
+// 	Math.sin(dLat/2) * Math.sin(dLat/2) +
+// 	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(location.latitude * (Math.PI/180)) *
+// 	Math.sin(dLon/2) * Math.sin(dLon/2);
+// 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+// 	var distance = R * c; // Distance in km
+// 	lastLatitude = location.latitude;
+// 	lastLongitude = location.longitude;
+
+// 	//Set timer HTML to total distance
+// 	//var tracker = Ext.ComponentQuery.query("timer #gps")[0];
+// 	var value = Math.round(runtap.globals.totalDistance * 100) / 100;
+	
+// }
+
+
+
