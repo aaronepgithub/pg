@@ -343,7 +343,7 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
-        //onBackgroundSuccess(location);
+        onBackgroundSuccess(location);
       });
 
       BackgroundGeolocation.on('error', function(error) {
@@ -380,38 +380,37 @@ function startGPSTracking() {
         }
       });
 
-//       Create a directory : platforms\android\app\src\main\res\mipmap.
+// Create a directory : platforms\android\app\src\main\res\mipmap.
 // Then copy resources\splash.png to icon.png in the new mipmap directory.
-
 }
 
 var lastLatitude = -1.0;
 var lastLongitude = -1.0;
 
-// function onBackgroundSuccess(location) {
+function onBackgroundSuccess(location) {
 
-//     if (lastLatitude == -1) {
-//         lastLatitude = location.latitude;
-//         lastLongitude = location.longitude;
-//         return;
-//     }
-// 	var R = 6371; // Radius of the earth in km
-// 	var dLat = (location.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
-// 	var dLon = (location.longitude-lastLongitude) * (Math.PI/180);
-// 	var a =
-// 	Math.sin(dLat/2) * Math.sin(dLat/2) +
-// 	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(location.latitude * (Math.PI/180)) *
-// 	Math.sin(dLon/2) * Math.sin(dLon/2);
-// 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-// 	var distance = R * c; // Distance in km
-// 	lastLatitude = location.latitude;
-// 	lastLongitude = location.longitude;
+    if (lastLatitude == -1) {
+        lastLatitude = location.latitude;
+        lastLongitude = location.longitude;
+        return;
+    }
+	var R = 6371; // Radius of the earth in km
+	var dLat = (location.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
+	var dLon = (location.longitude-lastLongitude) * (Math.PI/180);
+	var a =
+	Math.sin(dLat/2) * Math.sin(dLat/2) +
+	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(location.latitude * (Math.PI/180)) *
+	Math.sin(dLon/2) * Math.sin(dLon/2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	var distance = R * c; // Distance in km
+	lastLatitude = location.latitude;
+	lastLongitude = location.longitude;
 
-// 	//Set timer HTML to total distance
-// 	//var tracker = Ext.ComponentQuery.query("timer #gps")[0];
-// 	var value = Math.round(runtap.globals.totalDistance * 100) / 100;
+	//Set timer HTML to total distance
+	//var tracker = Ext.ComponentQuery.query("timer #gps")[0];
+	var value = Math.round(runtap.globals.totalDistance * 100) / 100;
 	
-// }
+}
 
 
 
