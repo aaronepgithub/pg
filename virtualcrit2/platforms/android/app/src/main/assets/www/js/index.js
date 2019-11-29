@@ -10,6 +10,9 @@ var app = new Framework7({
     cache: true,
     init: true,
     initOnDeviceReady: true,
+    statusbar: {
+        androidOverlaysWebView: true,
+      },
     on: {
         init: function () {
             console.log('App initialized');

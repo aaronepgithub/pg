@@ -243,6 +243,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
         "navigator.notification",
         "navigator"
       ]
+    },
+    {
+      "id": "cordova-plugin-statusbar.statusbar",
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "pluginId": "cordova-plugin-statusbar",
+      "clobbers": [
+        "window.StatusBar"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -252,6 +260,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "4.3.3",
     "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-vibration": "2.1.6"
+    "cordova-plugin-vibration": "2.1.6",
+    "cordova-plugin-statusbar": "2.4.3"
   };
 });
