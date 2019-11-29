@@ -337,8 +337,9 @@ function startGPSTracking() {
     BackgroundGeolocation.configure({
         locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
-        stationaryRadius: 50,
-        distanceFilter: 50,
+        //TODO...THIS IS TOO AGRESSIVE
+        stationaryRadius: 5,
+        distanceFilter: 5,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
         debug: false,
@@ -349,6 +350,7 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('start', () => {
         console.log('[DEBUG] BackgroundGeolocation has been started');
+        $$('.system-status').text("GPS Tracking Started");
       });
 
       BackgroundGeolocation.on('location', function(location) {
@@ -364,18 +366,18 @@ function startGPSTracking() {
         console.log('[INFO] BackgroundGeolocation service has been stopped');
       });
 
-    //   BackgroundGeolocation.on('authorization', function(status) {
-    //     console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
-    //     if (status !== BackgroundGeolocation.AUTHORIZED) {
-    //       // we need to set delay or otherwise alert may not be shown
-    //       setTimeout(function() {
-    //         var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
-    //         if (showSettings) {
-    //           return BackgroundGeolocation.showAppSettings();
-    //         }
-    //       }, 1000);
-    //     }
-    //   });
+      BackgroundGeolocation.on('authorization', function(status) {
+        console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
+        if (status !== BackgroundGeolocation.AUTHORIZED) {
+          // we need to set delay or otherwise alert may not be shown
+          setTimeout(function() {
+            var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
+            if (showSettings) {
+              return BackgroundGeolocation.showAppSettings();
+            }
+          }, 1000);
+        }
+      });
 
 
       BackgroundGeolocation.checkStatus(function(status) {
