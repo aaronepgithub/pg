@@ -10,6 +10,9 @@ var app = new Framework7({
     cache: true,
     init: true,
     initOnDeviceReady: true,
+    statusbar: {
+        androidOverlaysWebView: true,
+      },
     on: {
         init: function () {
             console.log('App initialized');
@@ -334,8 +337,9 @@ function startGPSTracking() {
     BackgroundGeolocation.configure({
         locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
-        stationaryRadius: 50,
-        distanceFilter: 50,
+        //TODO...THIS IS TOO AGRESSIVE
+        stationaryRadius: 5,
+        distanceFilter: 5,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
         debug: false,
@@ -346,10 +350,12 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('start', () => {
         console.log('[DEBUG] BackgroundGeolocation has been started');
+        $$('.main-status-alerts').text("GPS Tracking Started");
       });
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
+        $$('.main-status-alerts').text("...");
         onBackgroundSuccess(location);
       });
 
@@ -361,18 +367,18 @@ function startGPSTracking() {
         console.log('[INFO] BackgroundGeolocation service has been stopped');
       });
 
-    //   BackgroundGeolocation.on('authorization', function(status) {
-    //     console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
-    //     if (status !== BackgroundGeolocation.AUTHORIZED) {
-    //       // we need to set delay or otherwise alert may not be shown
-    //       setTimeout(function() {
-    //         var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
-    //         if (showSettings) {
-    //           return BackgroundGeolocation.showAppSettings();
-    //         }
-    //       }, 1000);
-    //     }
-    //   });
+      BackgroundGeolocation.on('authorization', function(status) {
+        console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
+        if (status !== BackgroundGeolocation.AUTHORIZED) {
+          // we need to set delay or otherwise alert may not be shown
+          setTimeout(function() {
+            var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
+            if (showSettings) {
+              return BackgroundGeolocation.showAppSettings();
+            }
+          }, 1000);
+        }
+      });
 
 
       BackgroundGeolocation.checkStatus(function(status) {
@@ -400,6 +406,14 @@ function onBackgroundSuccess(location) {
     if (lastLatitude == -1) {
         lastLatitude = location.latitude;
         lastLongitude = location.longitude;
+
+        if (startTime) {
+            console.log('already tock running');
+        } else {
+            console.log('starting tock');
+            startTime = _.now();
+            timer.start(secondsPerRound * 1000);
+        };
         return;
     }
 	var R = 6371; // Radius of the earth in km

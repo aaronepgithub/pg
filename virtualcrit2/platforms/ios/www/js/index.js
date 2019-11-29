@@ -350,11 +350,12 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('start', () => {
         console.log('[DEBUG] BackgroundGeolocation has been started');
-        $$('.system-status').text("GPS Tracking Started");
+        $$('.main-status-alerts').text("GPS Tracking Started");
       });
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
+        $$('.main-status-alerts').text("...");
         onBackgroundSuccess(location);
       });
 
@@ -405,6 +406,14 @@ function onBackgroundSuccess(location) {
     if (lastLatitude == -1) {
         lastLatitude = location.latitude;
         lastLongitude = location.longitude;
+
+        if (startTime) {
+            console.log('already tock running');
+        } else {
+            console.log('starting tock');
+            startTime = _.now();
+            timer.start(secondsPerRound * 1000);
+        };
         return;
     }
 	var R = 6371; // Radius of the earth in km

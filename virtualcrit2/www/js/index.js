@@ -406,6 +406,14 @@ function onBackgroundSuccess(location) {
     if (lastLatitude == -1) {
         lastLatitude = location.latitude;
         lastLongitude = location.longitude;
+
+        if (startTime) {
+            console.log('already tock running');
+        } else {
+            console.log('starting tock');
+            startTime = _.now();
+            timer.start(secondsPerRound * 1000);
+        };
         return;
     }
 	var R = 6371; // Radius of the earth in km
