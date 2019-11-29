@@ -364,10 +364,10 @@ function startGPSTracking() {
     BackgroundGeolocation.configure({
         // locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
-        //activityType: 'Fitness',
+        activityType: 'Fitness',
         //TODO...THIS IS TOO AGRESSIVE
-        stationaryRadius: 5,
-        distanceFilter: 5,
+        stationaryRadius: 25,
+        distanceFilter: 100,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
         //debug: true,
@@ -383,10 +383,6 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
-
-        // $$('.main-status-alerts').text("...");
-        $$('.main-status-alerts').text('new location');
-        //onBackgroundSuccess(location);
 
         let l = {
             latitude : location.latitude,
