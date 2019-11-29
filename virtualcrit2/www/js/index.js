@@ -350,11 +350,12 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('start', () => {
         console.log('[DEBUG] BackgroundGeolocation has been started');
-        $$('.system-status').text("GPS Tracking Started");
+        $$('.main-status-alerts').text("GPS Tracking Started");
       });
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
+        $$('.main-status-alerts').text("...");
         onBackgroundSuccess(location);
       });
 
