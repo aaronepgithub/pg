@@ -413,8 +413,8 @@ function startGPSTracking() {
 // Then copy resources\splash.png to icon.png in the new mipmap directory.
 }
 
-var lastLatitude = -1.0;
-var lastLongitude = -1.0;
+var lastLatitude = -1;
+var lastLongitude = -1;
 var lastActivityTime = 0;
 
 var totalDistance = 0;
@@ -425,6 +425,8 @@ var gpsSpeed = -1;
 
 function onBackgroundSuccess(location) {
     console.log('onBackgroundSuccess');
+
+
     if (lastLatitude == -1) {
         lastLatitude = location.latitude;
         lastLongitude = location.longitude;
