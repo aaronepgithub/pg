@@ -34,6 +34,8 @@ var timer = new Tock({
 
 var secondsPerRound = 60;
 var roundsComplete = 0;
+var totalElapsedTime;
+
 function tockCallback() {
     //console.log('tockCallback');
     var countdownTime = timer.lap();  //elapsed in milli, per round
@@ -41,11 +43,11 @@ function tockCallback() {
     // console.log('1a. tockCallback, countdownTime: ' + countdownTime + ', Rounded:  ' + Math.round(countdownTime/1000));
     // console.log('1b. tockCallback, roundCountdownTime: ' + timer.msToTimecode(countdownTime));
 
-    var elapsedTime = _.now() - startTime;
+    totalElapsedTime = _.now() - startTime;
     // console.log('2. tockCallback, elapsedTime: ' + elapsedTime);
     // console.log('3. tockCallback, elapsedTime: ' + timer.msToTimecode(elapsedTime) + "\n");
 
-    $$('.total-time').text(timer.msToTimecode(elapsedTime));
+    $$('.total-time').text(timer.msToTimecode(totalElapsedTime));
     $$('.system-status').text("Running");
 }
 
@@ -211,19 +213,33 @@ var reconnectRequests = [];
 function updateChip(n, i, d) {
     console.log('updateChip:  ' + n + ', ' + i + ', ' + d);
 
-    if (i ==1) {
+    if (i == 0) {
+
+        $$('.chip-gps').html('<div class="chip-media bg-color-green">' +
+        '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+        ' <div class="chip-label">GPS: '+ String(d) +' </div>'); 
+    }
+
+    if (i == 1) {
 
         $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
         '<i class="fa fa-heartbeat fa-lg"></i></div>' +
         ' <div class="chip-label">HR: ' + String(d) + ' </div>'); 
     }
-    if (i ==2) {
+    if (i == 2) {
 
         $$('.chip-csc').html('<div class="chip-media bg-color-green">' +
         '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
         ' <div class="chip-label">Spd/Cad: '+ String(d) +' </div>'); 
-
     }
+
+    if (i == 3) {
+
+        $$('.chip-csc').html('<div class="chip-media bg-color-green">' +
+        '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+        ' <div class="chip-label">Cad: '+ String(d) +' </div>'); 
+    }
+
 
 }
 
@@ -355,7 +371,7 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
-        $$('.main-status-alerts').text("...");
+        // $$('.main-status-alerts').text("...");
         onBackgroundSuccess(location);
       });
 
@@ -399,13 +415,20 @@ function startGPSTracking() {
 
 var lastLatitude = -1.0;
 var lastLongitude = -1.0;
+var lastActivityTime = 0;
+
 var totalDistance = 0;
+var totalActivyTime = 0;
+
+var gpsAvgSpeed = -1;
+var gpsSpeed = -1;
 
 function onBackgroundSuccess(location) {
     console.log('onBackgroundSuccess');
     if (lastLatitude == -1) {
         lastLatitude = location.latitude;
         lastLongitude = location.longitude;
+        lastActivityTime = _.now();  //ms
 
         if (startTime) {
             console.log('already tock running');
@@ -424,14 +447,24 @@ function onBackgroundSuccess(location) {
 	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(location.latitude * (Math.PI/180)) *
 	Math.sin(dLon/2) * Math.sin(dLon/2);
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    var distance = R * c; // Distance in km
-    totalDistance += distance;  //Total Distance in km
+    
+    var distance = R * c; // Distance in KM
+    totalDistance += distance;  //Total Distance in KM
     console.log( 'Total Distance in Miles ' + (totalDistance * 0.62137) );
-    $$('.item-distance').text(  (Math.round( (totalDistance * 0.62137) * 100)) / 100  + ' Miles');
+    $$('.item-distance').text((ret2string(totalDistance * 0.62137))  + ' Miles');
+
+    var activityTime = (_.now() - lastActivityTime);  //in MS
+    totalActivyTime += activityTime; //in MS
+
+    gpsAvgSpeed = ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
+    gpsSpeed = ret1string((distance * 0.62137) / (activityTime / 1000 / 60 / 60));
+    updateChip('gpsSpeed', 0, gpsSpeed + ' Mph');
+
+$$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime) + ", " + timer.msToTimecode(totalActivyTime) );
+
 	lastLatitude = location.latitude;   
 	lastLongitude = location.longitude;
-
-	
+    lastActivityTime = _.now();
 }
 
 var fakeLat = 40.6644403;
@@ -444,10 +477,23 @@ function startLocationSimulator() {
                     longitude : fakeLon
             };
             onBackgroundSuccess(l);
-            fakeLat += .0001;
+            let rn = _.random(.00005, .00015);
+            // fakeLat += .0001;
+            fakeLat += rn;
             fakeLon -= .0001;
           }, 2000);
 }
 
+function ret1string (n) {
+    return ((Math.round(n * 10))/10).toFixed(1);
+}
+function ret2string (n) {
+    return ((Math.round(n * 100))/100).toFixed(2);
+}
+function msToTime(s) {  //hh:mm:ss
+    // Pad to 2 or 3 digits, default is 2
+  var pad = (n, z = 2) => ('00' + n).slice(-z);
+  return pad(s/3.6e6|0) + ':' + pad((s%3.6e6)/6e4 | 0) + ':' + pad((s%6e4)/1000|0);
+}
 
 
