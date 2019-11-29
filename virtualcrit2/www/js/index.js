@@ -317,6 +317,12 @@ $$('.start-system').on('click', function (e) {
 
 $$('.start-gps').on('click', function (e) {
     console.log('click start-gps');
+    var t = $$('.gps-item-after').text(); 
+    if (t == 'ON') {
+        console.log('already started');
+        return;
+    }
+
     $$('.gps-item-header').text('');
     $$('.gps-item-after').text('ON');
     startGPSTracking();
