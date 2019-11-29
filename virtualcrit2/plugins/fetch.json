@@ -15,14 +15,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-ble-central": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-ble-central"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device": {
     "source": {
       "type": "registry",
@@ -47,23 +39,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-background-geolocation": {
-    "source": {
-      "type": "registry",
-      "id": "@mauron85/cordova-plugin-background-geolocation@3.1.0"
-    },
-    "is_top_level": true,
-    "variables": {
-      "GOOGLE_PLAY_SERVICES_VERSION": "11+",
-      "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
-      "ICON": "@mipmap/icon",
-      "SMALL_ICON": "@mipmap/icon",
-      "ACCOUNT_NAME": "@string/app_name",
-      "ACCOUNT_LABEL": "@string/app_name",
-      "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
-      "CONTENT_AUTHORITY": "$PACKAGE_NAME"
-    }
-  },
   "cordova-plugin-dialogs": {
     "source": {
       "type": "registry",
@@ -79,5 +54,28 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-ble-central": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-ble-central"
+    },
+    "is_top_level": true,
+    "variables": {
+      "BLUETOOTH_USAGE_DESCRIPTION": "Required to display HR and Speed"
+    }
+  },
+  "cordova-plugin-background-geolocation": {
+    "source": {
+      "type": "registry",
+      "id": "@mauron85/cordova-plugin-background-geolocation@3.1.0"
+    },
+    "is_top_level": true,
+    "variables": {
+      "GOOGLE_PLAY_SERVICES_VERSION": "11+",
+      "ANDROID_SUPPORT_LIBRARY_VERSION": "23+",
+      "ALWAYS_USAGE_DESCRIPTION": "App requires ...",
+      "MOTION_USAGE_DESCRIPTION": "App requires motion detection"
+    }
   }
 }

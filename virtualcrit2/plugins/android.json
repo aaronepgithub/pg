@@ -9,7 +9,7 @@
   "installed_plugins": {
     "cordova-plugin-background-geolocation": {
       "GOOGLE_PLAY_SERVICES_VERSION": "11+",
-      "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
+      "ANDROID_SUPPORT_LIBRARY_VERSION": "23+",
       "ICON": "@mipmap/icon",
       "SMALL_ICON": "@mipmap/icon",
       "ACCOUNT_NAME": "@string/app_name",
@@ -28,15 +28,6 @@
       "PACKAGE_NAME": "com.virtualcrit.virtualcrit2"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.virtualcrit.virtualcrit2"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.virtualcrit.virtualcrit2"
-    },
-    "cordova-plugin-vibration": {
-      "PACKAGE_NAME": "com.virtualcrit.virtualcrit2"
-    },
-    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.virtualcrit.virtualcrit2"
     }
   },

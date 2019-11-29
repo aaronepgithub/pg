@@ -20,14 +20,52 @@
 	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>prefs</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Required to display HR and Speed</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Required to display HR and Speed</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App requires ...</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App requires ...</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App requires ...</string>
 	<key>NSMainNibFile</key>
 	<string/>
 	<key>NSMainNibFile~ipad</key>
 	<string/>
+	<key>NSMotionUsageDescription</key>
+	<string>App requires motion detection</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>fetch</string>
+		<string>location</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>CDVLaunchScreen</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UISupportedInterfaceOrientations</key>
@@ -43,39 +81,5 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>UILaunchStoryboardName</key>
-	<string>CDVLaunchScreen</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app always requires location tracking</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app always requires location tracking</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app always requires location tracking</string>
-	<key>NSMotionUsageDescription</key>
-	<string>This app requires motion detection</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-	</array>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>prefs</string>
-			</array>
-		</dict>
-	</array>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string/>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string/>
 </dict>
 </plist>

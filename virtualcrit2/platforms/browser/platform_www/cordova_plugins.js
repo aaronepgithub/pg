@@ -1,22 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-ble-central/www/ble.js",
-        "id": "cordova-plugin-ble-central.ble",
-        "pluginId": "cordova-plugin-ble-central",
-        "clobbers": [
-            "ble"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-ble-central/src/browser/BLECentralPlugin.js",
-        "id": "cordova-plugin-ble-central.BLECentralPlugin",
-        "pluginId": "cordova-plugin-ble-central",
-        "merges": [
-            "ble"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-vibration/www/vibration.js",
         "id": "cordova-plugin-vibration.notification",
         "pluginId": "cordova-plugin-vibration",
@@ -70,19 +54,6 @@ module.exports = [
         "id": "cordova-plugin-network-information.NetworkInfoProxy",
         "pluginId": "cordova-plugin-network-information",
         "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-background-geolocation/www/BackgroundGeolocation.js",
-        "id": "cordova-plugin-background-geolocation.BackgroundGeolocation",
-        "pluginId": "cordova-plugin-background-geolocation",
-        "clobbers": [
-            "BackgroundGeolocation"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-background-geolocation/www/radio.js",
-        "id": "cordova-plugin-background-geolocation.radio",
-        "pluginId": "cordova-plugin-background-geolocation"
     },
     {
         "file": "plugins/cordova-plugin-dialogs/www/notification.js",
@@ -292,20 +263,49 @@ module.exports = [
         "id": "cordova-plugin-statusbar.StatusBarProxy",
         "pluginId": "cordova-plugin-statusbar",
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-ble-central/www/ble.js",
+        "id": "cordova-plugin-ble-central.ble",
+        "pluginId": "cordova-plugin-ble-central",
+        "clobbers": [
+            "ble"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-ble-central/src/browser/BLECentralPlugin.js",
+        "id": "cordova-plugin-ble-central.BLECentralPlugin",
+        "pluginId": "cordova-plugin-ble-central",
+        "merges": [
+            "ble"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-background-geolocation/www/BackgroundGeolocation.js",
+        "id": "cordova-plugin-background-geolocation.BackgroundGeolocation",
+        "pluginId": "cordova-plugin-background-geolocation",
+        "clobbers": [
+            "BackgroundGeolocation"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-background-geolocation/www/radio.js",
+        "id": "cordova-plugin-background-geolocation.radio",
+        "pluginId": "cordova-plugin-background-geolocation"
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-ble-central": "1.2.4",
     "cordova-plugin-vibration": "2.1.6",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-compat": "1.2.0",
-    "cordova-plugin-background-geolocation": "3.1.0",
     "cordova-plugin-dialogs": "2.0.2",
     "cordova-plugin-file": "4.3.3",
-    "cordova-plugin-statusbar": "2.4.3"
+    "cordova-plugin-statusbar": "2.4.3",
+    "cordova-plugin-ble-central": "1.2.4",
+    "cordova-plugin-background-geolocation": "3.1.0"
 }
 // BOTTOM OF METADATA
 });

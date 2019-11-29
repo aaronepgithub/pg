@@ -8,12 +8,12 @@
   },
   "installed_plugins": {
     "cordova-plugin-background-geolocation": {
-      "ALWAYS_USAGE_DESCRIPTION": "This app always requires location tracking",
-      "MOTION_USAGE_DESCRIPTION": "This app requires motion detection",
+      "ALWAYS_USAGE_DESCRIPTION": "App requires ...",
+      "MOTION_USAGE_DESCRIPTION": "App requires motion detection",
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-ble-central": {
-      "BLUETOOTH_USAGE_DESCRIPTION": " ",
+      "BLUETOOTH_USAGE_DESCRIPTION": "Required to display HR and Speed",
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-compat": {
@@ -26,15 +26,6 @@
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-vibration": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
-    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },

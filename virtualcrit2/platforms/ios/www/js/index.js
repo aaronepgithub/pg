@@ -53,8 +53,13 @@ function tockCallback() {
 
 function tockComplete() {
     roundsComplete += 1;
-    console.log('4. tockComplete, roundsComplete: ' + roundsComplete);
+    console.log('tockComplete, roundsComplete: ' + roundsComplete);
     timer.start( (secondsPerRound - 1) * 1000 );
+    newRound();
+}
+
+function newRound() {
+    console.log('fn newRound');
 }
 
 
@@ -317,6 +322,12 @@ $$('.start-system').on('click', function (e) {
 
 $$('.start-gps').on('click', function (e) {
     console.log('click start-gps');
+    var t = $$('.gps-item-after').text(); 
+    if (t == 'ON') {
+        console.log('already started');
+        return;
+    }
+
     $$('.gps-item-header').text('');
     $$('.gps-item-after').text('ON');
     startGPSTracking();
@@ -351,14 +362,15 @@ function startGPSTracking() {
 
 
     BackgroundGeolocation.configure({
-        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        // locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
+        //activityType: 'Fitness',
         //TODO...THIS IS TOO AGRESSIVE
         stationaryRadius: 5,
         distanceFilter: 5,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
-        debug: false,
+        //debug: true,
         interval: 5000,
         fastestInterval: 2000,
         activitiesInterval: 5000,
@@ -371,36 +383,64 @@ function startGPSTracking() {
 
       BackgroundGeolocation.on('location', function(location) {
         console.log('new location arrived');
+
         // $$('.main-status-alerts').text("...");
-        onBackgroundSuccess(location);
+        $$('.main-status-alerts').text('new location');
+        //onBackgroundSuccess(location);
+
+        let l = {
+            latitude : location.latitude,
+           longitude : location.longitude
+        };
+        console.log('calling onBackgroundSuccess');
+        onBackgroundSuccess(l);
+
       });
 
       BackgroundGeolocation.on('error', function(error) {
         console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
+        //$$('.main-status-alerts').text(error + ' GPS Error');
       });
     
       BackgroundGeolocation.on('stop', function() {
         console.log('[INFO] BackgroundGeolocation service has been stopped');
       });
 
-      BackgroundGeolocation.on('authorization', function(status) {
-        console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
-        if (status !== BackgroundGeolocation.AUTHORIZED) {
-          // we need to set delay or otherwise alert may not be shown
-          setTimeout(function() {
-            var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
-            if (showSettings) {
-              return BackgroundGeolocation.showAppSettings();
-            }
-          }, 1000);
-        }
+      BackgroundGeolocation.on('background', function() {
+        console.log('[INFO] App is in background');
+        // you can also reconfigure service (changes will be applied immediately)
+        //BackgroundGeolocation.configure({ debug: true });
       });
+    
+      BackgroundGeolocation.on('foreground', function() {
+        console.log('[INFO] App is in foreground');
+        //BackgroundGeolocation.configure({ debug: false });
+      });
+
+      BackgroundGeolocation.on('stationary', function(stationaryLocation) {
+        console.log('[INFO] stationary');
+        $$('.main-status-alerts').text('Stationary');
+      });
+
+    //   BackgroundGeolocation.on('authorization', function(status) {
+    //     console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
+    //     if (status !== BackgroundGeolocation.AUTHORIZED) {
+    //       // we need to set delay or otherwise alert may not be shown
+    //       setTimeout(function() {
+    //         var showSettings = confirm('App requires location tracking permission. Would you like to open app settings?');
+    //         if (showSettings) {
+    //           return BackgroundGeolocation.showAppSettings();
+    //         }
+    //       }, 1000);
+    //     }
+    //   });
 
 
       BackgroundGeolocation.checkStatus(function(status) {
         console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
+        $$('.main-status-alerts').text('[INFO] BackgroundGeolocation service is running', status.isRunning);
     
         // you don't need to check status before start (this is just the example)
         if (!status.isRunning) {
@@ -413,8 +453,8 @@ function startGPSTracking() {
 // Then copy resources\splash.png to icon.png in the new mipmap directory.
 }
 
-var lastLatitude = -1.0;
-var lastLongitude = -1.0;
+var lastLatitude = -1;
+var lastLongitude = -1;
 var lastActivityTime = 0;
 
 var totalDistance = 0;
@@ -423,11 +463,14 @@ var totalActivyTime = 0;
 var gpsAvgSpeed = -1;
 var gpsSpeed = -1;
 
-function onBackgroundSuccess(location) {
+function onBackgroundSuccess(newLocation) {
     console.log('onBackgroundSuccess');
+
+
     if (lastLatitude == -1) {
-        lastLatitude = location.latitude;
-        lastLongitude = location.longitude;
+        console.log('onBackgroundSuccess - first reading');
+        lastLatitude = newLocation.latitude;
+        lastLongitude = newLocation.longitude;
         lastActivityTime = _.now();  //ms
 
         if (startTime) {
@@ -439,12 +482,13 @@ function onBackgroundSuccess(location) {
         };
         return;
     }
+    console.log('onBackgroundSuccess - new, good reading');
 	var R = 6371; // Radius of the earth in km
-	var dLat = (location.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
-	var dLon = (location.longitude-lastLongitude) * (Math.PI/180);
+	var dLat = (newLocation.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
+	var dLon = (newLocation.longitude-lastLongitude) * (Math.PI/180);
 	var a =
 	Math.sin(dLat/2) * Math.sin(dLat/2) +
-	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(location.latitude * (Math.PI/180)) *
+	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(newLocation.latitude * (Math.PI/180)) *
 	Math.sin(dLon/2) * Math.sin(dLon/2);
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     
@@ -460,10 +504,11 @@ function onBackgroundSuccess(location) {
     gpsSpeed = ret1string((distance * 0.62137) / (activityTime / 1000 / 60 / 60));
     updateChip('gpsSpeed', 0, gpsSpeed + ' Mph');
 
-$$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime) + ", " + timer.msToTimecode(totalActivyTime) );
+    console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
+    $$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
 
-	lastLatitude = location.latitude;   
-	lastLongitude = location.longitude;
+	lastLatitude = newLocation.latitude;   
+	lastLongitude = newLocation.longitude;
     lastActivityTime = _.now();
 }
 

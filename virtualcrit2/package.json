@@ -6,31 +6,29 @@
     "plugins": {
       "cordova-plugin-file": {},
       "cordova-plugin-vibration": {},
-      "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": " "
-      },
       "cordova-plugin-device": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-compat": {},
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-ble-central": {
+        "BLUETOOTH_USAGE_DESCRIPTION": "Required to display HR and Speed"
+      },
       "cordova-plugin-background-geolocation": {
         "GOOGLE_PLAY_SERVICES_VERSION": "11+",
-        "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
+        "ANDROID_SUPPORT_LIBRARY_VERSION": "23+",
+        "ALWAYS_USAGE_DESCRIPTION": "App requires ...",
+        "MOTION_USAGE_DESCRIPTION": "App requires motion detection",
         "ICON": "@mipmap/icon",
         "SMALL_ICON": "@mipmap/icon",
         "ACCOUNT_NAME": "@string/app_name",
         "ACCOUNT_LABEL": "@string/app_name",
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
-        "CONTENT_AUTHORITY": "$PACKAGE_NAME",
-        "ALWAYS_USAGE_DESCRIPTION": "This app always requires location tracking",
-        "MOTION_USAGE_DESCRIPTION": "This app requires motion detection"
-      },
-      "cordova-plugin-dialogs": {},
-      "cordova-plugin-statusbar": {}
+        "CONTENT_AUTHORITY": "$PACKAGE_NAME"
+      }
     },
     "platforms": [
-      "browser",
-      "ios",
-      "android"
+      "browser"
     ]
   },
   "dependencies": {
