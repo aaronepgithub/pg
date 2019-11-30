@@ -1,0 +1,62 @@
+{
+  "devDependencies": {
+    "cordova-plugin-camera": "^2.4.1",
+    "cordova-plugin-geolocation": "^2.4.3"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": " ",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
+      },
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": " "
+      },
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-ble-central": {
+        "BLUETOOTH_USAGE_DESCRIPTION": "Bluetooth is required to display heartrate and speed information"
+      },
+      "cordova-plugin-battery-status": {},
+      "cordova-plugin-compat": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-globalization": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-vibration": {},
+      "cordova-plugin-media-capture": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-background-geolocation": {
+        "GOOGLE_PLAY_SERVICES_VERSION": "11+",
+        "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
+        "ICON": "@mipmap/icon",
+        "SMALL_ICON": "@mipmap/icon",
+        "ACCOUNT_NAME": "@string/app_name",
+        "ACCOUNT_LABEL": "@string/app_name",
+        "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
+        "CONTENT_AUTHORITY": "$PACKAGE_NAME",
+        "ALWAYS_USAGE_DESCRIPTION": "This app always requires location tracking",
+        "MOTION_USAGE_DESCRIPTION": "This app requires motion detection"
+      }
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "dependencies": {
+    "@mauron85/cordova-plugin-background-geolocation": "3.1.0",
+    "cordova-android": "^8.1.0",
+    "cordova-ios": "5.1.0",
+    "cordova-plugin-battery-status": "2.0.3",
+    "cordova-plugin-ble-central": "1.2.4",
+    "cordova-plugin-compat": "^1.2.0",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-dialogs": "2.0.2",
+    "cordova-plugin-file": "6.0.2",
+    "cordova-plugin-globalization": "1.11.0",
+    "cordova-plugin-media-capture": "3.0.3",
+    "cordova-plugin-network-information": "2.0.2",
+    "cordova-plugin-statusbar": "2.4.3",
+    "cordova-plugin-vibration": "3.1.1"
+  }
+}
