@@ -11,7 +11,9 @@ var app = new Framework7({
     init: true,
     initOnDeviceReady: true,
     statusbar: {
-        androidOverlaysWebView: true,
+        androidOverlaysWebView: false,
+        iosTextColor: 'white',
+        androidTextColor: 'white',
       },
     on: {
         init: function () {
@@ -366,8 +368,8 @@ function startGPSTracking() {
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
         activityType: 'Fitness',
         //TODO...THIS IS TOO AGRESSIVE
-        stationaryRadius: 15,
-        distanceFilter: 15,
+        stationaryRadius: 5,
+        distanceFilter: 5,
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
         //debug: true,
