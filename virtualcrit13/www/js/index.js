@@ -168,6 +168,7 @@ function startBluetoothConnection(i) {
             console.log('is CSC', + deviceClicked.name) ;
             changeLi(i, 'SPD/CAD');
             ble.startNotification(deviceClicked.id, "1816", "2A5B", function(bb) {
+                calcSpeedCadenceValues(bb);
                 var data_csc = new Uint8Array(bb);
                 console.log('notify success CSC: ' + data_csc[1] );
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
@@ -446,9 +447,6 @@ function startGPSTracking() {
           BackgroundGeolocation.start(); //triggers start on start event
         }
       });
-
-// Create a directory : platforms\android\app\src\main\res\mipmap.
-// Then copy resources\splash.png to icon.png in the new mipmap directory.
 }
 
 var lastLatitude = -1;
@@ -481,6 +479,14 @@ function onBackgroundSuccess(newLocation) {
         return;
     }
     console.log('onBackgroundSuccess - new, good reading');
+
+    //STOP THE CLOCK
+    if (lastActivityTime - _.now() > 15000) {
+        lastActivityTime = _.now();
+        return;
+    }
+
+
 	var R = 6371; // Radius of the earth in km
 	var dLat = (newLocation.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
 	var dLon = (newLocation.longitude-lastLongitude) * (Math.PI/180);
@@ -489,8 +495,12 @@ function onBackgroundSuccess(newLocation) {
 	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(newLocation.latitude * (Math.PI/180)) *
 	Math.sin(dLon/2) * Math.sin(dLon/2);
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
     var distance = R * c; // Distance in KM
+
+    if (distance < .01 || _.now() - lastActivityTime < 2000) {
+        return;
+    }
+
     totalDistance += distance;  //Total Distance in KM
     console.log( 'Total Distance in Miles ' + (totalDistance * 0.62137) );
     $$('.item-distance').text((ret2string(totalDistance * 0.62137))  + ' Miles');
@@ -537,4 +547,100 @@ function msToTime(s) {  //hh:mm:ss
     // Pad to 2 or 3 digits, default is 2
   var pad = (n, z = 2) => ('00' + n).slice(-z);
   return pad(s/3.6e6|0) + ':' + pad((s%3.6e6)/6e4 | 0) + ':' + pad((s%6e4)/1000|0);
+}
+
+
+
+//BLUETOOTH CSC TESTER
+
+const UINT16_MAX = 65536;  // 2^16
+const UINT32_MAX = 4294967296;  // 2^32
+const updateRatio = 0.85; // Percent ratio between old/new stats
+var previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance;
+var wheelSize = 2111;
+
+function calcSpeedCadenceValues(event) {
+    console.log('calcSpeedCadenceValues');
+    
+    let value = event.target.value;
+
+    let flags = value.getUint8(0, true);
+    hasWheel = flags === 1 || flags === 3;
+    hasCrank = flags === 2 || flags === 3;
+
+    previousSample = currentSample;
+    currentSample = {
+        wheel: value.getUint32(1, true),
+        wheelTime: value.getUint16(5, true),
+        crank: value.getUint16(7, true),
+        crankTime: value.getUint16(9, true),
+    };
+
+        console.log(previousSample, currentSample);
+    var bluetoothStats = "Wheel Rev: " + currentSample.wheel + "\n";
+    bluetoothStats += "Last Wheel Time: " + currentSample.wheelTime + "\n";
+    bluetoothStats += "Crank Rev: " + currentSample.crank + "\n";
+    bluetoothStats += "Last Crank Time: " + currentSample.crankTime;
+    console.log(bluetoothStats);
+
+    calculateStats();
+
+    if (bluetoothStats) {
+        var data = "Cadence (rpm): " + bluetoothStats.cadence.toFixed(1) + "\n";
+        data += "Distance (km): " + bluetoothStats.distance.toFixed(2) + "\n";
+        data += "Speed (km/hr): " + bluetoothStats.speed.toFixed(1);
+        console.log(data);
+        
+    }
+
+}
+
+function diffForSample(current, previous, max) {
+    if (current >= previous) {
+        return current - previous;
+    } else {
+        return (max - previous) + current;
+    }
+}
+
+function calculateStats() {
+    if (!previousSample) {
+        startDistance = currentSample.wheel * wheelSize / 1000 / 1000; // km
+        return;
+    }
+
+    var distance, cadence, speed;
+    if (hasWheel) {
+        let wheelTimeDiff = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
+        wheelTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
+        let wheelDiff = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
+
+        var sampleDistance = wheelDiff * wheelSize / 1000; // distance in meters
+        speed = (wheelTimeDiff == 0) ? 0 : sampleDistance / wheelTimeDiff * 3.6; // km/hr
+
+        distance = currentSample.wheel * wheelSize / 1000 / 1000; // km
+        distance -= startDistance;
+    }
+
+    if (hasCrank) {
+        let crankTimeDiff = diffForSample(currentSample.crankTime, previousSample.crankTime, UINT16_MAX);
+        crankTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
+        let crankDiff = diffForSample(currentSample.crank, previousSample.crank, UINT16_MAX);
+
+        cadence = (crankTimeDiff == 0) ? 0 : (60 * crankDiff / crankTimeDiff); // RPM
+    }
+
+    if (bluetoothStats) {
+        bluetoothStats = {
+            cadence: bluetoothStats.cadence * (1 - updateRatio) + cadence * updateRatio,
+            distance: distance,
+            speed: bluetoothStats.speed * (1 - updateRatio) + speed * updateRatio
+        };
+    } else {
+        bluetoothStats = {
+            cadence: cadence,
+            distance: distance,
+            speed: speed
+        };
+    }
 }
