@@ -30,11 +30,11 @@ var $$ = Dom7;
 var timer = new Tock({
     countdown: true,
     interval: 1000,
-    callback: tockCallback,
-    complete: tockComplete
+    callback: tockCallback,  //EVERY SECOND
+    complete: tockComplete   //EVERY ROUND
 });
 
-var secondsPerRound = 60;
+//var secondsPerRound = 60;
 var roundsComplete = 0;
 var totalElapsedTime;
 
@@ -47,15 +47,17 @@ function tockCallback() {
     $$('.system-status').text("Running");
 }
 
+//END OF ROUND
 function tockComplete() {
     roundsComplete += 1;
     console.log('tockComplete, roundsComplete: ' + roundsComplete);
-    timer.start((secondsPerRound - 1) * 1000);
+    timer.start((tim.timSecondsPerRound - 1) * 1000);
     newRound();
 }
 
 function newRound() {
-    console.log('fn newRound');
+    console.log('fn newRound, post totals');
+    postRound();  //which will call totals
 }
 
 
@@ -288,7 +290,7 @@ $$('.start-system').on('click', function (e) {
     };
 
     startTime = _.now();
-    timer.start(secondsPerRound * 1000);
+    timer.start(tim.timSecondsInRound * 1000); //Set round duration for cb
 });
 
 
@@ -406,7 +408,7 @@ function startGPSTracking() {
     });
 }
 
-var lastLatitude = -1;
+var lastLatitude = -2;
 var lastLongitude = -1;
 var lastActivityTime = 0;
 
@@ -419,6 +421,11 @@ var gpsSpeed = -1;
 function onBackgroundSuccess(newLocation) {
     console.log('onBackgroundSuccess');
 
+    if (lastLatitude == -2) {
+        lastLatitude = -1;
+        console.log('init reading');
+        
+    }
 
     if (lastLatitude == -1) {
         console.log('onBackgroundSuccess - first reading');
@@ -429,9 +436,9 @@ function onBackgroundSuccess(newLocation) {
         if (startTime) {
             console.log('already tock running');
         } else {
-            console.log('starting tock');
+            console.log('starting tock, based on location found');
             startTime = _.now();
-            timer.start(secondsPerRound * 1000);
+            timer.start(tim.timSecondsPerRound * 1000);
         };
         return;
     }
@@ -503,7 +510,8 @@ const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
 const updateRatio = 0.85; // Percent ratio between old/new stats
 var previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance;
-var wheelSize = 2111;
+//var wheelSize = 2111;
+
 
 function calcSpeedCadenceValues(v) {
     console.log('calcSpeedCadenceValues');
@@ -562,7 +570,7 @@ function calculateStats() {
 
     if (!previousSample) {
         console.log('!preiousSample');
-        startDistance = currentSample.wheel * wheelSize / 1000 / 1000; // km
+        startDistance = currentSample.wheel * tim.timWheelSize / 1000 / 1000; // km
         return;
     }
 
@@ -573,10 +581,10 @@ function calculateStats() {
         wheelTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
         let wheelDiff = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
 
-        var sampleDistance = wheelDiff * wheelSize / 1000; // distance in meters
+        var sampleDistance = wheelDiff * tim.timWheelSize / 1000; // distance in meters
         speed = (wheelTimeDiff == 0) ? 0 : sampleDistance / wheelTimeDiff * 3.6; // km/hr
 
-        distance = currentSample.wheel * wheelSize / 1000 / 1000; // km
+        distance = currentSample.wheel * tim.timWheelSize / 1000 / 1000; // km
         distance -= startDistance;
     }
 
@@ -646,18 +654,23 @@ function networkOfflineCallback() {
 
 
 //DATE FUNCTION
-var today = new Date();
-var dd = today.getDate().toString();
-var mm = (today.getMonth() + 1).toString(); //January is 0!
-var yyyy = today.getFullYear().toString();
-if (dd < 10) {
-		dd = '0' + dd;
+function getTodaysDate() {
+    let today = new Date();
+    var dd = today.getDate().toString();
+    var mm = (today.getMonth() + 1).toString(); //January is 0!
+    let yyyy = today.getFullYear().toString();
+    if (dd < 10) {
+            dd = '0' + dd;
+    }
+    if (mm < 10) {
+            mm = '0' + mm;
+    }
+    let pubFullDate = yyyy + mm + dd;
+    let pubFullTime = _.now();
+    let pubMonth = mm;
+    let pubDay = dd;
+    let pubYear = yyyy;
+
+    return pubFullDate
 }
-if (mm < 10) {
-		mm = '0' + mm;
-}
-var pubFullDate = yyyy + mm + dd;
-var pubFullTime = _.now();
-var pubMonth = mm;
-var pubDay = dd;
-var pubYear = yyyy;
+
