@@ -2,8 +2,8 @@ var tim = {
     timName: 'Tim15',
     timTeam: 'Solo',
     timGroup: 'None',
-    timAudio: 'NO',
-    timWheelSize: 2111,
+    timAudio: 'OFF',
+    timWheelSize: 2100,
     timMaxHeartate: 190,
     timSecondsPerRound: 15,
 }

@@ -278,22 +278,46 @@ function startup() {
     var systemStatus = "Stopped";
     $$('.total-time').text(totalTime);
     $$('.system-status').text(systemStatus);
-    //changeLi(0, 'STATUS');
 
+    //LOCAL STORAGE ON STARTUP
 
-    //LOCAL STORAGE
+    //name
     var g = localStorage.getItem('timName');
-    console.log('g: ' + g);
+    console.log('timName: ' + g);
     if (g) {
         tim.timName = g;
         $$(".span-timName").text(tim.timName);
-        console.log('1. tim.timName: ' + tim.timName);
     } else {
         localStorage.setItem('timName', tim.timName);
         $$(".span-timName").text(tim.timName);
-        console.log('2. tim.timName: ' + tim.timName);
     }
-    
+
+    //audio
+    if ( localStorage.getItem('timAudio') ) {
+        tim.timAudio = localStorage.getItem('timAudio');
+        $$(".span-timAudio").text(tim.timAudio);
+    } else {
+        localStorage.setItem('timAudio', tim.timAudio);
+        $$(".span-timAudio").text(tim.timAudio);
+    };
+
+    //maxhr
+    if ( localStorage.getItem('timMaxHeartate') ) {
+        tim.timMaxHeartate = parseInt(localStorage.getItem('timMaxHeartate'));
+        $$(".span-timMaxHeartate").text(tim.timMaxHeartate.toString());
+    } else {
+        localStorage.setItem('timMaxHeartate', tim.timMaxHeartate.toString());
+        $$(".span-timMaxHeartate").text(tim.timMaxHeartate.toString());
+    };
+
+    //tiresize
+    if ( localStorage.getItem('timWheelSize') ) {
+        tim.timWheelSize = parseInt(localStorage.getItem('timWheelSize'));
+        $$(".span-timWheelSize").text(tim.timWheelSize.toString());
+    } else {
+        localStorage.setItem('timWheelSize', tim.timWheelSize.toString());
+        $$(".span-timWheelSize").text(tim.timWheelSize.toString());
+    };
     
     
     
@@ -335,11 +359,10 @@ $$('.start-gps').on('dblclick', function (e) {
     startLocationSimulator();
 });
 
+//SET NAME
 $$('.item-timName').on('click', function (e) {
     console.log('click timName');
-    //tim.timName = $$('.span-timName').text();
-    //get and save val
-    var na = 'default1';
+
     app.dialog.prompt('RIDER NAME', '', function(x) {
         console.log('OK: x', x);
         tim.timName = x.toUpperCase();
@@ -351,6 +374,44 @@ $$('.item-timName').on('click', function (e) {
         $$('.span-timName').text(tim.timName);
         localStorage.setItem('timName', tim.timName);
     }, tim.timName);
+});
+
+//SET AUDIO
+$$('.item-timAudio').on('click', function (e) {
+    console.log('click timAudio');
+    
+    if ($$('.span-timAudio').text() == "OFF") {
+        $$('.span-timAudio').text("ON");
+        localStorage.setItem('timAudio', "ON");
+    } else {
+        $$('.span-timAudio').text("OFF");
+        localStorage.setItem('timAudio', "OFF");
+    }
+});
+
+//SET MAXHR
+$$('.item-timMaxHeartate').on('click', function (e) {
+    console.log('click timMaxHeartate');
+    
+    tim.timMaxHeartate += 5;
+    console.log('tim.timMaxHeartate  ', tim.timMaxHeartate);
+    if (tim.timMaxHeartate > 210) {
+        tim.timMaxHeartate = 185;
+    }
+    $$('.span-timMaxHeartate').text(tim.timMaxHeartate);
+    localStorage.setItem('timMaxHeartate', tim.timMaxHeartate.toString());
+});
+
+//SET WHEELSIZE
+$$('.item-timWheelSize').on('click', function (e) {
+    console.log('click timWheelSize');
+    
+    tim.timWheelSize += 10;
+    if (tim.timWheelSize > 2220) {
+        tim.timWheelSize = 2100;
+    }
+    $$('.span-timWheelSize').text(tim.timWheelSize);
+    localStorage.setItem('timWheelSize', tim.timWheelSize.toString());
 
 });
 
