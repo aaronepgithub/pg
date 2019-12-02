@@ -5,7 +5,7 @@ var app = new Framework7({
     touch: {
         fastClicks: true,
         tapHold: true //enable tap hold events
-      },
+    },
     material: true,
     cache: true,
     init: true,
@@ -14,7 +14,7 @@ var app = new Framework7({
         androidOverlaysWebView: false,
         iosTextColor: 'white',
         androidTextColor: 'white',
-      },
+    },
     on: {
         init: function () {
             console.log('App initialized');
@@ -41,14 +41,8 @@ var totalElapsedTime;
 function tockCallback() {
     //console.log('tockCallback');
     var countdownTime = timer.lap();  //elapsed in milli, per round
-    //var secondsInRound = secondsPerRound * 10000 - countdownTime; //round up to show
-    // console.log('1a. tockCallback, countdownTime: ' + countdownTime + ', Rounded:  ' + Math.round(countdownTime/1000));
-    // console.log('1b. tockCallback, roundCountdownTime: ' + timer.msToTimecode(countdownTime));
 
     totalElapsedTime = _.now() - startTime;
-    // console.log('2. tockCallback, elapsedTime: ' + elapsedTime);
-    // console.log('3. tockCallback, elapsedTime: ' + timer.msToTimecode(elapsedTime) + "\n");
-
     $$('.total-time').text(timer.msToTimecode(totalElapsedTime));
     $$('.system-status').text("Running");
 }
@@ -56,7 +50,7 @@ function tockCallback() {
 function tockComplete() {
     roundsComplete += 1;
     console.log('tockComplete, roundsComplete: ' + roundsComplete);
-    timer.start( (secondsPerRound - 1) * 1000 );
+    timer.start((secondsPerRound - 1) * 1000);
     newRound();
 }
 
@@ -75,28 +69,16 @@ function postScan() {
     $$('.device-ul').empty();
     scannedDevices.forEach(element => {
         console.log('postScan forEach Element:  ' + JSON.stringify(element));
-        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">'+element.name+'</span><div class="item-footer device-id">'+element.id+'</div></div> <div class="item-after device-status">.</div></div> </a> </li>');
+        $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">' + element.name + '</span><div class="item-footer device-id">' + element.id + '</div></div> <div class="item-after device-status">.</div></div> </a> </li>');
     });
     console.log('postScan Complete');
     $$('.status-alerts').text('Updated');
 }
 
-
-
-
-
-
-
-
-
 $$('.start-bluetooth-scan').on('click', function (e) {
     console.log('click ble link');
     startBluetoothScan();
 });
-
-
-
-
 
 $$('.device-ul').on('click', 'li', function (e) {
     console.log('clicked a ble device');
@@ -105,8 +87,6 @@ $$('.device-ul').on('click', 'li', function (e) {
     // startBluetoothConnection(clickedDeviceIndex);
     setTimeout(startBluetoothConnection, 2000, clickedDeviceIndex);
 });
-
-
 
 
 $$('.device-ul').on('taphold', 'li', function (e) {
@@ -120,17 +100,17 @@ function startBluetoothDisconnection(i) {
     var deviceClicked = scannedDevices[i];
     console.log('startBluetoothDisconnection:  ' + scannedDevices[i].name);
     //TODO:  CHANGE TO SERVICES/CHAR INUSE
-    ble.stopNotification(deviceClicked.id, "180d", "2a37", function(s) {
+    ble.stopNotification(deviceClicked.id, "180d", "2a37", function (s) {
         console.log('stop notify success, calling disconnect');
-        ble.disconnect(deviceClicked.id, function() {console.log('disconnect success');}, function() {console.log('disconnect failed');} );
-    }, function(e) {
+        ble.disconnect(deviceClicked.id, function () { console.log('disconnect success'); }, function () { console.log('disconnect failed'); });
+    }, function (e) {
         console.log('stop notify failure');
     });
 
-    ble.stopNotification(deviceClicked.id, "1816", "2A5B", function(s) {
+    ble.stopNotification(deviceClicked.id, "1816", "2A5B", function (s) {
         console.log('stop notify success, calling disconnect CSC');
-        ble.disconnect(deviceClicked.id, function() {console.log('disconnect success CSC');}, function() {console.log('disconnect failed CSC');} );
-    }, function(e) {
+        ble.disconnect(deviceClicked.id, function () { console.log('disconnect success CSC'); }, function () { console.log('disconnect failed CSC'); });
+    }, function (e) {
         console.log('stop notify failure CSC');
     });
 
@@ -141,11 +121,11 @@ var connectedDevices = [];  //Peripheral Object
 function startBluetoothConnection(i) {
     console.log('startBluetoothConnection for index: ' + i);
     changeLi(i, '...');
-    if (scannedDevices.length < 1) {return};
+    if (scannedDevices.length < 1) { return };
     var deviceClicked = scannedDevices[i];  //TODO, MAYBE PUBLIC VAR?
     console.log('deviceClicked:  ' + deviceClicked.id + ', ' + deviceClicked.name);
     connectedDevices.push(deviceClicked);
-    ble.connect(deviceClicked.id, function(p) {
+    ble.connect(deviceClicked.id, function (p) {
         console.log('connected callback for ' + deviceClicked.id);
         //TRY THIS TO ACCESS...
         console.log('From connected callback, p.name, p.id, p.services, p.services[0]:  ' + p.name + ',' + p.id + ', ' + JSON.stringify(p.services) + ', ' + p.services[0]);
@@ -162,28 +142,28 @@ function startBluetoothConnection(i) {
         if ((t1) || (t2)) {
             console.log('is HR');
             changeLi(i, 'HR');
-            ble.startNotification(deviceClicked.id, "180d", "2a37", function(b) {
+            ble.startNotification(deviceClicked.id, "180d", "2a37", function (b) {
                 var data = new Uint8Array(b);
-                console.log('notify success HR: ' + data[1] );
+                console.log('notify success HR: ' + data[1]);
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 updateChip(p.name, 1, data[1]);
-            }, function(e) {
+            }, function (e) {
                 console.log('notify failure HR:  ' + e);
             });
-        }  
-        
+        }
+
         if (t3) {
             // if (isNaN(deviceClicked.name)) {return};
             console.log('is CSC', + p.name);
             //TODO, WHY DOES P.NAME WORK BUT NOT DEVICECLICKED.NAME???
             changeLi(i, 'SPD/CAD');
-            ble.startNotification(deviceClicked.id, "1816", "2A5B", function(bb) {
+            ble.startNotification(deviceClicked.id, "1816", "2A5B", function (bb) {
                 calcSpeedCadenceValues(bb);
                 var data_csc = new Uint8Array(bb);
-                console.log('notify success CSC: ' + data_csc[1] );
+                console.log('notify success CSC: ' + data_csc[1]);
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 // updateChip(p.name, 2, data_csc[1]);
-            }, function(e) {
+            }, function (e) {
                 console.log('notify failure CSC:  ' + e);
             });
         }
@@ -192,38 +172,14 @@ function startBluetoothConnection(i) {
             console.log('isNan');
         }
 
-    }, function(p) {
+    }, function (p) {
         console.log('disconnected callback:  ' + JSON.stringify(p));
         $$('.status-alerts').html('Disconnection: ' + p.name);
         var tt = _.findIndex(scannedDevices, ['id', p.id]);
         console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
         console.log('waiting 15 seconds before issuing a new start BluetoothConnection');
         setTimeout(startBluetoothConnection, 15000, tt);
-
-
-        // var t = _.indexOf(reconnectRequests, p.id);
-        // if (t < 0) {
-        //     console.log('first disconnection, issue a new connect');
-        //     reconnectRequests.push(p.id);
-        //     //get index value of peripheral
-        //     var tt = _.findIndex(scannedDevices, ['id', p.id]);
-        //     console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
-        //     setTimeout(startBluetoothConnection, 30000, tt);
-        //     if (tt >= 0 ) {
-        //         console.log('request to restart connection for p.id, name: ' + p.id + ', ' + p.name);
-        //         $$('.status-alerts').html('Waiting for: ' + p.name);
-        //         setTimeout(startBluetoothConnection, 30000, tt);
-        //     } else {
-        //         console.log('couldnt find p.id, p.name in scanned devices: ' + p.id + ', ' + p.name);
-        //     }
-
-        // } else {
-        //     console.log('we have already issued a connect request following the initial disconnect');
-        // }
-
-
     }
-
     );
 
 
@@ -237,28 +193,28 @@ function updateChip(n, i, d) {
     if (i == 0) {
 
         $$('.chip-gps').html('<div class="chip-media bg-color-green">' +
-        '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
-        ' <div class="chip-label">GPS: '+ String(d) +' </div>');
+            '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+            ' <div class="chip-label">GPS: ' + String(d) + ' </div>');
     }
 
     if (i == 1) {
 
         $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
-        '<i class="fa fa-heartbeat fa-lg"></i></div>' +
-        ' <div class="chip-label">HR: ' + String(d) + ' </div>');
+            '<i class="fa fa-heartbeat fa-lg"></i></div>' +
+            ' <div class="chip-label">HR: ' + String(d) + ' </div>');
     }
     if (i == 2) {
 
         $$('.chip-csc').html('<div class="chip-media bg-color-green">' +
-        '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
-        ' <div class="chip-label">Spd: '+ String(d) +' </div>');
+            '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+            ' <div class="chip-label">Spd: ' + String(d) + ' </div>');
     }
 
     if (i == 3) {
 
         $$('.chip-cad').html('<div class="chip-media bg-color-green">' +
-        '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
-        ' <div class="chip-label">Cad: '+ String(d) +' </div>');
+            '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+            ' <div class="chip-label">Cad: ' + String(d) + ' </div>');
     }
 
 
@@ -266,13 +222,13 @@ function updateChip(n, i, d) {
 
 
 var bleServices = {
-	serviceHR: '180d',
-	measurementHR: '2a37',
-	serviceCSC: '1816',
-	measurementCSC: '2A5B',
-	servicePOW: '1818',
-	measurementPOW: '2A63',
-	serviceHRwrist: '55FF'
+    serviceHR: '180d',
+    measurementHR: '2a37',
+    serviceCSC: '1816',
+    measurementCSC: '2A5B',
+    servicePOW: '1818',
+    measurementPOW: '2A63',
+    serviceHRwrist: '55FF'
 };
 
 function startBluetoothScan() {
@@ -298,6 +254,20 @@ function startBluetoothScan() {
     );
 }
 
+function changeLi(i, v) {
+    console.log('changeLi');
+    //GET THE LI BY IDEX
+    var a = $$('.device-li').eq(i);
+    console.log($$(a).find('.device-status').html());
+    //SET THE VALUE...
+    // $$(a).find('.device-status').empty();
+    var b = $$(a).find('.device-status').text(v);
+    // console.log('a:' + a);
+    // console.log('a:' + b);
+    //var c = $$(a).find('.device-status').html();
+    console.log($$(a).find('.device-status').html());
+}
+
 
 var startTime;
 function startup() {
@@ -309,20 +279,6 @@ function startup() {
     //changeLi(0, 'STATUS');
 }
 
-function changeLi(i, v) {
-    console.log('changeLi');
-    //GET THE LI BY IDEX
-    var a = $$( '.device-li' ).eq(i);
-    console.log($$(a).find('.device-status').html());
-    //SET THE VALUE...
-    // $$(a).find('.device-status').empty();
-    var b = $$(a).find('.device-status').text(v);
-    // console.log('a:' + a);
-    // console.log('a:' + b);
-    //var c = $$(a).find('.device-status').html();
-    console.log($$(a).find('.device-status').html());
-}
-
 $$('.start-system').on('click', function (e) {
     console.log('click start-system');
 
@@ -331,8 +287,8 @@ $$('.start-system').on('click', function (e) {
         return;
     };
 
-        startTime = _.now();
-        timer.start(secondsPerRound * 1000);
+    startTime = _.now();
+    timer.start(secondsPerRound * 1000);
 });
 
 
@@ -357,21 +313,9 @@ $$('.start-gps').on('dblclick', function (e) {
     startLocationSimulator();
 });
 
-var isNetworkAvailable = true;
-
-document.addEventListener("offline", networkOfflineCallback, false);
-document.addEventListener("online", networkOnlineCallback, false);
-
-function networkOnlineCallback() {
-    console.log('Network online');
-    isNetworkAvailable = true;
-}
-function networkOfflineCallback() {
-    console.log('Network offline');
-    isNetworkAvailable = false;
-}
 
 
+// START LOCATION CALC
 
 function startGPSTracking() {
     console.log('startGPSTracking');
@@ -390,49 +334,49 @@ function startGPSTracking() {
         interval: 5000,
         fastestInterval: 2000,
         activitiesInterval: 5000,
-      });
+    });
 
-      BackgroundGeolocation.on('start', () => {
+    BackgroundGeolocation.on('start', () => {
         console.log('[DEBUG] BackgroundGeolocation has been started');
         $$('.main-status-alerts').text("GPS Tracking Started");
-      });
+    });
 
-      BackgroundGeolocation.on('location', function(location) {
+    BackgroundGeolocation.on('location', function (location) {
         console.log('new location arrived');
 
         let l = {
-            latitude : location.latitude,
-           longitude : location.longitude
+            latitude: location.latitude,
+            longitude: location.longitude
         };
         console.log('calling onBackgroundSuccess');
         onBackgroundSuccess(l);
 
-      });
+    });
 
-      BackgroundGeolocation.on('error', function(error) {
+    BackgroundGeolocation.on('error', function (error) {
         console.log('[ERROR] BackgroundGeolocation error:', error.code, error.message);
         //$$('.main-status-alerts').text(error + ' GPS Error');
-      });
+    });
 
-      BackgroundGeolocation.on('stop', function() {
+    BackgroundGeolocation.on('stop', function () {
         console.log('[INFO] BackgroundGeolocation service has been stopped');
-      });
+    });
 
-      BackgroundGeolocation.on('background', function() {
+    BackgroundGeolocation.on('background', function () {
         console.log('[INFO] App is in background');
         // you can also reconfigure service (changes will be applied immediately)
         //BackgroundGeolocation.configure({ debug: true });
-      });
+    });
 
-      BackgroundGeolocation.on('foreground', function() {
+    BackgroundGeolocation.on('foreground', function () {
         console.log('[INFO] App is in foreground');
         //BackgroundGeolocation.configure({ debug: false });
-      });
+    });
 
-      BackgroundGeolocation.on('stationary', function(stationaryLocation) {
+    BackgroundGeolocation.on('stationary', function (stationaryLocation) {
         console.log('[INFO] stationary');
         $$('.main-status-alerts').text('Stationary');
-      });
+    });
 
     //   BackgroundGeolocation.on('authorization', function(status) {
     //     console.log('[INFO] BackgroundGeolocation authorization status: ' + status);
@@ -448,7 +392,7 @@ function startGPSTracking() {
     //   });
 
 
-      BackgroundGeolocation.checkStatus(function(status) {
+    BackgroundGeolocation.checkStatus(function (status) {
         console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
@@ -457,9 +401,9 @@ function startGPSTracking() {
         // you don't need to check status before start (this is just the example)
         if (!status.isRunning) {
             console.log('issue start command');
-          BackgroundGeolocation.start(); //triggers start on start event
+            BackgroundGeolocation.start(); //triggers start on start event
         }
-      });
+    });
 }
 
 var lastLatitude = -1;
@@ -500,14 +444,14 @@ function onBackgroundSuccess(newLocation) {
     }
 
 
-	var R = 6371; // Radius of the earth in km
-	var dLat = (newLocation.latitude-lastLatitude) * (Math.PI/180);  // deg2rad below
-	var dLon = (newLocation.longitude-lastLongitude) * (Math.PI/180);
-	var a =
-	Math.sin(dLat/2) * Math.sin(dLat/2) +
-	Math.cos(lastLatitude * (Math.PI/180)) * Math.cos(newLocation.latitude * (Math.PI/180)) *
-	Math.sin(dLon/2) * Math.sin(dLon/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var R = 6371; // Radius of the earth in km
+    var dLat = (newLocation.latitude - lastLatitude) * (Math.PI / 180);  // deg2rad below
+    var dLon = (newLocation.longitude - lastLongitude) * (Math.PI / 180);
+    var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lastLatitude * (Math.PI / 180)) * Math.cos(newLocation.latitude * (Math.PI / 180)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var distance = R * c; // Distance in KM
 
     if (distance < .01 || _.now() - lastActivityTime < 2000) {
@@ -515,8 +459,8 @@ function onBackgroundSuccess(newLocation) {
     }
 
     totalDistance += distance;  //Total Distance in KM
-    console.log( 'Total Distance in Miles ' + (totalDistance * 0.62137) );
-    $$('.item-distance').text((ret2string(totalDistance * 0.62137))  + ' Miles');
+    console.log('Total Distance in Miles ' + (totalDistance * 0.62137));
+    $$('.item-distance').text((ret2string(totalDistance * 0.62137)) + ' Miles');
 
     var activityTime = (_.now() - lastActivityTime);  //in MS
     totalActivyTime += activityTime; //in MS
@@ -528,47 +472,33 @@ function onBackgroundSuccess(newLocation) {
     console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
     $$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
 
-	lastLatitude = newLocation.latitude;
-	lastLongitude = newLocation.longitude;
+    lastLatitude = newLocation.latitude;
+    lastLongitude = newLocation.longitude;
     lastActivityTime = _.now();
 }
 
-var fakeLat = 40.6644403;
-var fakeLon = -73.9712484;
-function startLocationSimulator() {
-    console.log('locationSimulator');
-          setInterval(function() {
-            let l = {
-                     latitude : fakeLat,
-                    longitude : fakeLon
-            };
-            onBackgroundSuccess(l);
-            let rn = _.random(.00005, .00015);
-            // fakeLat += .0001;
-            fakeLat += rn;
-            fakeLon -= .0001;
-          }, 2000);
-}
+// END LOCATION CALC
 
-function ret0string (n) {
-    return ((Math.round(n * 10))/10).toFixed(0);
+
+
+function ret0string(n) {
+    return ((Math.round(n * 10)) / 10).toFixed(0);
 }
-function ret1string (n) {
-    return ((Math.round(n * 10))/10).toFixed(1);
+function ret1string(n) {
+    return ((Math.round(n * 10)) / 10).toFixed(1);
 }
-function ret2string (n) {
-    return ((Math.round(n * 100))/100).toFixed(2);
+function ret2string(n) {
+    return ((Math.round(n * 100)) / 100).toFixed(2);
 }
 function msToTime(s) {  //hh:mm:ss
     // Pad to 2 or 3 digits, default is 2
-  var pad = (n, z = 2) => ('00' + n).slice(-z);
-  return pad(s/3.6e6|0) + ':' + pad((s%3.6e6)/6e4 | 0) + ':' + pad((s%6e4)/1000|0);
+    var pad = (n, z = 2) => ('00' + n).slice(-z);
+    return pad(s / 3.6e6 | 0) + ':' + pad((s % 3.6e6) / 6e4 | 0) + ':' + pad((s % 6e4) / 1000 | 0);
 }
 
 
 
-//BLUETOOTH CSC TESTER
-
+//BLUETOOTH CSC CALCULATOR
 const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
 const updateRatio = 0.85; // Percent ratio between old/new stats
@@ -577,7 +507,7 @@ var wheelSize = 2111;
 
 function calcSpeedCadenceValues(v) {
     console.log('calcSpeedCadenceValues');
-    
+
     let v0 = new Uint8Array(v);
     let value = new DataView(v);
 
@@ -611,9 +541,9 @@ function calcSpeedCadenceValues(v) {
         data += "Speed (km/hr): " + bluetoothStats.speed;
         console.log('data:  ' + data);
         console.log('ret1string values:  ' + ret1string(bluetoothStats.cadence), ret1string(bluetoothStats.distance), ret1string(bluetoothStats.speed));
-        if (bluetoothStats.speed) {updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph' );} //convert to mph
-        if (bluetoothStats.cadence) {updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm');}
-        if (bluetoothStats.distance) {$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137))  + ' Miles');}
+        if (bluetoothStats.speed) { updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
+        if (bluetoothStats.cadence) { updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
+        if (bluetoothStats.distance) { $$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
 
     }
 
@@ -629,7 +559,7 @@ function diffForSample(current, previous, max) {
 
 function calculateStats() {
     console.log('calculateStats Start');
-    
+
     if (!previousSample) {
         console.log('!preiousSample');
         startDistance = currentSample.wheel * wheelSize / 1000 / 1000; // km
@@ -652,7 +582,7 @@ function calculateStats() {
 
     if (hasCrank) {
         console.log('hasCrank');
-        
+
         let crankTimeDiff = diffForSample(currentSample.crankTime, previousSample.crankTime, UINT16_MAX);
         crankTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
         let crankDiff = diffForSample(currentSample.crank, previousSample.crank, UINT16_MAX);
@@ -662,14 +592,14 @@ function calculateStats() {
 
     if (bluetoothStats) {
         console.log('bluetoothStats has a value');
-        
+
         bluetoothStats = {
             cadence: bluetoothStats.cadence * (1 - updateRatio) + cadence * updateRatio,
             distance: distance,
             speed: bluetoothStats.speed * (1 - updateRatio) + speed * updateRatio
         };
         console.log('bluetoothStats1: ' + JSON.stringify(bluetoothStats));
-        
+
     } else {
         bluetoothStats = {
             cadence: cadence,
@@ -679,3 +609,55 @@ function calculateStats() {
         console.log('bluetoothStats2: ' + JSON.stringify(bluetoothStats));
     }
 }
+// END BLUETOOTH CALC
+
+
+// LOCATION SIMULATOR
+var fakeLat = 40.6644403;
+var fakeLon = -73.9712484;
+function startLocationSimulator() {
+    console.log('locationSimulator');
+    setInterval(function () {
+        let l = {
+            latitude: fakeLat,
+            longitude: fakeLon
+        };
+        onBackgroundSuccess(l);
+        let rn = _.random(.00005, .00015);
+        // fakeLat += .0001;
+        fakeLat += rn;
+        fakeLon -= .0001;
+    }, 2000);
+}
+
+// TEST NETWORK AVAILABILITY
+var isNetworkAvailable = true;
+document.addEventListener("offline", networkOfflineCallback, false);
+document.addEventListener("online", networkOnlineCallback, false);
+
+function networkOnlineCallback() {
+    console.log('Network online');
+    isNetworkAvailable = true;
+}
+function networkOfflineCallback() {
+    console.log('Network offline');
+    isNetworkAvailable = false;
+}
+
+
+//DATE FUNCTION
+var today = new Date();
+var dd = today.getDate().toString();
+var mm = (today.getMonth() + 1).toString(); //January is 0!
+var yyyy = today.getFullYear().toString();
+if (dd < 10) {
+		dd = '0' + dd;
+}
+if (mm < 10) {
+		mm = '0' + mm;
+}
+var pubFullDate = yyyy + mm + dd;
+var pubFullTime = _.now();
+var pubMonth = mm;
+var pubDay = dd;
+var pubYear = yyyy;
