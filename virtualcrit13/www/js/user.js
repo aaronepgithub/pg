@@ -1,14 +1,26 @@
 var tim = {
-    timName: 'Tim13',
+    timName: 'Tim15',
     timTeam: 'Solo',
     timGroup: 'None',
     timAudio: 'NO',
     timWheelSize: 2111,
     timMaxHeartate: 185,
-    timSecondsPerRound: 60,
+    timSecondsPerRound: 15,
 }
 
-
+//STRINGS AND IMPERIAL?
+//USE GETTERS/SETTERS?
+var active = {
+    btSpeed: 0,
+    btDistance: 0,
+    btHeartrate: 0,
+    btCadence: 0,  
+    btTime: 0,
+    gpsSpeed: 0,  
+    gpsDistance: 0,  
+    gpsTime: 0,
+    
+}
 
 var totals = {
     distance: 0,

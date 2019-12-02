@@ -279,18 +279,21 @@ function startup() {
     $$('.total-time').text(totalTime);
     $$('.system-status').text(systemStatus);
     //changeLi(0, 'STATUS');
+
+    $("#input-Name").attr("placeholder", tim.timName);
+
+    listenTotals();
 }
 
 $$('.start-system').on('click', function (e) {
     console.log('click start-system');
-
     if (startTime) {
         console.log('running');
         return;
     };
 
     startTime = _.now();
-    timer.start(tim.timSecondsInRound * 1000); //Set round duration for cb
+    timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
 });
 
 
@@ -315,6 +318,22 @@ $$('.start-gps').on('dblclick', function (e) {
     startLocationSimulator();
 });
 
+$$('.item-timName').on('click', function (e) {
+    console.log('click timName');
+    tim.timName = $$('.span-timName').text();
+    //get and save val
+    var na = 'default1';
+    app.dialog.prompt('RIDER NAME', '', function(x) {
+        console.log('OK: x', x);
+        tim.timName = x.toUpperCase();
+        $$('.span-timName').text(tim.timName);
+    }, function(y) {
+        console.log('Cancel: y: ', y);
+        tim.timName = y.toUpperCase();
+        $$('.span-timName').text(tim.timName);
+    }, tim.timName);
+
+});
 
 
 // START LOCATION CALC
@@ -398,7 +417,9 @@ function startGPSTracking() {
         console.log('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('[INFO] BackgroundGeolocation services enabled', status.locationServicesEnabled);
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
-        $$('.main-status-alerts').text('[INFO] BackgroundGeolocation service is running', status.isRunning);
+        //$$('.main-status-alerts').text('[INFO] BackgroundGeolocation service is running', status.isRunning);
+        console.log('BackgroundGeo is Running');
+        
 
         // you don't need to check status before start (this is just the example)
         if (!status.isRunning) {
