@@ -4,7 +4,7 @@ var tim = {
     timGroup: 'None',
     timAudio: 'NO',
     timWheelSize: 2111,
-    timMaxHeartate: 185,
+    timMaxHeartate: 190,
     timSecondsPerRound: 15,
 }
 

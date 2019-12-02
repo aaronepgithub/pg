@@ -280,8 +280,25 @@ function startup() {
     $$('.system-status').text(systemStatus);
     //changeLi(0, 'STATUS');
 
-    $("#input-Name").attr("placeholder", tim.timName);
 
+    //LOCAL STORAGE
+    var g = localStorage.getItem('timName');
+    console.log('g: ' + g);
+    if (g) {
+        tim.timName = g;
+        $$(".span-timName").text(tim.timName);
+        console.log('1. tim.timName: ' + tim.timName);
+    } else {
+        localStorage.setItem('timName', tim.timName);
+        $$(".span-timName").text(tim.timName);
+        console.log('2. tim.timName: ' + tim.timName);
+    }
+    
+    
+    
+    
+    
+    
     listenTotals();
 }
 
@@ -320,17 +337,19 @@ $$('.start-gps').on('dblclick', function (e) {
 
 $$('.item-timName').on('click', function (e) {
     console.log('click timName');
-    tim.timName = $$('.span-timName').text();
+    //tim.timName = $$('.span-timName').text();
     //get and save val
     var na = 'default1';
     app.dialog.prompt('RIDER NAME', '', function(x) {
         console.log('OK: x', x);
         tim.timName = x.toUpperCase();
         $$('.span-timName').text(tim.timName);
+        localStorage.setItem('timName', tim.timName);
     }, function(y) {
         console.log('Cancel: y: ', y);
         tim.timName = y.toUpperCase();
         $$('.span-timName').text(tim.timName);
+        localStorage.setItem('timName', tim.timName);
     }, tim.timName);
 
 });
