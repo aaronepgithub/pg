@@ -1,4 +1,30 @@
 var database = firebase.database();
+
+function listenRounds() {
+  console.log('Listen for Rounds Changes');
+  var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
+  roundsRef.on('value', function(snapshot) {
+    console.log('RoundsDB\n'+JSON.stringify(snapshot));
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      arrRounds.push(childData);
+    });
+    console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
+    let v = _.values(arrRounds);
+
+    let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
+    let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
+
+    console.log('arrScore[0]', arrScore[0].fb_timName, arrScore[0].fb_RND);
+    console.log('arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].fb_SPD); 
+
+  });
+  
+}
+
+var arrRounds = [];
+
 function listenTotals() {
     console.log('Listen for Totals Changes ' + getTodaysDate());
     //var totalsRef = database.ref('totals/' + getTodaysDate());

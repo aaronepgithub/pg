@@ -332,6 +332,10 @@ $$('.start-system').on('click', function (e) {
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
     listenTotals();
+
+    setTimeout(function() {
+        listenRounds();
+    }, 10000);
 });
 
 
@@ -538,6 +542,12 @@ function onBackgroundSuccess(newLocation) {
             startTime = _.now();
             timer.start(tim.timSecondsPerRound * 1000);
             listenTotals();
+
+            setTimeout(function() {
+                listenRounds();
+            }, 10000);
+
+            
         };
         return;
     }
