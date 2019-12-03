@@ -152,6 +152,9 @@ function startBluetoothConnection(i) {
                 console.log('notify success HR: ' + data[1]);
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 updateChip(p.name, 1, data[1]);
+                ui('item-hr', + ret0string(data[1]) + ' BPM');
+                //ui('item-hr-avg', +  + ' BPM (AVG)');
+
             }, function (e) {
                 console.log('notify failure HR:  ' + e);
             });
@@ -356,6 +359,13 @@ $$('.start-gps').on('click', function (e) {
 });
 
 $$('.start-gps').on('dblclick', function (e) {
+    console.log('click start-gps, taphold, start sim');
+    $$('.gps-item-header').text('');
+    $$('.gps-item-after').text('ON');
+    // startGPSTracking();
+    startLocationSimulator();
+});
+$$('.start-gps').on('taphold', function (e) {
     console.log('click start-gps, taphold, start sim');
     $$('.gps-item-header').text('');
     $$('.gps-item-after').text('ON');
@@ -588,8 +598,12 @@ function onBackgroundSuccess(newLocation) {
     gpsSpeed = ret1string((distance * 0.62137) / (activityTime / 1000 / 60 / 60));
     updateChip('gpsSpeed', 0, gpsSpeed + ' Mph');
 
-    console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
-    $$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
+    ui('.item-speed',gpsSpeed + ' MPH');
+    ui('.item-average-speed',gpsAvgSpeed + 'MPH (AVG)');
+    ui('.item-distance',ret2string(totalDistance * 0.62137) + ' MILES');
+
+    //console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
+    //$$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
 
     lastLatitude = newLocation.latitude;
     lastLongitude = newLocation.longitude;
@@ -661,12 +675,17 @@ function calcSpeedCadenceValues(v) {
         data += "Speed (km/hr): " + bluetoothStats.speed;
         console.log('data:  ' + data);
         console.log('ret1string values:  ' + ret1string(bluetoothStats.cadence), ret1string(bluetoothStats.distance), ret1string(bluetoothStats.speed));
-        if (bluetoothStats.speed) { updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
-        if (bluetoothStats.cadence) { updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
-        if (bluetoothStats.distance) { $$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
+        if (bluetoothStats.speed) { ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
+        if (bluetoothStats.cadence) { ui('item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
+        if (bluetoothStats.distance) { ui('item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
+
+
+// ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');
+//ui('item-average-speed-bt', + ' MPH (AVG)');
+// ui('item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');
+//ui('item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');
 
     }
-
 }
 
 function diffForSample(current, previous, max) {
@@ -786,3 +805,21 @@ function getTodaysDate() {
     return pubFullDate
 }
 
+
+//UPDATE UI VALUES
+// item-speed
+// item-average-speed
+// item-distance
+
+// item-speed-bt
+// item-average-speed-bt
+// item-distance-bt
+
+// item-hr
+// item-hr-avg
+// item-cadence
+
+function ui(k,v) {
+    console.log('update ui');
+    $$(k).text(v);
+}
