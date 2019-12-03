@@ -16,8 +16,8 @@ function listenRounds() {
     let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
     let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
-    console.log('arrScore[0]', arrScore[0].fb_timName, arrScore[0].fb_RND);
-    console.log('arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].fb_SPD); 
+    console.log('arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
+    console.log('arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast); 
 
   });
   
