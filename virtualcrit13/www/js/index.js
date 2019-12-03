@@ -12,6 +12,7 @@ var app = new Framework7({
     initOnDeviceReady: true,
     statusbar: {
         androidOverlaysWebView: false,
+        iosOverlaysWebview: true,
         iosTextColor: 'white',
         androidTextColor: 'white',
     },
@@ -286,7 +287,6 @@ function startup() {
     $$('.system-status').text(systemStatus);
 
     //LOCAL STORAGE ON STARTUP
-
     //name
     var g = localStorage.getItem('timName');
     console.log('timName: ' + g);
@@ -330,11 +330,28 @@ function startup() {
 
 $$('.start-system').on('click', function (e) {
     console.log('click start-system');
+    timerStarter();
+    // if (startTime) {
+    //     console.log('running');
+    //     return;
+    // };
+
+    // startTime = _.now();
+    // timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
+    // listenTotals();
+
+    // setTimeout(function() {
+    //     listenRounds();
+    // }, 10000);
+});
+
+function timerStarter() {
+    console.log('timerStarter');
+    
     if (startTime) {
         console.log('running');
         return;
     };
-
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
     listenTotals();
@@ -342,7 +359,7 @@ $$('.start-system').on('click', function (e) {
     setTimeout(function() {
         listenRounds();
     }, 10000);
-});
+}
 
 
 $$('.start-gps').on('click', function (e) {
@@ -548,20 +565,20 @@ function onBackgroundSuccess(newLocation) {
         lastLongitude = newLocation.longitude;
         lastActivityTime = _.now();  //ms
 
-        if (startTime) {
-            console.log('already tock running');
-        } else {
-            console.log('starting tock, based on location found');
-            startTime = _.now();
-            timer.start(tim.timSecondsPerRound * 1000);
-            listenTotals();
+        timerStarter();
 
-            setTimeout(function() {
-                listenRounds();
-            }, 10000);
+        // if (startTime) {
+        //     console.log('already tock running');
+        // } else {
+        //     console.log('starting tock, based on location found');
+        //     startTime = _.now();
+        //     timer.start(tim.timSecondsPerRound * 1000);
+        //     listenTotals();
 
-            
-        };
+        //     setTimeout(function() {
+        //         listenRounds();
+        //     }, 10000);   
+        // };
         return;
     }
     console.log('onBackgroundSuccess - new, good reading');
