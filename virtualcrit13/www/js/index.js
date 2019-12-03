@@ -123,6 +123,7 @@ function startBluetoothDisconnection(i) {
 }
 
 var connectedDevices = [];  //Peripheral Object
+var heartrateReadings = [];
 
 function startBluetoothConnection(i) {
     console.log('startBluetoothConnection for index: ' + i);
@@ -151,10 +152,12 @@ function startBluetoothConnection(i) {
             ble.startNotification(deviceClicked.id, "180d", "2a37", function (b) {
                 var data = new Uint8Array(b);
                 console.log('notify success HR: ' + data[1]);
-                //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
+                
                 updateChip(p.name, 1, data[1]);
                 ui('item-hr', + ret0string(data[1]) + ' BPM');
-                //ui('item-hr-avg', +  + ' BPM (AVG)');
+                heartrateReadings.push(data[1]);
+                ui('item-hr-avg', + _.mean(heartrateReadings) + ' BPM (AVG)');
+                totals.heartrate = ret1num(_.mean(heartrateReadings));
 
             }, function (e) {
                 console.log('notify failure HR:  ' + e);
@@ -618,6 +621,8 @@ function onBackgroundSuccess(newLocation) {
     ui('.item-speed',gpsSpeed + ' MPH');
     ui('.item-average-speed',gpsAvgSpeed + 'MPH (AVG)');
     ui('.item-distance',ret2string(totalDistance * 0.62137) + ' MILES');
+    totals.speed = ret1num((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
+    
 
     //console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
     //$$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
@@ -630,6 +635,9 @@ function onBackgroundSuccess(newLocation) {
 // END LOCATION CALC
 
 
+function ret1num(n) {
+    return (Math.round(n*10)/10)
+}
 
 function ret0string(n) {
     return ((Math.round(n * 10)) / 10).toFixed(0);
@@ -653,6 +661,8 @@ const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
 const updateRatio = 0.85; // Percent ratio between old/new stats
 var previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance;
+var bluetoothSpeedActiveTime = 0;
+var bluetoothSpeedAverage;  //km/hr
 //var wheelSize = 2111;
 
 
@@ -695,7 +705,7 @@ function calcSpeedCadenceValues(v) {
         if (bluetoothStats.speed) { ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
         if (bluetoothStats.cadence) { ui('item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
         if (bluetoothStats.distance) { ui('item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
-
+        if (bluetoothSpeedAverage) { ui('item-average-speed-bt',ret1string(bluetoothSpeedAverage * 0.62137) + ' MPH');} //convert to mph
 
 // ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');
 //ui('item-average-speed-bt', + ' MPH (AVG)');
@@ -726,6 +736,7 @@ function calculateStats() {
     if (hasWheel) {
         console.log('hasWheel');
         let wheelTimeDiff = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
+        if (wheelTimeDiff < 20000) {bluetoothSpeedActiveTime += (wheelTimeDiff/1024)}
         wheelTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
         let wheelDiff = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
 
@@ -734,6 +745,8 @@ function calculateStats() {
 
         distance = currentSample.wheel * tim.timWheelSize / 1000 / 1000; // km
         distance -= startDistance;
+        let a = distance / (bluetoothSpeedActiveTime) * 3.6;  //km/hr
+        if (a > 0) (bluetoothSpeedAverage = a);
     }
 
     if (hasCrank) {
