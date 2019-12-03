@@ -5,7 +5,7 @@ var tim = {
     timAudio: 'OFF',
     timWheelSize: 2100,
     timMaxHeartate: 190,
-    timSecondsPerRound: 300,
+    timSecondsPerRound: 60,
 }
 
 //STRINGS AND IMPERIAL?

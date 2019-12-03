@@ -53,6 +53,9 @@
       "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
       "CONTENT_AUTHORITY": "$PACKAGE_NAME",
       "PACKAGE_NAME": "com.phonegap.virtualcrit"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.phonegap.virtualcrit"
     }
   },
   "dependent_plugins": {}

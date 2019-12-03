@@ -48,6 +48,9 @@
     },
     "cordova-plugin-background-geolocation": {
       "PACKAGE_NAME": "com.phonegap.virtualcrit"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.phonegap.virtualcrit"
     }
   },
   "dependent_plugins": {}
