@@ -52,6 +52,9 @@ function tockComplete() {
     roundsComplete += 1;
     console.log('tockComplete, roundsComplete: ' + roundsComplete);
     timer.start((tim.timSecondsPerRound - 1) * 1000);
+
+    //TODO:  PUSH CURRENT ROUND OBJECT TO ROUNDS[], RESET ROUND OBJ TO 0
+    rounds.push(round);
     newRound();
 }
 

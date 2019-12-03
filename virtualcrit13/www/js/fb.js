@@ -91,6 +91,7 @@ function postTotals() {
 function postRound() {
     console.log('postRound');
 
+    //TODO  CHANGE THESE VALUES TO PULL FROM LATEST OBJECT STORED IN rounds[]
     firebase.database().ref('rounds/' + getTodaysDate() + '/').push({
         a_scoreRoundLast: getScoreFromHeartate(round.heartrate),
         a_speedRoundLast: round.speed,
