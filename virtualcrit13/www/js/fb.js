@@ -1,8 +1,7 @@
 var database = firebase.database();
-
 function listenTotals() {
     console.log('Listen for Totals Changes ' + getTodaysDate());
-    
+    //var totalsRef = database.ref('totals/' + getTodaysDate());
     var totalsRef = firebase.database().ref('totals/' + getTodaysDate());
     totalsRef.on('value', function(snapshot) {
         //console.log('TotalsDB\n'+JSON.stringify(snapshot));

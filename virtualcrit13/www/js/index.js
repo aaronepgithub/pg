@@ -319,11 +319,7 @@ function startup() {
         $$(".span-timWheelSize").text(tim.timWheelSize.toString());
     };
     
-    
-    
-    
-    
-    listenTotals();
+    // listenTotals();
 }
 
 $$('.start-system').on('click', function (e) {
@@ -335,6 +331,7 @@ $$('.start-system').on('click', function (e) {
 
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
+    listenTotals();
 });
 
 
@@ -540,6 +537,7 @@ function onBackgroundSuccess(newLocation) {
             console.log('starting tock, based on location found');
             startTime = _.now();
             timer.start(tim.timSecondsPerRound * 1000);
+            listenTotals();
         };
         return;
     }
