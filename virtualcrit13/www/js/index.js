@@ -88,6 +88,7 @@ $$('.start-bluetooth-scan').on('click', function (e) {
 
 $$('.device-ul').on('click', 'li', function (e) {
     console.log('clicked a ble device');
+    $$('.status-alerts').html('Connecting ...');
     var clickedDeviceIndex = $$(this).index();
     console.log(clickedDeviceIndex);
     // startBluetoothConnection(clickedDeviceIndex);
@@ -697,11 +698,11 @@ function calcSpeedCadenceValues(v) {
         // var data = "\nCadence (rpm): " + bluetoothStats.cadence.toFixed(1) + "\n";
         // data += "Distance (km): " + bluetoothStats.distance.toFixed(2) + "\n";
         // data += "Speed (km/hr): " + bluetoothStats.speed.toFixed(1);
-        var data = "Cadence (rpm): " + bluetoothStats.cadence + "\n";
+        var data = "\nCadence (rpm): " + bluetoothStats.cadence + "\n";
         data += "Distance (km): " + bluetoothStats.distance + "\n";
         data += "Speed (km/hr): " + bluetoothStats.speed;
         console.log('data:  ' + data);
-        console.log('ret1string values:  ' + ret1string(bluetoothStats.cadence), ret1string(bluetoothStats.distance), ret1string(bluetoothStats.speed));
+        //console.log('ret1string values:  ' + ret1string(bluetoothStats.cadence), ret1string(bluetoothStats.distance), ret1string(bluetoothStats.speed));
         if (bluetoothStats.speed) { ui('.item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
         if (bluetoothStats.cadence) { ui('.item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
         if (bluetoothStats.distance) { ui('.item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
