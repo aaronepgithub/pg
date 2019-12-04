@@ -5,6 +5,7 @@ function listenRounds() {
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
   roundsRef.on('value', function(snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
+    arrRounds = [];
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
       var childData = childSnapshot.val();
@@ -32,6 +33,7 @@ function listenTotals() {
     var totalsRef = firebase.database().ref('totals/' + getTodaysDate());
     totalsRef.on('value', function(snapshot) {
         //console.log('TotalsDB\n'+JSON.stringify(snapshot));
+        arrTotals = [];
         snapshot.forEach(function(childSnapshot) {
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();

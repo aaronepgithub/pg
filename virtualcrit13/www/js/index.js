@@ -184,7 +184,7 @@ function startBluetoothConnection(i) {
             ble.startNotification(deviceClicked.id, "1816", "2A5B", function (bb) {
                 calcSpeedCadenceValues(bb);
                 var data_csc = new Uint8Array(bb);
-                console.log('notify success CSC: ' + data_csc[1]);
+                //console.log('notify success CSC: ' + data_csc[1]);
                 //TODO:  UPDATE UI VALUE, UPDATE UI CHIP
                 // updateChip(p.name, 2, data_csc[1]);
             }, function (e) {
