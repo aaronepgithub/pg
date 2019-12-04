@@ -59,7 +59,7 @@ function postTotals() {
     console.log('postTotals');
 
     firebase.database().ref('totals/' + getTodaysDate() + '/' + tim.timName + '/').set({
-        a_scoreHRTotal: totals.heartrate,
+        a_scoreHRTotal: getScoreFromHeartate(totals.heartrate),
         a_scoreHRRoundLast: getScoreFromHeartate(totals.heartrate),
         a_speedTotal: totals.speed,
         a_speedLast: totals.speed,
@@ -112,8 +112,8 @@ function postRound() {
         fb_timAvgCADtotal: totals.cadence,
         fb_timAvgHRtotal: totals.heartrate,
         fb_scoreHRTotal: getScoreFromHeartate(totals.heartrate),
-        fb_scoreHRRound: round.heartrate,
-        fb_scoreHRRoundLast: round.heartrate,
+        fb_scoreHRRound: getScoreFromHeartate(round.heartrate),
+        fb_scoreHRRoundLast: getScoreFromHeartate(round.heartrate),
     },
     function(error) {
         if (error) {

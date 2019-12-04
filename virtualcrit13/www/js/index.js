@@ -59,11 +59,17 @@ function tockComplete() {
 }
 
 function newRound() {
-    console.log('fn newRound, post totals');
-    //TODO:  NEED TO CREATE AN OBJECT FOR EACH ROUND
+    console.log('fn newRound, post to fb');
     postRound();  //which will call totals
-    arrRoundDistances.push(totals.distance);
-    var distanceInMostRecendRound = _.last(arrRoundDistances) - _.nth(arrRoundDistances, -1);
+    arrRoundDistances.push(totals.distance);  //km
+    let distanceInMostRecendRound = _.last(arrRoundDistances) - _.nth(arrRoundDistances, -1);  //km
+    round.speed = ret1num((distanceInMostRecendRound * 0.62137) / ((tim.timSecondsPerRound * 1000) / 1000 / 60 / 60));
+    if (heartrateReadingsRound.length > 0) {
+        round.heartrate = ret1num(_.mean(heartrateReadingsRound));
+        console.log('round.heartrate:', round.heartrate);
+        heartrateReadingsRound = [];
+    }
+    console.log('round.speed:', round.speed);
 }
 
 
@@ -127,6 +133,7 @@ function startBluetoothDisconnection(i) {
 
 var connectedDevices = [];  //Peripheral Object
 var heartrateReadings = [];
+var heartrateReadingsRound = [];
 
 function startBluetoothConnection(i) {
     console.log('startBluetoothConnection for index: ' + i);
@@ -159,6 +166,7 @@ function startBluetoothConnection(i) {
                 updateChip(p.name, 1, data[1]);
                 ui('.item-hr', ret0string(data[1]) + ' BPM');
                 heartrateReadings.push(data[1]);
+                heartrateReadingsRound.push(data[1]);
                 ui('.item-hr-avg', (_.mean(heartrateReadings).toFixed(1)) + ' BPM (AVG)');
                 totals.heartrate = ret1num(_.mean(heartrateReadings));
 
@@ -172,6 +180,7 @@ function startBluetoothConnection(i) {
             console.log('is CSC', + p.name);
             //TODO, WHY DOES P.NAME WORK BUT NOT DEVICECLICKED.NAME???
             changeLi(i, 'SPD/CAD');
+            if ( t1 == true || t2 == true) {changeLi(i, 'SPD/CAD/HR');}
             ble.startNotification(deviceClicked.id, "1816", "2A5B", function (bb) {
                 calcSpeedCadenceValues(bb);
                 var data_csc = new Uint8Array(bb);
@@ -614,7 +623,7 @@ function onBackgroundSuccess(newLocation) {
     ui('.item-average-speed',gpsAvgSpeed + 'MPH (AVG)');
     ui('.item-distance',ret2string(totalDistance * 0.62137) + ' MILES');
     totals.speed = ret1num((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
-    totals.distance = totalDistance;
+    totals.distance = ret2num(totalDistance * 0.62137);
     
 
     //console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
@@ -630,6 +639,10 @@ function onBackgroundSuccess(newLocation) {
 
 function ret1num(n) {
     return (Math.round(n*10)/10)
+}
+
+function ret2num(n) {
+    return (Math.round(n*100)/100)
 }
 
 function ret0string(n) {
@@ -703,10 +716,10 @@ function calcSpeedCadenceValues(v) {
         if (bluetoothStats.cadence) { ui('.item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
         if (bluetoothStats.distance) { ui('.item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
         if (bluetoothStats.avgSpeed) { ui('.item-average-speed-bt',ret1string(bluetoothSpeedAverage * 0.62137) + ' MPH');} //convert to mph
-        if (totals.distance < 1) {
+        if (totals.distance < 1 && bluetoothStats.distance > .01) {
             //not using gps
-            totals.distance = parseFloat(ret2string(bluetoothStats.distance * 0.62137));
-            totals.speed = parseFloat(ret1string(bluetoothSpeedAverage * 0.62137));
+            totals.distance = rel2num(ret2string(bluetoothStats.distance * 0.62137));
+            totals.speed = rel1num(ret1string(bluetoothSpeedAverage * 0.62137));           
         }
         
 // ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');
