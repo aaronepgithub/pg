@@ -4,18 +4,19 @@ function listenRounds() {
   console.log('Listen for Rounds Changes');
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
   roundsRef.on('value', function(snapshot) {
-    console.log('RoundsDB\n'+JSON.stringify(snapshot));
+    //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
       var childData = childSnapshot.val();
       arrRounds.push(childData);
     });
-    console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
+    //console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
     let v = _.values(arrRounds);
 
     let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
     let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
+    console.log('New Rounds Leader');
     console.log('arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
     console.log('arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast); 
 
@@ -120,7 +121,7 @@ function postRound() {
           
         } else {
             console.log('postRound success');
-            console.log(JSON.stringify(round));
+            //console.log(JSON.stringify(round));
             postTotals();
         }
       });

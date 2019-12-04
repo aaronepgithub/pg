@@ -37,3 +37,4 @@ var round = {
 }
 
 var rounds = [];
+var arrRoundDistances = [];
