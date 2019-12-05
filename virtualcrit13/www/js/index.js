@@ -951,13 +951,15 @@ function ui(k, v) {
 var dynamicPopup = app.popup.create({
     content: '<div id = "elem-to-center" class="popup center-popup">' +
 
-                '<div class="block block-strong text-align-center">' +
+    '<div class="block-header">SPEED</div>' +
+
+                '<div class="block text-align-center">' +
                 '<div class="gauge demo-gauge my-gauge"></div>' +
                 '</div>' +
-                '<div class="block block-strong text-align-center">' +
+                '<div class="block text-align-center">' +
                 '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
                 '</div>' +
-
+    '<div class="block-footer">HEARTRATE</div>' +
             '</div>',
     backdrop: true,
     closeByBackdropClick: true,
@@ -970,11 +972,11 @@ var dynamicPopup = app.popup.create({
             var gauge = app.gauge.create({
                 el: '.gauge',
                 type: 'circle',
-                value: 0.5,
+                value: 0.1,
                 size: 230,
                 borderColor: '#ff0000',
                 borderWidth: 20,
-                valueText: '15.1',
+                valueText: '0',
                 valueFontSize: 55,
                 valueTextColor: '#ff0000',
                 valueFontWeight: 700,
@@ -991,11 +993,11 @@ var dynamicPopup = app.popup.create({
             var gauge2 = app.gauge.create({
                 el: '.gauge2',
                 type: 'circle',
-                value: 0.75,
+                value: 0.1,
                 size: 230,
                 borderColor: '#ff0000',
                 borderWidth: 20,
-                valueText: (100 * .75).toFixed(0),
+                valueText: 0,
                 valueFontSize: 55,
                 valueTextColor: '#ff0000',
                 valueFontWeight: 700,
@@ -1014,21 +1016,6 @@ var dynamicPopup = app.popup.create({
         opened: function (popup) {
             console.log('Popup opened');
             hasPopupOpened = true;
-            // setTimeout(() => {
-            //     var gauge = app.gauge.get('.my-gauge');
-            //     gauge.update({
-            //         value: 0.75,
-            //         valueText: (100 * .75).toFixed(1),
-            //     });
-
-            //     var gauge2 = app.gauge.get('.my-gauge2');
-            //     gauge2.update({
-            //         value: 0.58,
-            //         valueText: (100 * .58).toFixed(0),
-            //     });
-
-
-            // }, 2000);
         },
     }
 });
@@ -1047,3 +1034,12 @@ $$('.dynamic-pop').on('click', function () {
 });
 
 var hasPopupOpened = false;
+
+
+
+
+$(document).on("click", $('#elem-to-center'), function() {
+    console.log('elem-to-center');
+    //TODO:  USE THIS TO CHANGE THE GAGUES...
+});
+
