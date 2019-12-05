@@ -19,9 +19,11 @@ function listenRounds() {
     let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
     let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
-    console.log('New Rounds Leader');
+    //console.log('New Rounds Leader');
     console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
-    console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast); 
+    console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
+    
+    $$('.status-alerts').text('Crit Leader, ',arrSpeed[0].fb_timName, ret1string(arrSpeed[0].a_speedRoundLast) );
 
   });
   
