@@ -77,7 +77,11 @@ function newRound() {
         heartrateReadingsRound = [];
     }
 
-    postRound();  //which will call totals
+    postRound();  //which will call postTotals
+
+    round.speed = 0;
+    round.cadence = 0;
+    round.heartrate = 0;
     
 }
 
@@ -380,11 +384,19 @@ function timerStarter() {
     };
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
-    listenTotals();
+
+
+    setTimeout(function() {
+        listenTotals();
+    }, 10000);
 
     setTimeout(function() {
         listenRounds();
     }, 10000);
+
+    setTimeout(function() {
+        listenRoundsHR();
+    }, 15000);
 }
 
 

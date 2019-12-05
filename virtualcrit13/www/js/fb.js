@@ -1,7 +1,6 @@
 var database = firebase.database();
 
 function listenRounds() {
-  //TODO:  DO I CARE ABOUT HR...
   console.log('Listen for Rounds Changes');
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
   roundsRef.limitToLast(10).orderByChild('a_speedRoundLast').on('value', function(snapshot) {
@@ -19,19 +18,53 @@ function listenRounds() {
     let v = _.values(arrRounds);
     if (arrRounds.length < 1) {return;}
 
-    let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
+    //let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
     let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
     //console.log('New Rounds Leader');
-    console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
+    //console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
     console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
     
-    $$('.main-status-alerts').html('TOP CRIT SPEED:   ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
+    $$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
+
   });
   
 }
 
 var arrRounds = [];
+var arrRoundsHR = [];
+
+function listenRoundsHR() {
+  console.log('Listen for Rounds Changes, sorted by HR');
+  var roundsRefHR = firebase.database().ref('rounds/' + getTodaysDate());
+  roundsRefHR.limitToLast(10).orderByChild('a_scoreRoundLast').on('value', function(snapshot) {
+    //console.log('RoundsDB\n'+JSON.stringify(snapshot));
+    arrRoundsHR = [];
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      arrRoundsHR.push(childData);
+    });
+    //console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
+    console.log('arrRoundsHR.length:  ', arrRoundsHR.length);
+    
+
+    let v = _.values(arrRoundsHR);
+    if (arrRoundsHR.length < 1) {return;}
+
+    let arrScoreHR = _.orderBy(v, 'a_scoreRoundLast', 'desc');
+    //let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
+
+    //console.log('New Rounds Leader');
+    console.log('arrRoundsHR, arrScore[0]', arrScoreHR[0].fb_timName, arrScoreHR[0].a_scoreRoundLast);
+    //console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
+    
+    //$$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
+  });
+  
+}
+
+
 
 function listenTotals() {
     console.log('Listen for Totals Changes ' + getTodaysDate());
@@ -52,10 +85,10 @@ function listenTotals() {
         if (arrTotals.length < 1) {return;}
         
         let i = _.orderBy(arrTotals, ['a_speedTotal'], ['desc']);
-        console.log('arrTotals, i.name, i.a_speedTotal, ' + i[0].a_speedTotal, i[0].fb_timName);
+        console.log('arrTotals, i.name, i.a_speedTotal, ' + i[0].a_speedTotal +' MPH, ' + i[0].fb_timName);
 
         let s = _.orderBy(arrTotals, ['a_scoreHRTotal'], ['desc']);
-        console.log('arrTotals, i.name, i.a_scoreHRTotal, ' + s[0].a_scoreHRTotal, s[0].fb_timName);
+        console.log('arrTotals, i.name, i.a_scoreHRTotal, ' + s[0].a_scoreHRTotal + ' %MAX, ' + s[0].fb_timName);
 
       });
 }
