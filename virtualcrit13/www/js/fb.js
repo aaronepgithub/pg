@@ -1,9 +1,10 @@
 var database = firebase.database();
 
 function listenRounds() {
+  //TODO:  DO I CARE ABOUT HR...
   console.log('Listen for Rounds Changes');
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
-  roundsRef.on('value', function(snapshot) {
+  roundsRef.limitToLast(10).orderByChild('a_speedRoundLast').on('value', function(snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRounds = [];
     snapshot.forEach(function(childSnapshot) {
@@ -12,6 +13,8 @@ function listenRounds() {
       arrRounds.push(childData);
     });
     //console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
+    console.log('arrRounds.length:  ', arrRounds.length);
+    
 
     let v = _.values(arrRounds);
     if (arrRounds.length < 1) {return;}
@@ -23,8 +26,7 @@ function listenRounds() {
     console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
     console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
     
-    $$('.status-alerts').text('Crit Leader, ',arrSpeed[0].fb_timName, ret1string(arrSpeed[0].a_speedRoundLast) );
-
+    $$('.main-status-alerts').html('TOP CRIT SPEED:   ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
   });
   
 }

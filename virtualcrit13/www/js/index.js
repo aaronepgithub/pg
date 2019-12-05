@@ -95,7 +95,7 @@ function postScan() {
         $$('.device-ul').append('<li class="device-li"> <a href="#" class="item-link item-content no-chevron"> <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> <div class="item-inner"> <div class="item-title"> <div class="item-header device-service"></div> <span class="device-name">' + element.name + '</span><div class="item-footer device-id">' + element.id + '</div></div> <div class="item-after device-status">.</div></div> </a> </li>');
     });
     console.log('postScan Complete');
-    $$('.status-alerts').text('Updated');
+    $$('.status-alerts').html('Updated');
 }
 
 $$('.start-bluetooth-scan').on('click', function (e) {
@@ -156,7 +156,7 @@ function startBluetoothConnection(i) {
         //TRY THIS TO ACCESS...
         console.log('From connected callback, p.name, p.id, p.services, p.services[0]:  ' + p.name + ',' + p.id + ', ' + JSON.stringify(p.services) + ', ' + p.services[0]);
         connectedDevices.push(deviceClicked);
-        $$('.status-alerts').html('Connection: ' + p.name);
+        $$('.status-alerts').html('Connected: ' + p.name);
         changeLi(i, '....');
         //TODO CHECK/START ONLY SERVICES/CHAR
         //CHECK TO SEE IF HR VS CSC
@@ -207,7 +207,7 @@ function startBluetoothConnection(i) {
 
     }, function (p) {
         console.log('disconnected callback:  ' + JSON.stringify(p));
-        $$('.status-alerts').html('Disconnection: ' + p.name);
+        $$('.status-alerts').html('Disconnected: ' + p.name);
         var tt = _.findIndex(scannedDevices, ['id', p.id]);
         console.log('found the index for the disconnected device  ' + p.name + ', index: ' + tt);
         console.log('waiting 15 seconds before issuing a new start BluetoothConnection');
