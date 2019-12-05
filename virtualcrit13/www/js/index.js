@@ -10,6 +10,9 @@ var app = new Framework7({
     cache: true,
     init: true,
     initOnDeviceReady: true,
+    popup: {
+        closeByBackdropClick: true,
+    },
     statusbar: {
         androidOverlaysWebView: false,
         iosOverlaysWebview: true,
@@ -65,12 +68,30 @@ function newRound() {
     let a = _.last(arrRoundDistances);
     let b = _.nth(arrRoundDistances, -2)
     //console.log('a,b', a,b);
-    let distanceInMostRecendRound = a-b;  //km
+    let distanceInMostRecendRound = a - b;  //km
     //console.log('distanceInMostRecendRound', distanceInMostRecendRound);
-    
+
     round.speed = ret1num((distanceInMostRecendRound * 0.62137) / ((tim.timSecondsPerRound * 1000) / 1000 / 60 / 60));
-    //console.log('round.speed', round.speed);
-    
+    console.log('round.speed', round.speed);
+
+    if (tim.timAudio == "ON") {
+        if (round.speed > 0) {
+            TTS.speak({
+                text: ret1string(round.speed) + ' Miles Per Hour.',
+                locale: 'en-US',
+                rate: 1
+            }, function () {
+                console.log('Text succesfully spoken');
+            }, function (reason) {
+                console.log('tts failed:  ', reason);
+            });
+        }
+    }
+
+
+
+
+
     if (heartrateReadingsRound.length > 0) {
         round.heartrate = ret1num(_.mean(heartrateReadingsRound));
         //console.log('round.heartrate:', round.heartrate);
@@ -79,10 +100,6 @@ function newRound() {
 
     postRound();  //which will call postTotals
 
-    round.speed = 0;
-    round.cadence = 0;
-    round.heartrate = 0;
-    
 }
 
 
@@ -175,13 +192,24 @@ function startBluetoothConnection(i) {
             ble.startNotification(deviceClicked.id, "180d", "2a37", function (b) {
                 var data = new Uint8Array(b);
                 console.log('notify success HR: ' + data[1]);
-                
+
                 updateChip(p.name, 1, data[1]);
                 ui('.item-hr', ret0string(data[1]) + ' BPM');
                 heartrateReadings.push(data[1]);
                 heartrateReadingsRound.push(data[1]);
                 ui('.item-hr-avg', (_.mean(heartrateReadings).toFixed(1)) + ' BPM (AVG)');
                 totals.heartrate = ret1num(_.mean(heartrateReadings));
+
+                if (hasPopupOpened) {
+                    var gauge2 = app.gauge.get('.my-gauge2');
+                    gauge.update({
+                        value: (data[1] / 2)/100,
+                        valueText: ret0string(data[1]),
+                    });
+                }
+
+
+
 
             }, function (e) {
                 console.log('notify failure HR:  ' + e);
@@ -193,7 +221,7 @@ function startBluetoothConnection(i) {
             console.log('is CSC', + p.name);
             //TODO, WHY DOES P.NAME WORK BUT NOT DEVICECLICKED.NAME???
             changeLi(i, 'SPD/CAD');
-            if ( t1 == true || t2 == true) {changeLi(i, 'SPD/CAD/HR');}
+            if (t1 == true || t2 == true) { changeLi(i, 'SPD/CAD/HR'); }
             ble.startNotification(deviceClicked.id, "1816", "2A5B", function (bb) {
                 calcSpeedCadenceValues(bb);
                 var data_csc = new Uint8Array(bb);
@@ -329,7 +357,7 @@ function startup() {
     }
 
     //audio
-    if ( localStorage.getItem('timAudio') ) {
+    if (localStorage.getItem('timAudio')) {
         tim.timAudio = localStorage.getItem('timAudio');
         $$(".span-timAudio").text(tim.timAudio);
     } else {
@@ -338,7 +366,7 @@ function startup() {
     };
 
     //maxhr
-    if ( localStorage.getItem('timMaxHeartate') ) {
+    if (localStorage.getItem('timMaxHeartate')) {
         tim.timMaxHeartate = parseInt(localStorage.getItem('timMaxHeartate'));
         $$(".span-timMaxHeartate").text(tim.timMaxHeartate.toString());
     } else {
@@ -347,14 +375,14 @@ function startup() {
     };
 
     //tiresize
-    if ( localStorage.getItem('timWheelSize') ) {
+    if (localStorage.getItem('timWheelSize')) {
         tim.timWheelSize = parseInt(localStorage.getItem('timWheelSize'));
         $$(".span-timWheelSize").text(tim.timWheelSize.toString());
     } else {
         localStorage.setItem('timWheelSize', tim.timWheelSize.toString());
         $$(".span-timWheelSize").text(tim.timWheelSize.toString());
     };
-    
+
     // listenTotals();
 }
 
@@ -377,7 +405,7 @@ $$('.start-system').on('click', function (e) {
 
 function timerStarter() {
     console.log('timerStarter');
-    
+
     if (startTime) {
         console.log('running');
         return;
@@ -386,15 +414,15 @@ function timerStarter() {
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
 
 
-    setTimeout(function() {
+    setTimeout(function () {
         listenTotals();
     }, 10000);
 
-    setTimeout(function() {
+    setTimeout(function () {
         listenRounds();
     }, 10000);
 
-    setTimeout(function() {
+    setTimeout(function () {
         listenRoundsHR();
     }, 15000);
 }
@@ -432,12 +460,12 @@ $$('.start-gps').on('taphold', function (e) {
 $$('.item-timName').on('click', function (e) {
     console.log('click timName');
 
-    app.dialog.prompt('RIDER NAME', '', function(x) {
+    app.dialog.prompt('RIDER NAME', '', function (x) {
         console.log('OK: x', x);
         tim.timName = x.toUpperCase();
         $$('.span-timName').text(tim.timName);
         localStorage.setItem('timName', tim.timName);
-    }, function(y) {
+    }, function (y) {
         console.log('Cancel: y: ', y);
         tim.timName = y.toUpperCase();
         $$('.span-timName').text(tim.timName);
@@ -448,7 +476,7 @@ $$('.item-timName').on('click', function (e) {
 //SET AUDIO
 $$('.item-timAudio').on('click', function (e) {
     console.log('click timAudio');
-    
+
     if ($$('.span-timAudio').text() == "OFF") {
         $$('.span-timAudio').text("ON");
         localStorage.setItem('timAudio', "ON");
@@ -461,7 +489,7 @@ $$('.item-timAudio').on('click', function (e) {
 //SET MAXHR
 $$('.item-timMaxHeartate').on('click', function (e) {
     console.log('click timMaxHeartate');
-    
+
     tim.timMaxHeartate += 5;
     console.log('tim.timMaxHeartate  ', tim.timMaxHeartate);
     if (tim.timMaxHeartate > 210) {
@@ -474,7 +502,7 @@ $$('.item-timMaxHeartate').on('click', function (e) {
 //SET WHEELSIZE
 $$('.item-timWheelSize').on('click', function (e) {
     console.log('click timWheelSize');
-    
+
     tim.timWheelSize += 10;
     if (tim.timWheelSize > 2220) {
         tim.timWheelSize = 2100;
@@ -568,7 +596,7 @@ function startGPSTracking() {
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
         //$$('.main-status-alerts').text('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('BackgroundGeo is Running');
-        
+
 
         // you don't need to check status before start (this is just the example)
         if (!status.isRunning) {
@@ -594,7 +622,7 @@ function onBackgroundSuccess(newLocation) {
     if (lastLatitude == -2) {
         lastLatitude = -1;
         console.log('init reading');
-        
+
     }
 
     if (lastLatitude == -1) {
@@ -641,12 +669,21 @@ function onBackgroundSuccess(newLocation) {
     gpsSpeed = ret1string((distance * 0.62137) / (activityTime / 1000 / 60 / 60));
     updateChip('gpsSpeed', 0, gpsSpeed + ' Mph');
 
-    ui('.item-speed',gpsSpeed + ' MPH');
-    ui('.item-average-speed',gpsAvgSpeed + 'MPH (AVG)');
-    ui('.item-distance',ret2string(totalDistance * 0.62137) + ' MILES');
+    ui('.item-speed', gpsSpeed + ' MPH');
+    ui('.item-average-speed', gpsAvgSpeed + 'MPH (AVG)');
+    ui('.item-distance', ret2string(totalDistance * 0.62137) + ' MILES');
     totals.speed = ret1num((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
     totals.distance = ret2num(totalDistance * 0.62137);
-    
+
+    if (hasPopupOpened) {
+        var gauge = app.gauge.get('.my-gauge');
+        gauge.update({
+            value: (parseFloat(gpsSpeed) * 3.75)/100,
+            valueText: gpsSpeed,
+        });
+    }
+
+
 
     //console.log('main location alert: ' + gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
     //$$('.main-status-alerts').text(gpsSpeed + " mph, " + gpsAvgSpeed + " avg, " + msToTime(totalActivyTime));
@@ -660,11 +697,11 @@ function onBackgroundSuccess(newLocation) {
 
 
 function ret1num(n) {
-    return (Math.round(n*10)/10)
+    return (Math.round(n * 10) / 10)
 }
 
 function ret2num(n) {
-    return (Math.round(n*100)/100)
+    return (Math.round(n * 100) / 100)
 }
 
 function ret0string(n) {
@@ -734,20 +771,20 @@ function calcSpeedCadenceValues(v) {
         data += "Active Time (seconds): " + msToTime(bluetoothStats.totalActivyTime);
         console.log('data:  ' + data);
         //console.log('ret1string values:  ' + ret1string(bluetoothStats.cadence), ret1string(bluetoothStats.distance), ret1string(bluetoothStats.speed));
-        if (bluetoothStats.speed) { ui('.item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
-        if (bluetoothStats.cadence) { ui('.item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
-        if (bluetoothStats.distance) { ui('.item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
-        if (bluetoothStats.avgSpeed) { ui('.item-average-speed-bt',ret1string(bluetoothSpeedAverage * 0.62137) + ' MPH');} //convert to mph
+        if (bluetoothStats.speed) { ui('.item-speed-bt', ret1string(bluetoothStats.speed * 0.62137) + ' MPH'); updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
+        if (bluetoothStats.cadence) { ui('.item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM'); updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
+        if (bluetoothStats.distance) { ui('.item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH'); $$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
+        if (bluetoothStats.avgSpeed) { ui('.item-average-speed-bt', ret1string(bluetoothSpeedAverage * 0.62137) + ' MPH'); } //convert to mph
         if (totals.distance < 1 && bluetoothStats.distance > 2) {
             //not using gps
             totals.distance = rel2num(ret2string(bluetoothStats.distance * 0.62137));
-            totals.speed = rel1num(ret1string(bluetoothSpeedAverage * 0.62137));           
+            totals.speed = rel1num(ret1string(bluetoothSpeedAverage * 0.62137));
         }
-        
-// ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');
-//ui('item-average-speed-bt', + ' MPH (AVG)');
-// ui('item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');
-//ui('item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');
+
+        // ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');
+        //ui('item-average-speed-bt', + ' MPH (AVG)');
+        // ui('item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');
+        //ui('item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');
 
     }
 }
@@ -780,17 +817,16 @@ function calculateStats() {
         let wheelTimeDiff = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
         wheelTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
         let wheelDiff = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
-        
-        var sampleDistance = wheelDiff * tim.timWheelSize / 1000; // distance in meters
-        if (wheelTimeDiff < 10 && sampleDistance > 0 && sampleDistance < 10 )
-            {
-                totalWheelTime += wheelTimeDiff;
-                totalWheelRevs += wheelDiff;
 
-                speed = (wheelTimeDiff == 0) ? 0 : sampleDistance / totalWheelTime * 3.6; // km/hr
-                distance = totalWheelRevs * tim.timWheelSize / 1000 / 1000;  //km
-                bluetoothSpeedAverage = distance / (bluetoothSpeedActiveTime) * 3.6;  //km/hr
-            }
+        var sampleDistance = wheelDiff * tim.timWheelSize / 1000; // distance in meters
+        if (wheelTimeDiff < 10 && sampleDistance > 0 && sampleDistance < 10) {
+            totalWheelTime += wheelTimeDiff;
+            totalWheelRevs += wheelDiff;
+
+            speed = (wheelTimeDiff == 0) ? 0 : sampleDistance / totalWheelTime * 3.6; // km/hr
+            distance = totalWheelRevs * tim.timWheelSize / 1000 / 1000;  //km
+            bluetoothSpeedAverage = distance / (bluetoothSpeedActiveTime) * 3.6;  //km/hr
+        }
 
     }
 
@@ -873,10 +909,10 @@ function getTodaysDate() {
     var mm = (today.getMonth() + 1).toString(); //January is 0!
     let yyyy = today.getFullYear().toString();
     if (dd < 10) {
-            dd = '0' + dd;
+        dd = '0' + dd;
     }
     if (mm < 10) {
-            mm = '0' + mm;
+        mm = '0' + mm;
     }
     let pubFullDate = yyyy + mm + dd;
     let pubFullTime = _.now();
@@ -901,7 +937,113 @@ function getTodaysDate() {
 // item-hr-avg
 // item-cadence
 
-function ui(k,v) {
+function ui(k, v) {
     // console.log('update ui');
     $$(k).text(v);
 }
+
+
+
+
+
+
+// Create dynamic Popup
+var dynamicPopup = app.popup.create({
+    content: '<div id = "elem-to-center" class="popup center-popup">' +
+
+                '<div class="block block-strong text-align-center">' +
+                '<div class="gauge demo-gauge my-gauge"></div>' +
+                '</div>' +
+                '<div class="block block-strong text-align-center">' +
+                '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
+                '</div>' +
+
+            '</div>',
+    backdrop: true,
+    closeByBackdropClick: true,
+    swipeToClose: true,
+    // Events
+    on: {
+        open: function (popup) {
+            console.log('Popup open');
+
+            var gauge = app.gauge.create({
+                el: '.gauge',
+                type: 'circle',
+                value: 0.5,
+                size: 230,
+                borderColor: '#ff0000',
+                borderWidth: 20,
+                valueText: '15.1',
+                valueFontSize: 55,
+                valueTextColor: '#ff0000',
+                valueFontWeight: 700,
+                labelFontSize: 20,
+                labelText: 'MPH',
+                // valueText: 'Speed',
+                on: {
+                    beforeDestroy: function () {
+                        console.log('Gauge will be destroyed')
+                    }
+                }
+            })
+
+            var gauge2 = app.gauge.create({
+                el: '.gauge2',
+                type: 'circle',
+                value: 0.75,
+                size: 230,
+                borderColor: '#ff0000',
+                borderWidth: 20,
+                valueText: (100 * .75).toFixed(0),
+                valueFontSize: 55,
+                valueTextColor: '#ff0000',
+                valueFontWeight: 700,
+                labelFontSize: 20,
+                labelText: 'BPM',
+                on: {
+                    beforeDestroy: function () {
+                        console.log('Gauge will be destroyed')
+                    }
+                }
+            })
+
+
+
+        },
+        opened: function (popup) {
+            console.log('Popup opened');
+            hasPopupOpened = true;
+            // setTimeout(() => {
+            //     var gauge = app.gauge.get('.my-gauge');
+            //     gauge.update({
+            //         value: 0.75,
+            //         valueText: (100 * .75).toFixed(1),
+            //     });
+
+            //     var gauge2 = app.gauge.get('.my-gauge2');
+            //     gauge2.update({
+            //         value: 0.58,
+            //         valueText: (100 * .58).toFixed(0),
+            //     });
+
+
+            // }, 2000);
+        },
+    }
+});
+// Events also can be assigned on instance later
+dynamicPopup.on('close', function (popup) {
+    console.log('Popup close');
+});
+dynamicPopup.on('closed', function (popup) {
+    hasPopupOpened = false;
+    console.log('Popup closed');
+});
+
+// Open dynamic popup
+$$('.dynamic-pop').on('click', function () {
+    dynamicPopup.open();
+});
+
+var hasPopupOpened = false;
