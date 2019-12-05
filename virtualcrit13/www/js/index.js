@@ -53,23 +53,32 @@ function tockComplete() {
     roundsComplete += 1;
     console.log('tockComplete, roundsComplete: ' + roundsComplete);
     timer.start((tim.timSecondsPerRound - 1) * 1000);
-
-
     newRound();
 }
 
 function newRound() {
-    console.log('fn newRound, post to fb');
-    postRound();  //which will call totals
+    console.log('newRound');
     arrRoundDistances.push(totals.distance);  //km
-    let distanceInMostRecendRound = _.last(arrRoundDistances) - _.nth(arrRoundDistances, -1);  //km
+
+    //console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
+
+    let a = _.last(arrRoundDistances);
+    let b = _.nth(arrRoundDistances, -2)
+    //console.log('a,b', a,b);
+    let distanceInMostRecendRound = a-b;  //km
+    //console.log('distanceInMostRecendRound', distanceInMostRecendRound);
+    
     round.speed = ret1num((distanceInMostRecendRound * 0.62137) / ((tim.timSecondsPerRound * 1000) / 1000 / 60 / 60));
+    //console.log('round.speed', round.speed);
+    
     if (heartrateReadingsRound.length > 0) {
         round.heartrate = ret1num(_.mean(heartrateReadingsRound));
-        console.log('round.heartrate:', round.heartrate);
+        //console.log('round.heartrate:', round.heartrate);
         heartrateReadingsRound = [];
     }
-    console.log('round.speed:', round.speed);
+
+    postRound();  //which will call totals
+    
 }
 
 
@@ -292,6 +301,7 @@ function changeLi(i, v) {
     console.log($$(a).find('.device-status').html());
 }
 
+var arrRoundDistances = [];
 
 var startTime;
 function startup() {
@@ -716,7 +726,7 @@ function calcSpeedCadenceValues(v) {
         if (bluetoothStats.cadence) { ui('.item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
         if (bluetoothStats.distance) { ui('.item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');$$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
         if (bluetoothStats.avgSpeed) { ui('.item-average-speed-bt',ret1string(bluetoothSpeedAverage * 0.62137) + ' MPH');} //convert to mph
-        if (totals.distance < 1 && bluetoothStats.distance > .01) {
+        if (totals.distance < 1 && bluetoothStats.distance > 2) {
             //not using gps
             totals.distance = rel2num(ret2string(bluetoothStats.distance * 0.62137));
             totals.speed = rel1num(ret1string(bluetoothSpeedAverage * 0.62137));           

@@ -12,14 +12,16 @@ function listenRounds() {
       arrRounds.push(childData);
     });
     //console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
+
     let v = _.values(arrRounds);
+    if (arrRounds.length < 1) {return;}
 
     let arrScore = _.orderBy(v, 'a_scoreRoundLast', 'desc');
     let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
     console.log('New Rounds Leader');
-    console.log('arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
-    console.log('arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast); 
+    console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
+    console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast); 
 
   });
   
@@ -43,12 +45,13 @@ function listenTotals() {
         });
         
         //console.log('\narrTotals\n' + JSON.stringify(arrTotals));
+        if (arrTotals.length < 1) {return;}
         
         let i = _.orderBy(arrTotals, ['a_speedTotal'], ['desc']);
-        console.log('\ni.name, i.a_speedTotal, ' + i[0].a_speedTotal, i[0].fb_timName),'\n';
+        console.log('arrTotals, i.name, i.a_speedTotal, ' + i[0].a_speedTotal, i[0].fb_timName);
 
         let s = _.orderBy(arrTotals, ['a_scoreHRTotal'], ['desc']);
-        console.log('\ni.name, i.a_scoreHRTotal, ' + s[0].a_scoreHRTotal, s[0].fb_timName), '\n';
+        console.log('arrTotals, i.name, i.a_scoreHRTotal, ' + s[0].a_scoreHRTotal, s[0].fb_timName);
 
       });
 }
@@ -123,7 +126,7 @@ function postRound() {
           
         } else {
             console.log('postRound success');
-            //console.log(JSON.stringify(round));
+            console.log(JSON.stringify(round));
             postTotals();
         }
       });
