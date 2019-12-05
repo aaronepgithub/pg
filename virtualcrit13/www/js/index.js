@@ -997,7 +997,7 @@ var dynamicPopup = app.popup.create({
                 size: 230,
                 borderColor: '#ff0000',
                 borderWidth: 20,
-                valueText: 0,
+                valueText: '0',
                 valueFontSize: 55,
                 valueTextColor: '#ff0000',
                 valueFontWeight: 700,
