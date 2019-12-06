@@ -1,9 +1,10 @@
 var database = firebase.database();
 
+//speed
 function listenRounds() {
   console.log('Listen for Rounds Changes');
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
-  roundsRef.limitToLast(10).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
+  roundsRef.limitToLast(3).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRounds = [];
     snapshot.forEach(function (childSnapshot) {
@@ -26,6 +27,9 @@ function listenRounds() {
     console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
 
     $$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+    $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
+    $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+    
 
   });
 
@@ -37,7 +41,7 @@ var arrRoundsHR = [];
 function listenRoundsHR() {
   console.log('Listen for Rounds Changes, sorted by HR');
   var roundsRefHR = firebase.database().ref('rounds/' + getTodaysDate());
-  roundsRefHR.limitToLast(10).orderByChild('a_scoreRoundLast').on('value', function (snapshot) {
+  roundsRefHR.limitToLast(3).orderByChild('a_scoreRoundLast').on('value', function (snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRoundsHR = [];
     snapshot.forEach(function (childSnapshot) {
@@ -58,6 +62,8 @@ function listenRoundsHR() {
     //console.log('New Rounds Leader');
     console.log('arrRoundsHR, arrScore[0]', arrScoreHR[0].fb_timName, arrScoreHR[0].a_scoreRoundLast);
     //console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
+    $$('.item-crit-score-name').html(String(arrScoreHR[0].fb_timName).toUpperCase());
+    $$('.item-crit-score-value').html(ret1string(arrScoreHR[0].a_scoreRoundLast) + ' %MAX');
 
     //$$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
   });
@@ -173,4 +179,16 @@ function postRound() {
 
 function getScoreFromHeartate(hr) {
   return Math.round(totals.heartrate / tim.timMaxHeartate * 100 * 10) / 10;
+}
+
+
+var leaders = {
+  roundSpeedValue: 0,
+  roundScoreValue: 0,
+  roundSpeedName: '',
+  roundScoreName: '',
+  totalSpeedValue: 0,
+  totalScoreValue: 0,
+  totalSpeedName: '',
+  totalScoreName: '',
 }

@@ -73,15 +73,19 @@ function newRound() {
 
     round.speed = ret1num((distanceInMostRecendRound * 0.62137) / ((tim.timSecondsPerRound * 1000) / 1000 / 60 / 60));
     console.log('round.speed', round.speed);
+    console.log('tim.timAudio', tim.timAudio);
+    console.log('attempt to play audio');
 
+    $$('.main-status-alerts').html('MY LAST CRIT:  ' + round.speed + ' MPH');
+    
     if (tim.timAudio == "ON") {
         if (round.speed > 0) {
             TTS.speak({
                 text: ret1string(round.speed) + ' Miles Per Hour.',
                 locale: 'en-US',
-                rate: 1
+                rate: 1.5
             }, function () {
-                console.log('Text succesfully spoken');
+                console.log('tts success');
             }, function (reason) {
                 console.log('tts failed:  ', reason);
             });
@@ -408,6 +412,16 @@ function timerStarter() {
     };
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
+
+    TTS.speak({
+        text: 'Here we go!',
+        locale: 'en-US',
+        rate: 1.5
+    }, function () {
+        console.log('tts success');
+    }, function (reason) {
+        console.log('tts failed:  ', reason);
+    });
 
 
     setTimeout(function () {
