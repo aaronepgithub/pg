@@ -14,12 +14,12 @@ var active = {
     btSpeed: 0,
     btDistance: 0,
     btHeartrate: 0,
-    btCadence: 0,  
+    btCadence: 0,
     btTime: 0,
-    gpsSpeed: 0,  
-    gpsDistance: 0,  
+    gpsSpeed: 0,
+    gpsDistance: 0,
     gpsTime: 0,
-    
+
 }
 
 var totals = {

@@ -88,10 +88,6 @@ function newRound() {
         }
     }
 
-
-
-
-
     if (heartrateReadingsRound.length > 0) {
         round.heartrate = ret1num(_.mean(heartrateReadingsRound));
         //console.log('round.heartrate:', round.heartrate);
@@ -200,10 +196,10 @@ function startBluetoothConnection(i) {
                 ui('.item-hr-avg', (_.mean(heartrateReadings).toFixed(1)) + ' BPM (AVG)');
                 totals.heartrate = ret1num(_.mean(heartrateReadings));
 
-                if (hasPopupOpened) {
+                if (popupGauge) {
                     var gauge2 = app.gauge.get('.my-gauge2');
                     gauge.update({
-                        value: (data[1] / 2)/100,
+                        value: (data[1] / 2) / 100,
                         valueText: ret0string(data[1]),
                     });
                 }
@@ -675,10 +671,10 @@ function onBackgroundSuccess(newLocation) {
     totals.speed = ret1num((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
     totals.distance = ret2num(totalDistance * 0.62137);
 
-    if (hasPopupOpened) {
+    if (popupGauge) {
         var gauge = app.gauge.get('.my-gauge');
         gauge.update({
-            value: (parseFloat(gpsSpeed) * 3.75)/100,
+            value: (parseFloat(gpsSpeed) * 3.75) / 100,
             valueText: gpsSpeed,
         });
     }
@@ -942,25 +938,21 @@ function ui(k, v) {
     $$(k).text(v);
 }
 
-
-
-
+ var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
+        '<div class="block-header">SPEED</div>' +
+        '<div class="block text-align-center">' +
+            '<div class="gauge demo-gauge my-gauge"></div>' +
+        '</div>' +
+        '<div class="block text-align-center">' +
+            '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
+        '</div>' +
+        '<div class="block-footer">HEARTRATE</div>' +
+    '</div>';
 
 
 // Create dynamic Popup
 var dynamicPopup = app.popup.create({
-    content: '<div id = "elem-to-center" class="popup center-popup">' +
-
-    '<div class="block-header">SPEED</div>' +
-
-                '<div class="block text-align-center">' +
-                '<div class="gauge demo-gauge my-gauge"></div>' +
-                '</div>' +
-                '<div class="block text-align-center">' +
-                '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
-                '</div>' +
-    '<div class="block-footer">HEARTRATE</div>' +
-            '</div>',
+    content: popupHtml,
     backdrop: true,
     closeByBackdropClick: true,
     swipeToClose: true,
@@ -1015,7 +1007,7 @@ var dynamicPopup = app.popup.create({
         },
         opened: function (popup) {
             console.log('Popup opened');
-            hasPopupOpened = true;
+            popupGauge = true;
         },
     }
 });
@@ -1024,22 +1016,42 @@ dynamicPopup.on('close', function (popup) {
     console.log('Popup close');
 });
 dynamicPopup.on('closed', function (popup) {
-    hasPopupOpened = false;
+    popupGauge = false;
     console.log('Popup closed');
 });
 
-// Open dynamic popup
+// Open dynamic popup from menu bars 
 $$('.dynamic-pop').on('click', function () {
     dynamicPopup.open();
 });
 
-var hasPopupOpened = false;
+var popupGauge = false;
+var popupCounter = 0;
 
 
 
 
-$(document).on("click", $('#elem-to-center'), function() {
+$(document).on("click", $('#elem-to-center'), function () {
     console.log('elem-to-center');
-    //TODO:  USE THIS TO CHANGE THE GAGUES...
+    //changePopupContent();
 });
+
+
+function changePopupContent() {
+    console.log('changePopupContent');  
+    if (popupCounter == 0) {popupCounter += 1;return;}
+    popupCounter += 1;
+
+    var gauge = app.gauge.get('.my-gauge');
+    gauge.destroy();
+    var gauge2 = app.gauge.get('.my-gauge2');
+    gauge2.destroy();
+    $('#elem-to-center').html(        '<div class="block-header">NEW</div>' +
+    '<div class="block text-align-center">' +
+        '<div> SOMETHING IN THE MIDDLE </div>' +
+    '</div>');
+}
+
+
+
 
