@@ -61,17 +61,19 @@ function tockComplete() {
 
 function newRound() {
     console.log('newRound');
-    arrRoundDistances.push(totals.distance);  //km
+    arrRoundDistances.push(totals.distance);  //already in miles
 
-    //console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
+    console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
 
     let a = _.last(arrRoundDistances);
     let b = _.nth(arrRoundDistances, -2)
-    //console.log('a,b', a,b);
-    let distanceInMostRecendRound = a - b;  //km
-    //console.log('distanceInMostRecendRound', distanceInMostRecendRound);
+    console.log('a,b', a,b);
+    let distanceInMostRecendRound = a - b;  //miles
+    console.log('distanceInMostRecendRound', distanceInMostRecendRound);
 
-    round.speed = ret1num((distanceInMostRecendRound * 0.62137) / ((tim.timSecondsPerRound * 1000) / 1000 / 60 / 60));
+    //ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
+
+    round.speed = ret1num( distanceInMostRecendRound / (tim.timSecondsPerRound / 60 / 60) );
     console.log('round.speed', round.speed);
     console.log('tim.timAudio', tim.timAudio);
     console.log('attempt to play audio');
@@ -1045,10 +1047,10 @@ var popupCounter = 0;
 
 
 
-$(document).on("click", $('#elem-to-center'), function () {
-    console.log('elem-to-center');
-    //changePopupContent();
-});
+// $(document).on("click", $('#elem-to-center'), function () {
+//     console.log('elem-to-center');
+//     //changePopupContent();
+// });
 
 
 function changePopupContent() {
@@ -1060,7 +1062,7 @@ function changePopupContent() {
     gauge.destroy();
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.destroy();
-    $('#elem-to-center').html(        '<div class="block-header">NEW</div>' +
+    $('#elem-to-center').html('<div class="block-header">NEW</div>' +
     '<div class="block text-align-center">' +
         '<div> SOMETHING IN THE MIDDLE </div>' +
     '</div>');
