@@ -204,7 +204,7 @@ function startBluetoothConnection(i) {
 
                 if (popupGauge) {
                     var gauge2 = app.gauge.get('.my-gauge2');
-                    gauge.update({
+                    gauge2.update({
                         value: (data[1] / 2) / 100,
                         valueText: ret0string(data[1]),
                     });
