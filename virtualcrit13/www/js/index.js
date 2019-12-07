@@ -994,9 +994,11 @@ var dynamicPopup = app.popup.create({
                 on: {
                     beforeDestroy: function () {
                         console.log('Gauge will be destroyed')
-                    }
+                    },
                 }
             })
+
+
 
             var gauge2 = app.gauge.create({
                 el: '.gauge2',
@@ -1017,8 +1019,6 @@ var dynamicPopup = app.popup.create({
                     }
                 }
             })
-
-
 
         },
         opened: function (popup) {
@@ -1042,22 +1042,17 @@ $$('.dynamic-pop').on('click', function () {
 });
 
 var popupGauge = false;
+
+
+$$('.tab1').on('click', function() {
+    console.log('tab1 click');
+});
+
 var popupCounter = 0;
-
-
-
-
-// $(document).on("click", $('#elem-to-center'), function () {
-//     console.log('elem-to-center');
-//     //changePopupContent();
-// });
-
-
 function changePopupContent() {
     console.log('changePopupContent');  
     if (popupCounter == 0) {popupCounter += 1;return;}
     popupCounter += 1;
-
     var gauge = app.gauge.get('.my-gauge');
     gauge.destroy();
     var gauge2 = app.gauge.get('.my-gauge2');

@@ -40,7 +40,7 @@
     <!-- Your main view, should have "view-main" class -->
     <div class="view view-main">
       <!-- Initial Page, "data-name" contains page name -->
-      <div data-name="home" class="page">
+      <div data-name="home" class="page page-with-subnavbar">
 
         <!-- Top Navbar -->
         <div class="navbar">
@@ -54,12 +54,21 @@
             <div class="title make-bold">VIRTUAL CRIT</div>
             <div class="right">
               <a href="#" class="link icon-only">
-                <!-- <i class="fa fa-home fa-lg"></i> -->
+                <i class="fa fa-ellipsis-h fa-lg"></i>
               </a>
             </div>
           </div>
         </div>
 
+        <div class="subnavbar">
+          <div class="subnavbar-inner">
+            <div class="segmented segmented-raised">
+              <a class="button tab-link tab1" href="#tab1">1</a>
+              <a class="button tab-link tab2" href="#tab2">2</a>
+              <a class="button tab-link tab3" href="#tab3">3</a>
+            </div>
+          </div>
+        </div>
 
         <!-- Bottom Toolbar -->
         <div class="toolbar toolbar-bottom">
@@ -390,7 +399,7 @@
                   </div>
                   <div class="title">Bluetooth Devices</div>
                   <div class="right">
-                    <a class="link popup-close"><i class="fa fa-home fa-lg"></i></a>
+                    <a class="link popup-close"><i class="fa fa-home fa-2x"></i></a>
                     <!-- <a class="link start-bluetooth-scan"><i class="fa fa-refresh fa-lg"></i></a> -->
                   </div>
                 </div>
@@ -400,7 +409,7 @@
                 <div class="toolbar-inner">
                   <!-- Toolbar links -->
                   <div class="left">
-                    <a class="link start-bluetooth-scan"><i class="fa fa-refresh fa-lg"></i></a>
+                    <a class="link start-bluetooth-scan"><i class="fa fa-refresh fa-2x"></i></a>
                   </div>
                   <div class="block status-alerts">Alerts</div>
                 </div>
