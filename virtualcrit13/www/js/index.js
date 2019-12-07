@@ -409,7 +409,7 @@ function timerStarter() {
     console.log('timerStarter');
 
     if (startTime) {
-        console.log('running');
+        console.log('already running');
         return;
     };
     startTime = _.now();
@@ -954,15 +954,18 @@ function ui(k, v) {
     $$(k).text(v);
 }
 
+
+//DYANMIC POPUPS
+//POPUP GAUGE
  var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
-        '<div class="block-header">SPEED</div>' +
+        '<div class="block-header">SPEED/HEARTRATE</div>' +
         '<div class="block text-align-center">' +
             '<div class="gauge demo-gauge my-gauge"></div>' +
         '</div>' +
         '<div class="block text-align-center">' +
             '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
         '</div>' +
-        '<div class="block-footer">HEARTRATE</div>' +
+        '<div class="block-footer">SWIPE UP/DOWN TO DISMISS</div>' +
     '</div>';
 
 
@@ -1042,13 +1045,9 @@ $$('.dynamic-pop').on('click', function () {
 });
 
 var popupGauge = false;
-
-
-$$('.tab1').on('click', function() {
-    console.log('tab1 click');
-});
-
 var popupCounter = 0;
+
+//NOT USING...
 function changePopupContent() {
     console.log('changePopupContent');  
     if (popupCounter == 0) {popupCounter += 1;return;}
@@ -1062,6 +1061,49 @@ function changePopupContent() {
         '<div> SOMETHING IN THE MIDDLE </div>' +
     '</div>');
 }
+
+//TAB1 POPUP
+var popupTab1 = false;
+$$('.tab1').on('click', function() {
+    console.log('tab1 click');
+
+    var tab1Html = '<div id = "elem-to-center" class="popup center-popup">' +
+    '<div class="block-header">LEADERS</div>' +
+    '<div class="block text-align-center">' +
+        '<span id = "tab1a">-</span>' +
+    '</div>' +
+    '<div class="block text-align-center">' +
+        '-' +
+    '</div>' +
+    '<div class="block-footer">SWIPE TO DISMISS</div>' +
+'</div>';
+
+
+var dynamicPopupTab1 = app.popup.create({
+    content: tab1Html,
+    backdrop: true,
+    closeByBackdropClick: true,
+    swipeToClose: true,
+    // Events
+    on: {
+        open: function (popup) {
+            console.log('Popup open');
+        },
+        opened: function (popup) {
+            console.log('Popup opened');
+            popupTab1 = true;
+        },
+        closed: function (popup) {
+            console.log('Popup closed');
+            popupTab1 = false;
+        },
+    }
+});
+
+    dynamicPopupTab1.open();
+
+});  //END, TAB1
+
 
 
 

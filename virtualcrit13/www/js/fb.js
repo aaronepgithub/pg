@@ -66,6 +66,12 @@ function listenRoundsHR() {
     $$('.item-crit-score-value').html(ret1string(arrScoreHR[0].a_scoreRoundLast) + ' %MAX');
 
     //$$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
+
+    // if (popupTab1) {
+    //   $$('#tab1a').html(String(arrScoreHR[0].fb_timName).toUpperCase() +'\n'+ String(arrScoreHR[0].fb_timName).toUpperCase() + ' %MAX' +
+    //   '\n' +   String(arrSpeed[0].fb_timName).toUpperCase() + '\n' + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+    // }
+
   });
 
 }
