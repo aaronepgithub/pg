@@ -962,8 +962,8 @@ previousSample = currentSample;
     if (bluetoothValues.speedAverage) { ui('.item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH'); } //convert to mph
     if (tim.timMode = 'ON') {
         //not using gps
-        totals.distance = rel2num(ret2string(bluetoothValues.distance));
-        totals.speed = rel1num(ret1string(bluetoothValues.speedAverage));
+        totals.distance = ret2num(ret2string(bluetoothValues.distance));
+        totals.speed = ret1num(ret1string(bluetoothValues.speedAverage));
 
         if (popupGauge) {
             var gauge = app.gauge.get('.my-gauge');
