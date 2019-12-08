@@ -221,6 +221,7 @@ function startBluetoothConnection(i) {
         if (t3) {
             // if (isNaN(deviceClicked.name)) {return};
             console.log('is CSC', + p.name);
+            console.log('is CSC', + deviceClicked.name);
             //TODO, WHY DOES P.NAME WORK BUT NOT DEVICECLICKED.NAME???
             changeLi(i, 'SPD/CAD');
             if (t1 == true || t2 == true) { changeLi(i, 'SPD/CAD/HR'); }
@@ -801,12 +802,13 @@ var bluetoothValues = {
     distance : -1,
     activeTime : -1,
     speedRound : -1,
+    cadence: -1,
 }
 
 var currentSample;
 var previousSample;
-var hasWheel;
-var hasCrank;
+// var hasWheel;
+// var hasCrank;
 
 var totalWheelRevs = 0.0;
 var totalWheelTime = 0.0;
@@ -823,8 +825,8 @@ function calcSpeedCadenceValues(v) {
     let value = new DataView(v);
 
     let flags = v0[0];
-    hasWheel = flags === 1 || flags === 3;
-    hasCrank = flags === 2 || flags === 3;
+    let hasWheel = flags === 1 || flags === 3;
+    let hasCrank = flags === 2 || flags === 3;
 
     
 
@@ -851,8 +853,8 @@ function calcSpeedCadenceValues(v) {
         currentSample = {
             // wheel: value.getUint32(1, true),
             // wheelTime: value.getUint16(5, true),
-            crank: value.getUint32(1, true),
-            crankTime: value.getUint16(5, true),
+            crank: value.getUint16(1, true),
+            crankTime: value.getUint16(3, true),
             // crank: value.getUint16(7, true),
             // crankTime: value.getUint16(9, true),
         };
@@ -874,6 +876,8 @@ function calcSpeedCadenceValues(v) {
             console.log('has crank, process crank/time');
             console.log(currentSample.crank, currentSample.crankTime);
             //TODO:  PROCESS CRANK...
+            currentCadenceSample = {crank: currentSample.crank, crankTime: currentSample.crankTime}
+            calculateCadence();
         }
     }
 
@@ -920,6 +924,49 @@ function diffForSample(current, previous, max) {
 // {"wheel":578,"wheelTime":45632} {"wheel":580,"wheelTime":46751}
 // {"wheel":580,"wheelTime":46751} {"wheel":581,"wheelTime":47328}
 
+var previousCadenceSample;
+var currentCadenceSample = {crankTime: 0.0, crank: 0.0};
+var totalCrankRevs = 0;var totalCrankTime = 0;
+function calculateCadence() {
+    if (!previousCadenceSample) {
+        previousCadenceSample = currentCadenceSample;
+        return;
+    }
+
+    console.log('calcCadence', JSON.stringify(currentCadenceSample));
+    
+    var crankTimeDiff = 0.0;
+    var crankDiff = 0.0;
+    crankTimeDiff = diffForSample(currentCadenceSample.crankTime, currentCadenceSample.crankTime, UINT16_MAX);
+    //crankTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
+    crankDiff = diffForSample(currentCadenceSample.crank, previousCadenceSample.crank, UINT16_MAX);
+
+    console.log('crankTimeDiff', crankTimeDiff);
+    console.log('crankDiff', crankDiff);
+    
+
+    totalCrankRevs += crankDiff;
+    totalCrankTime += crankTimeDiff / 1024;
+
+    console.log('totals', totalCrankRevs, totalCrankTime);
+
+    cadence = ((60 * crankDiff) / (crankTimeDiff / 1024)); // RPM
+    bluetoothCadenceAverage = (60 * totalCrankRevs / totalCrankTime); // RPM TOTAL AVG
+    bluetoothValues.cadence = ret1num(cadence);
+
+    console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
+    
+
+    if (bluetoothValues.cadence) {
+        console.log('hasCadence...up update');
+        
+        updateChip('na', 3, ret0string(bluetoothValues.cadence) + ' Rpm');
+        ui('item-cadence',ret0string(bluetoothValues.cadence) + ' RPM');
+    }
+
+    previousCadenceSample = currentCadenceSample;
+
+}
 
 function calculateSpeed() {
 
