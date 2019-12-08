@@ -6,6 +6,7 @@ var tim = {
     timWheelSize: 2100,
     timMaxHeartate: 185,
     timSecondsPerRound: 300,
+    timMode: 'OFF',
 }
 
 //STRINGS AND IMPERIAL?
