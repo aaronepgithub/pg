@@ -26,7 +26,7 @@ function listenRounds() {
     //console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
     console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
 
-    $$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+    $$('.main-status-alerts').html('LEADING:  ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",   " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
 
@@ -34,7 +34,7 @@ function listenRounds() {
     t2Content += '<ol>'
 
     _.forEach(arrSpeed, function(value) {
-        console.log(JSON.stringify(value));
+        //console.log(JSON.stringify(value));
         t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
       });
       t2Content += '</ol>'

@@ -892,7 +892,7 @@ function diffForSample(current, previous, max) {
 var previousCadenceSample;
 var currentCadenceSample = { crankTime: 0.0, crank: 0.0 };
 var totalCrankRevs = 0; var totalCrankTime = 0;
-var crankVals = [1,2,3,4];
+var crankVals = [1,2,3,4,5,6,7];
 
 
 function calculateCadence() {
@@ -917,7 +917,7 @@ function calculateCadence() {
     console.log('crankDiff', crankDiff);
 
 
-    if (crankDiff < 4) {
+    if (crankDiff < 6) {
         console.log('get a bigger sample');
         if (_.head(crankVals) == _.last(crankVals)) {
             updateChip('na', 3, 0 + ' RPM');
@@ -1254,10 +1254,11 @@ function ui(k, v) {
 //DYANMIC POPUPS
 //POPUP GAUGE
 var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
-    '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
+    // '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
     '<div class="block text-align-center">' +
     '<div class="gauge demo-gauge my-gauge"></div>' +
     '</div>' +
+    '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
     '<div class="block text-align-center">' +
     '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
     '</div>' +
@@ -1280,7 +1281,7 @@ var dynamicPopup = app.popup.create({
                 el: '.gauge',
                 type: 'circle',
                 value: 0.1,
-                size: 230,
+                size: 220,
                 borderColor: '#ff0000',
                 borderWidth: 20,
                 valueText: '0',
@@ -1303,7 +1304,7 @@ var dynamicPopup = app.popup.create({
                 el: '.gauge2',
                 type: 'circle',
                 value: 0.1,
-                size: 230,
+                size: 220,
                 borderColor: '#ff0000',
                 borderWidth: 20,
                 valueText: '0',
