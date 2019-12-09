@@ -958,10 +958,10 @@ function calculateCadence() {
     
 
     if (bluetoothValues.cadence) {
-        console.log('hasCadence...up update');
+        console.log('hasCadence...ui update');
         
-        updateChip('na', 3, ret0string(bluetoothValues.cadence) + ' Rpm');
-        ui('item-cadence',ret0string(bluetoothValues.cadence) + ' RPM');
+        updateChip('na', 3, ret0string(bluetoothValues.cadence) + ' RPM');
+        ui('.item-cadence',ret0string(bluetoothValues.cadence) + ' RPM');
     }
 
     previousCadenceSample = currentCadenceSample;
@@ -1022,11 +1022,17 @@ previousSample = currentSample;
 
     if (bluetoothValues.speed) {
           ui('.item-speed-bt', ret1string(bluetoothValues.speed) + ' MPH'); 
-          updateChip('na', 2, ret1string(bluetoothValues.speed) + ' Mph'); 
+          updateChip('na', 2, ret1string(bluetoothValues.speed) + ' MPH'); 
     } 
 
-    if (bluetoothValues.distance) { ui('.item-distance-bt', ret2string(bluetoothValues.distance) + ' MPH'); $$('.item-distance-bt').text((ret2string(bluetoothValues.distance)) + ' Miles'); }
-    if (bluetoothValues.speedAverage) { ui('.item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH'); } //convert to mph
+    if (bluetoothValues.distance) { 
+        ui('.item-distance-bt', ret2string(bluetoothValues.distance) + ' MPH');
+        $$('.item-distance-bt').text((ret2string(bluetoothValues.distance)) + ' Miles'); 
+    }
+    if (bluetoothValues.speedAverage) {
+        ui('.item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH');
+    } //convert to mph
+    
     if (tim.timMode == 'ON') {
         //not using gps
         totals.distance = ret2num(ret2string(bluetoothValues.distance));
@@ -1057,9 +1063,9 @@ previousSample = currentSample;
 
     }
 
-    ui('item-speed-bt',ret1string(bluetoothValues.speed) + ' MPH');
-    ui('item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH (AVG)');
-    ui('item-distance-bt', ret2string(bluetoothValues.distance) + ' MPH');
+    // ui('item-speed-bt',ret1string(bluetoothValues.speed) + ' MPH');
+    // ui('item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH (AVG)');
+    // ui('item-distance-bt', ret2string(bluetoothValues.distance) + ' MPH');
 
 
 }
