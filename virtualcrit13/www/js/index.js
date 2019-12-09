@@ -67,19 +67,19 @@ function newRound() {
 
     let a = _.last(arrRoundDistances);
     let b = _.nth(arrRoundDistances, -2)
-    console.log('a,b', a,b);
+    console.log('a,b', a, b);
     let distanceInMostRecendRound = a - b;  //miles
     console.log('distanceInMostRecendRound', distanceInMostRecendRound);
 
     //ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
 
-    round.speed = ret1num( distanceInMostRecendRound / (tim.timSecondsPerRound / 60 / 60) );
+    round.speed = ret1num(distanceInMostRecendRound / (tim.timSecondsPerRound / 60 / 60));
     console.log('round.speed', round.speed);
     console.log('tim.timAudio', tim.timAudio);
     console.log('attempt to play audio');
 
     $$('.main-status-alerts').html('MY LAST CRIT:  ' + round.speed + ' MPH');
-    
+
     if (tim.timAudio == "ON") {
         if (round.speed > 0) {
             TTS.speak({
@@ -227,7 +227,7 @@ function startBluetoothConnection(i) {
             if (t1 == true || t2 == true) { changeLi(i, 'SPD/CAD/HR'); }
             ble.startNotification(deviceClicked.id, "1816", "2A5B", function (bb) {
                 console.log('start notification CSC');
-                
+
                 calcSpeedCadenceValues(bb);
                 var data_csc = new Uint8Array(bb);
                 //console.log('notify success CSC: ' + data_csc[1]);
@@ -511,7 +511,7 @@ $$('.item-timAudio').on('click', function (e) {
         tim.timAudio = "OFF";
     }
     console.log('timAudio: ', tim.timAudio);
-    
+
 });
 
 //SET MODE
@@ -528,7 +528,7 @@ $$('.item-timMode').on('click', function (e) {
         tim.timMode = "OFF";
     }
     console.log('tim.timMode: ', tim.timMode);
-    
+
 });
 
 
@@ -684,7 +684,6 @@ function onBackgroundSuccess(newLocation) {
 
     //STOP THE CLOCK
     if (lastActivityTime - _.now() > 15000) {
-
         lastActivityTime = _.now();
         return;
     }
@@ -700,7 +699,8 @@ function onBackgroundSuccess(newLocation) {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var distance = R * c; // Distance in KM
 
-    if (distance < .01 || _.now() - lastActivityTime < 2000) {
+    if ((distance * 1000) < 10 || _.now() - lastActivityTime < 2000) {
+        console.log('too short, wait for the next one');
         return;
     }
 
@@ -787,28 +787,19 @@ const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
 //const updateRatio = 0.85; // Percent ratio between old/new stats
 
-// var bluetoothStats, startDistance;
-// var bluetoothSpeedActiveTime = 0;
-// var bluetoothSpeedAverage;  //km/hr
-// var bluetoothCadenceAverage;
-
-
-//var wheelSize = 2111;
 var bluetoothValues = {
-    heartrate : -1,
-    heartrateAverage : -1,
-    speed : -1,
-    speedAverage : -1,
-    distance : -1,
-    activeTime : -1,
-    speedRound : -1,
+    heartrate: -1,
+    heartrateAverage: -1,
+    speed: -1,
+    speedAverage: -1,
+    distance: -1,
+    activeTime: -1,
+    speedRound: -1,
     cadence: -1,
 }
 
 var currentSample;
 var previousSample;
-// var hasWheel;
-// var hasCrank;
 
 var totalWheelRevs = 0.0;
 var totalWheelTime = 0.0;
@@ -828,10 +819,10 @@ function calcSpeedCadenceValues(v) {
     let hasWheel = flags === 1 || flags === 3;
     let hasCrank = flags === 2 || flags === 3;
 
-    
+
 
     if (hasWheel) {
-        
+
         if (hasCrank) {
             console.log('wheel and crank');
             currentSample = {
@@ -876,38 +867,12 @@ function calcSpeedCadenceValues(v) {
             console.log('has crank, process crank/time');
             console.log(currentSample.crank, currentSample.crankTime);
             //TODO:  PROCESS CRANK...
-            currentCadenceSample = {crank: currentSample.crank, crankTime: currentSample.crankTime}
+            currentCadenceSample = { crank: currentSample.crank, crankTime: currentSample.crankTime }
             calculateCadence();
         }
     }
 
-    // if (bluetoothStats) {
-    //     // var data = "\nCadence (rpm): " + bluetoothStats.cadence.toFixed(1) + "\n";
-    //     // data += "Distance (km): " + bluetoothStats.distance.toFixed(2) + "\n";
-    //     // data += "Speed (km/hr): " + bluetoothStats.speed.toFixed(1);
-    //     var data = "\nCadence (rpm): " + bluetoothStats.cadence + "\n";
-    //     data += "Distance (km): " + bluetoothStats.distance + "\n";
-    //     data += "Speed (km/hr): " + bluetoothStats.speed;
-    //     data += "Avg.Speed (km/hr): " + bluetoothStats.avgSpeed;
-    //     data += "Active Time (seconds): " + msToTime(bluetoothStats.totalActivyTime);
-    //     console.log('data:  ' + data);
-    //     //console.log('ret1string values:  ' + ret1string(bluetoothStats.cadence), ret1string(bluetoothStats.distance), ret1string(bluetoothStats.speed));
-    //     if (bluetoothStats.speed) { ui('.item-speed-bt', ret1string(bluetoothStats.speed * 0.62137) + ' MPH'); updateChip('na', 2, ret1string(bluetoothStats.speed * 0.62137) + ' Mph'); } //convert to mph
-    //     if (bluetoothStats.cadence) { ui('.item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM'); updateChip('na', 3, ret0string(bluetoothStats.cadence) + ' Rpm'); }
-    //     if (bluetoothStats.distance) { ui('.item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH'); $$('.item-distance-bt').text((ret2string(bluetoothStats.distance * 0.62137)) + ' Miles'); }
-    //     if (bluetoothStats.avgSpeed) { ui('.item-average-speed-bt', ret1string(bluetoothSpeedAverage * 0.62137) + ' MPH'); } //convert to mph
-    //     if (totals.distance < 1 && bluetoothStats.distance > 2) {
-    //         //not using gps
-    //         totals.distance = rel2num(ret2string(bluetoothStats.distance * 0.62137));
-    //         totals.speed = rel1num(ret1string(bluetoothSpeedAverage * 0.62137));
-    //     }
 
-    //     // ui('item-speed-bt',ret1string(bluetoothStats.speed * 0.62137) + ' MPH');
-    //     //ui('item-average-speed-bt', + ' MPH (AVG)');
-    //     // ui('item-distance-bt', ret2string(bluetoothStats.distance * 0.62137) + ' MPH');
-    //     //ui('item-cadence', + ret0string(bluetoothStats.cadence) + ' RPM');
-
-    // }
 }
 
 function diffForSample(current, previous, max) {
@@ -925,9 +890,10 @@ function diffForSample(current, previous, max) {
 // {"wheel":580,"wheelTime":46751} {"wheel":581,"wheelTime":47328}
 
 var previousCadenceSample;
-var currentCadenceSample = {crankTime: 0.0, crank: 0.0};
-var totalCrankRevs = 0;var totalCrankTime = 0;
-var cadCheck = Array.from({length: 3}, (v, i) => i);
+var currentCadenceSample = { crankTime: 0.0, crank: 0.0 };
+var totalCrankRevs = 0; var totalCrankTime = 0;
+var crankVals = [1,2,3,4];
+
 
 function calculateCadence() {
     if (!previousCadenceSample) {
@@ -936,7 +902,12 @@ function calculateCadence() {
     }
 
     console.log('calcCadence', JSON.stringify(currentCadenceSample));
+    crankVals.push(currentCadenceSample.crank);
+    crankVals.shift();
+    console.log('crankVals ', JSON.stringify(crankVals));
+
     
+
     var crankTimeDiff = 0.0;
     var crankDiff = 0.0;
     crankTimeDiff = diffForSample(currentCadenceSample.crankTime, previousCadenceSample.crankTime, UINT16_MAX);
@@ -944,41 +915,42 @@ function calculateCadence() {
 
     console.log('crankTimeDiff', crankTimeDiff);
     console.log('crankDiff', crankDiff);
-    
+
 
     if (crankDiff < 4) {
         console.log('get a bigger sample');
+        if (_.head(crankVals) == _.last(crankVals)) {
+            updateChip('na', 3, 0 + ' RPM');
+            ui('.item-cadence', 0 + ' RPM');
+        }
         return;
     }
 
-
-    if (crankDiff == 0) {
-        bluetoothValues.cadence = 0;
-    } else {
-        totalCrankRevs += crankDiff;
-        totalCrankTime += crankTimeDiff;  //raw
-        console.log('totals', totalCrankRevs, totalCrankTime);
-    
-        cadence = ( (crankDiff) / (crankTimeDiff / 1024 / 60) ); // RPM
-        bluetoothCadenceAverage = ( totalCrankRevs / (totalCrankTime / 1024 / 60) ); // RPM TOTAL AVG
-        bluetoothValues.cadence = ret1num(cadence);
-    
-        console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
+    if (crankDiff > 15 || crankTimeDiff > 15000) {
+        console.log('too long for crank update, reset, return');
+        previousCadenceSample = currentCadenceSample;
+        return;
     }
 
+    totalCrankRevs += crankDiff;
+    totalCrankTime += crankTimeDiff;  //raw
+    console.log('totals', totalCrankRevs, totalCrankTime);
 
-    
+    cadence = ((crankDiff) / (crankTimeDiff / 1024 / 60)); // RPM
+    bluetoothCadenceAverage = (totalCrankRevs / (totalCrankTime / 1024 / 60)); // RPM TOTAL AVG
+    bluetoothValues.cadence = ret1num(cadence);
+    console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
+
 
     if (bluetoothValues.cadence) {
         console.log('hasCadence...ui update');
-        
         updateChip('na', 3, ret0string(bluetoothValues.cadence) + ' RPM');
-        ui('.item-cadence',ret0string(bluetoothValues.cadence) + ' RPM');
+        ui('.item-cadence', ret0string(bluetoothValues.cadence) + ' RPM');
     }
-
     previousCadenceSample = currentCadenceSample;
-
 }
+
+var wheelVals = [1,2,3,4];
 
 function calculateSpeed() {
 
@@ -987,61 +959,70 @@ function calculateSpeed() {
         previousSample = currentSample;
         return;
     }
-console.log('calculateSpeed', JSON.stringify(currentSample), JSON.stringify(previousSample));
 
-sampleWheelTime = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
-sampleWheelRevs = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
+    wheelVals.push(currentSample.wheel);
+    wheelVals.shift();
+    console.log('wheelVals ', JSON.stringify(wheelVals));
 
-console.log('sampleWheelRevs', sampleWheelRevs, 'sampleWheelTime', sampleWheelTime);
+    console.log('calculateSpeed', JSON.stringify(currentSample), JSON.stringify(previousSample));
 
-if (sampleWheelRevs == 0 || sampleWheelTime == 0) {
-    console.log('didnt go anywhere, no time passed, return');    
+    sampleWheelTime = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
+    sampleWheelRevs = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
+
+    console.log('sampleWheelRevs', sampleWheelRevs, 'sampleWheelTime', sampleWheelTime);
+
+    // if (sampleWheelRevs == 0 || sampleWheelTime == 0) {
+    //     console.log('didnt go anywhere, no time passed, return');
+    //     previousSample = currentSample;
+    //     return;
+    // }
+
+    //sampleWheelTime = sampleWheelTime / 1024;  //seconds
+
+    if (sampleWheelRevs > 15 || sampleWheelTime > 15000) {  //1024th
+        console.log('too much time, reset');
+        previousSample = currentSample;
+        return;
+    }
+    //IF TOO SMALL, JUST RET, NOT RESET
+    if (sampleWheelRevs < 5) {
+        console.log('WAIT FOR A BIGGER SAMPLE');
+        if (_.head(wheelVals) == _.last(wheelVals)) {
+            ui('.item-speed-bt', 0 + ' MPH');
+            updateChip('na', 2, 0 + ' MPH');
+        }
+        return;
+    }
+
+    totalWheelRevs += sampleWheelRevs;
+    totalWheelTime += sampleWheelTime;
+
+
+    bluetoothValues.activeTime = totalWheelTime / 1024;  //seconds
+    bluetoothValues.distance = ((totalWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137;   //miles
+    sampleDistance = ((sampleWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137; //miles
+    bluetoothValues.speedAverage = bluetoothValues.distance / (bluetoothValues.activeTime / 60 / 60);  //mph
+    bluetoothValues.speed = sampleDistance / (sampleWheelTime / 1024 / 60 / 60);  //mph
+    if ((bluetoothValues.speed) ? bluetoothValues.speed : 0.0);
+
+    console.log('calcSpeedValues ', sampleWheelTime, sampleWheelRevs, totalWheelTime, totalWheelRevs, sampleDistance);
+    console.log('btval ', JSON.stringify(bluetoothValues));
+
     previousSample = currentSample;
-    return;
-}
-
-//sampleWheelTime = sampleWheelTime / 1024;  //seconds
-
-if (sampleWheelRevs > 20 || sampleWheelTime > 20000) {
-    console.log('too much time, reset');
-    previousSample = currentSample;
-    return;
-}
-//IF TOO SMALL, JUST RET, NOT RESET
-if (sampleWheelRevs < 5) {
-    console.log('WAIT FOR A BIGGER SAMPLE');
-    return;
-}
-
-totalWheelRevs += sampleWheelRevs;
-totalWheelTime += sampleWheelTime;
-
-
-bluetoothValues.activeTime = totalWheelTime / 1024;  //seconds
-bluetoothValues.distance = ((totalWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137;   //miles
-sampleDistance = ((sampleWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137; //miles
-bluetoothValues.speedAverage = bluetoothValues.distance / (bluetoothValues.activeTime / 60 / 60);  //mph
-bluetoothValues.speed = sampleDistance / (sampleWheelTime / 1024 / 60 / 60);  //mph
-if ((bluetoothValues.speed) ? bluetoothValues.speed : 0.0);
-
-console.log('calcSpeedValues ', sampleWheelTime, sampleWheelRevs, totalWheelTime, totalWheelRevs, sampleDistance);
-console.log('btval ', JSON.stringify(bluetoothValues));
-
-previousSample = currentSample;
 
     if (bluetoothValues.speed) {
-          ui('.item-speed-bt', ret1string(bluetoothValues.speed) + ' MPH'); 
-          updateChip('na', 2, ret1string(bluetoothValues.speed) + ' MPH'); 
-    } 
+        ui('.item-speed-bt', ret1string(bluetoothValues.speed) + ' MPH');
+        updateChip('na', 2, ret1string(bluetoothValues.speed) + ' MPH');
+    }
 
-    if (bluetoothValues.distance) { 
+    if (bluetoothValues.distance) {
         ui('.item-distance-bt', ret2string(bluetoothValues.distance) + ' MPH');
-        $$('.item-distance-bt').text((ret2string(bluetoothValues.distance)) + ' Miles'); 
+        $$('.item-distance-bt').text((ret2string(bluetoothValues.distance)) + ' Miles');
     }
     if (bluetoothValues.speedAverage) {
         ui('.item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH');
     } //convert to mph
-    
+
     if (tim.timMode == 'ON') {
         //not using gps
         totals.distance = ret2num(ret2string(bluetoothValues.distance));
@@ -1065,8 +1046,6 @@ previousSample = currentSample;
                     });
                 }
             }
-
-
         }
 
 
@@ -1094,27 +1073,27 @@ previousSample = currentSample;
 //         console.log('hasWheel');
 //         let wheelTimeDiff = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
 //         console.log('wheelTimeDiff', wheelTimeDiff);
-        
+
 //         wheelTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
 //         let wheelDiff = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
 //         console.log('wheelDiff', wheelDiff);
-        
+
 
 //         var sampleDistance = wheelDiff * tim.timWheelSize / 1000; // distance in meters
 //         console.log('sampleDistance', sampleDistance);
-        
+
 //         if (wheelTimeDiff < 10 && sampleDistance > 0 && sampleDistance < 10) {
 //             totalWheelTime += wheelTimeDiff;
 //             totalWheelRevs += wheelDiff;
 //             console.log('totalWheelTime, totalWheelRevs ', totalWheelTime, totalWheelRevs);
-            
+
 
 //             //speed = (wheelTimeDiff == 0) ? 0 : sampleDistance / totalWheelTime * 3.6; // km/hr
 //             speed = (sampleDistance / 1000 * 0.62137) / (wheelTimeDiff / 60 / 60);
 //             distance = ((totalWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137;  //mi
 //             bluetoothSpeedAverage = distance / (totalWheelTime / 60 / 60) * 0.62137;  //mi/hr
 //             console.log('spd, dist, avg ', speed, distance, bluetoothSpeedAverage);
-            
+
 //         }
 
 //     }
@@ -1163,34 +1142,34 @@ previousSample = currentSample;
 function startBleSimulator() {
     console.log('startBleSimulator');
     var bleSimdata = [
-        {"wheel":574,"wheelTime":1000},
-        {"wheel":575,"wheelTime":2000},
-        {"wheel":578,"wheelTime":3000},
-        {"wheel":580,"wheelTime":4000},
-        {"wheel":581,"wheelTime":5000},
+        { "wheel": 574, "wheelTime": 1000 },
+        { "wheel": 575, "wheelTime": 2000 },
+        { "wheel": 578, "wheelTime": 3000 },
+        { "wheel": 580, "wheelTime": 4000 },
+        { "wheel": 581, "wheelTime": 5000 },
     ];
 
     var i;
-    var w = 582;var wt = 6000;
+    var w = 582; var wt = 6000;
 
     for (i = 0; i < 100; i++) {
         w += 2;
         wt += (1000 + Math.round(Math.random() * 1000));
-        bleSimdata.push({'wheel':w, 'wheelTime': wt});
+        bleSimdata.push({ 'wheel': w, 'wheelTime': wt });
     }
     console.log('bleSimdata', JSON.stringify(bleSimdata));
-    
+
 
     i = 0;
     //previousSample = {"wheel":574,"wheelTime":43486};
     //currentSample = {"wheel":574,"wheelTime":100};
     setInterval(() => {
-        i ++;
+        i++;
         currentSample = {};
         currentSample.wheel = bleSimdata[i]["wheel"];
         currentSample.wheelTime = bleSimdata[i]["wheelTime"];
         console.log('currentSample ', JSON.stringify(currentSample));
-        
+
         calculateSpeed();
     }, 3000);
 
@@ -1274,15 +1253,15 @@ function ui(k, v) {
 
 //DYANMIC POPUPS
 //POPUP GAUGE
- var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
-        '<div class="block-header-gauge">SPEED/HEARTRATE</div>' +
-        '<div class="block text-align-center">' +
-            '<div class="gauge demo-gauge my-gauge"></div>' +
-        '</div>' +
-        '<div class="block text-align-center">' +
-            '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
-        '</div>' +
-        '<div class="block-footer">SWIPE UP/DOWN TO DISMISS</div>' +
+var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
+    '<div class="block-header-gauge">SPEED/HEARTRATE</div>' +
+    '<div class="block text-align-center">' +
+    '<div class="gauge demo-gauge my-gauge"></div>' +
+    '</div>' +
+    '<div class="block text-align-center">' +
+    '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
+    '</div>' +
+    '<div class="block-footer">SWIPE UP/DOWN TO DISMISS</div>' +
     '</div>';
 
 
@@ -1366,60 +1345,60 @@ var popupCounter = 0;
 
 //NOT USING...
 function changePopupContent() {
-    console.log('changePopupContent');  
-    if (popupCounter == 0) {popupCounter += 1;return;}
+    console.log('changePopupContent');
+    if (popupCounter == 0) { popupCounter += 1; return; }
     popupCounter += 1;
     var gauge = app.gauge.get('.my-gauge');
     gauge.destroy();
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.destroy();
     $('#elem-to-center').html('<div class="block-header">NEW</div>' +
-    '<div class="block text-align-center">' +
+        '<div class="block text-align-center">' +
         '<div> SOMETHING IN THE MIDDLE </div>' +
-    '</div>');
+        '</div>');
 }
 
-//TAB1 POPUP
-var popupTab1 = false;
-$$('.tab1').on('click', function() {
-    console.log('tab1 click');
+//TAB2 POPUP
+var popupTab2 = false;
+$$('.tab2').on('click', function () {
+    console.log('tab2 click');
 
-    var tab1Html = '<div id = "elem-to-center" class="popup center-popup">' +
-    '<div class="block-header">LEADERS</div>' +
-    '<div class="block text-align-center">' +
-        '<span id = "tab1a">-</span>' +
-    '</div>' +
-    '<div class="block text-align-center">' +
+    var tab2Html = '<div id = "elem-to-center" class="popup center-popup">' +
+        '<div class="block-header">LEADERS</div>' +
+        '<div class="block text-align-center">' +
+        '<span id = "tab2a">-</span>' +
+        '</div>' +
+        '<div class="block text-align-center">' +
         '-' +
-    '</div>' +
-    '<div class="block-footer">SWIPE TO DISMISS</div>' +
-'</div>';
+        '</div>' +
+        '<div class="block-footer">SWIPE TO DISMISS</div>' +
+        '</div>';
 
 
-var dynamicPopupTab1 = app.popup.create({
-    content: tab1Html,
-    backdrop: true,
-    closeByBackdropClick: true,
-    swipeToClose: true,
-    // Events
-    on: {
-        open: function (popup) {
-            console.log('Popup open');
-        },
-        opened: function (popup) {
-            console.log('Popup opened');
-            popupTab1 = true;
-        },
-        closed: function (popup) {
-            console.log('Popup closed');
-            popupTab1 = false;
-        },
-    }
-});
+    var dynamicPopupTab2 = app.popup.create({
+        content: tab2Html,
+        backdrop: true,
+        closeByBackdropClick: true,
+        swipeToClose: true,
+        // Events
+        on: {
+            open: function (popup) {
+                console.log('Popup open');
+            },
+            opened: function (popup) {
+                console.log('Popup opened');
+                popupTab2 = true;
+            },
+            closed: function (popup) {
+                console.log('Popup closed');
+                popupTab2 = false;
+            },
+        }
+    });
 
-    dynamicPopupTab1.open();
+    dynamicPopupTab2.open();
 
-});  //END, TAB1
+});  //END, TAB2
 
 
 
