@@ -937,7 +937,7 @@ function calculateCadence() {
     
     var crankTimeDiff = 0.0;
     var crankDiff = 0.0;
-    crankTimeDiff = diffForSample(currentCadenceSample.crankTime, currentCadenceSample.crankTime, UINT16_MAX);
+    crankTimeDiff = diffForSample(currentCadenceSample.crankTime, previousCadenceSample.crankTime, UINT16_MAX);
     //crankTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
     crankDiff = diffForSample(currentCadenceSample.crank, previousCadenceSample.crank, UINT16_MAX);
 
