@@ -4,7 +4,7 @@ var database = firebase.database();
 function listenRounds() {
   console.log('Listen for Rounds Changes');
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
-  roundsRef.limitToLast(3).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
+  roundsRef.limitToLast(10).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRounds = [];
     snapshot.forEach(function (childSnapshot) {
@@ -29,6 +29,18 @@ function listenRounds() {
     $$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+
+    t2Content = '';
+    t2Content += '<ol>'
+
+    _.forEach(arrSpeed, function(value) {
+        console.log(JSON.stringify(value));
+        t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
+      });
+      t2Content += '</ol>'
+      $$('#tab2a').html(t2Content);
+
+
     
 
   });
@@ -145,6 +157,11 @@ function postTotals() {
 
 function postRound() {
   console.log('postRound');
+  
+  // my rounds
+  myRounds.push( {'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate)} );
+  console.log('myRounds: ', JSON.stringify(myRounds));
+  
 
   //TODO  CHANGE THESE VALUES TO PULL FROM LATEST OBJECT STORED IN rounds[]
   firebase.database().ref('rounds/' + getTodaysDate() + '/').push({

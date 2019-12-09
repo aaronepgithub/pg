@@ -37,5 +37,5 @@ var round = {
     cadence: 0,
 }
 
-var rounds = [];
+var myRounds = [];
 var arrRoundDistances = [];

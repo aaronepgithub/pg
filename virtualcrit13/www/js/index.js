@@ -1254,14 +1254,14 @@ function ui(k, v) {
 //DYANMIC POPUPS
 //POPUP GAUGE
 var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
-    '<div class="block-header-gauge">SPEED/HEARTRATE</div>' +
+    '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
     '<div class="block text-align-center">' +
     '<div class="gauge demo-gauge my-gauge"></div>' +
     '</div>' +
     '<div class="block text-align-center">' +
     '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
     '</div>' +
-    '<div class="block-footer">SWIPE UP/DOWN TO DISMISS</div>' +
+    '<div class="block-footer"></div>' +
     '</div>';
 
 
@@ -1344,34 +1344,51 @@ var popupGauge = false;
 var popupCounter = 0;
 
 //NOT USING...
-function changePopupContent() {
-    console.log('changePopupContent');
-    if (popupCounter == 0) { popupCounter += 1; return; }
-    popupCounter += 1;
-    var gauge = app.gauge.get('.my-gauge');
-    gauge.destroy();
-    var gauge2 = app.gauge.get('.my-gauge2');
-    gauge2.destroy();
-    $('#elem-to-center').html('<div class="block-header">NEW</div>' +
-        '<div class="block text-align-center">' +
-        '<div> SOMETHING IN THE MIDDLE </div>' +
-        '</div>');
-}
+// function changePopupContent() {
+//     console.log('changePopupContent');
+//     if (popupCounter == 0) { popupCounter += 1; return; }
+//     popupCounter += 1;
+//     var gauge = app.gauge.get('.my-gauge');
+//     gauge.destroy();
+//     var gauge2 = app.gauge.get('.my-gauge2');
+//     gauge2.destroy();
+//     $('#elem-to-center').html('<div class="block-header">NEW</div>' +
+//         '<div class="block text-align-center">' +
+//         '<div> SOMETHING IN THE MIDDLE </div>' +
+//         '</div>');
+// }
 
 //TAB2 POPUP
+var t2Content = '';
 var popupTab2 = false;
 $$('.tab2').on('click', function () {
     console.log('tab2 click');
 
-    var tab2Html = '<div id = "elem-to-center" class="popup center-popup">' +
+    
+    if (arrRounds.length < 1) {
+        t2Content = 'Waiting for Results';
+    } else {
+        t2Content = '';
+        t2Content += '<ol>'
+        let v = _.values(arrRounds);
+        let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
+    
+        _.forEach(arrSpeed, function(value) {
+            console.log(JSON.stringify(value));
+            t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
+          });
+          t2Content += '</ol>'
+    }
+
+    var tab2Html = '<div id = "idTab2" class="popup center-popup elem-to-center">' +
         '<div class="block-header">LEADERS</div>' +
         '<div class="block text-align-center">' +
-        '<span id = "tab2a">-</span>' +
+        '<span id = "tab2a">'+ t2Content +'</span>' +
         '</div>' +
         '<div class="block text-align-center">' +
-        '-' +
+        '' +
         '</div>' +
-        '<div class="block-footer">SWIPE TO DISMISS</div>' +
+        '<div class="block-footer"></div>' +
         '</div>';
 
 
