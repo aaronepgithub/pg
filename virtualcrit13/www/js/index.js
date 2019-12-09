@@ -927,6 +927,8 @@ function diffForSample(current, previous, max) {
 var previousCadenceSample;
 var currentCadenceSample = {crankTime: 0.0, crank: 0.0};
 var totalCrankRevs = 0;var totalCrankTime = 0;
+var cadCheck = Array.from({length: 3}, (v, i) => i);
+
 function calculateCadence() {
     if (!previousCadenceSample) {
         previousCadenceSample = currentCadenceSample;
@@ -938,23 +940,33 @@ function calculateCadence() {
     var crankTimeDiff = 0.0;
     var crankDiff = 0.0;
     crankTimeDiff = diffForSample(currentCadenceSample.crankTime, previousCadenceSample.crankTime, UINT16_MAX);
-    //crankTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
     crankDiff = diffForSample(currentCadenceSample.crank, previousCadenceSample.crank, UINT16_MAX);
 
     console.log('crankTimeDiff', crankTimeDiff);
     console.log('crankDiff', crankDiff);
     
 
-    totalCrankRevs += crankDiff;
-    totalCrankTime += crankTimeDiff / 1024;
+    if (crankDiff < 4) {
+        console.log('get a bigger sample');
+        return;
+    }
 
-    console.log('totals', totalCrankRevs, totalCrankTime);
 
-    cadence = ((60 * crankDiff) / (crankTimeDiff / 1024)); // RPM
-    bluetoothCadenceAverage = (60 * totalCrankRevs / totalCrankTime); // RPM TOTAL AVG
-    bluetoothValues.cadence = ret1num(cadence);
+    if (crankDiff == 0) {
+        bluetoothValues.cadence = 0;
+    } else {
+        totalCrankRevs += crankDiff;
+        totalCrankTime += crankTimeDiff;  //raw
+        console.log('totals', totalCrankRevs, totalCrankTime);
+    
+        cadence = ( (crankDiff) / (crankTimeDiff / 1024 / 60) ); // RPM
+        bluetoothCadenceAverage = ( totalCrankRevs / (totalCrankTime / 1024 / 60) ); // RPM TOTAL AVG
+        bluetoothValues.cadence = ret1num(cadence);
+    
+        console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
+    }
 
-    console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
+
     
 
     if (bluetoothValues.cadence) {
@@ -978,42 +990,39 @@ function calculateSpeed() {
 console.log('calculateSpeed', JSON.stringify(currentSample), JSON.stringify(previousSample));
 
 sampleWheelTime = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
-sampleWheelTime = sampleWheelTime / 1024;  //seconds
-
 sampleWheelRevs = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
-// sampleWheelRevs = sampleWheelRevs * tim.timWheelSize; //meters
-// sampleWheelRevs = sampleWheelRevs / 1000 * 0.62137;  //miles
+
 console.log('sampleWheelRevs', sampleWheelRevs, 'sampleWheelTime', sampleWheelTime);
 
-// if (sampleWheelRevs == 0 || sampleWheelTime == 0) {
-//     console.log('didnt go anywhere, no time passed, return');    
-//     //previousSample = currentSample;
-//     return;
-// }
-if (sampleWheelRevs > 20 || sampleWheelTime > 5) {
+if (sampleWheelRevs == 0 || sampleWheelTime == 0) {
+    console.log('didnt go anywhere, no time passed, return');    
+    previousSample = currentSample;
+    return;
+}
+
+//sampleWheelTime = sampleWheelTime / 1024;  //seconds
+
+if (sampleWheelRevs > 20 || sampleWheelTime > 20000) {
     console.log('too much time, reset');
     previousSample = currentSample;
     return;
 }
 //IF TOO SMALL, JUST RET, NOT RESET
-// if (sampleWheelRevs < 2 || sampleWheelTime < .002) {
-//     return;
-// }
+if (sampleWheelRevs < 5) {
+    console.log('WAIT FOR A BIGGER SAMPLE');
+    return;
+}
 
 totalWheelRevs += sampleWheelRevs;
 totalWheelTime += sampleWheelTime;
 
 
-bluetoothValues.activeTime = totalWheelTime;  //seconds
+bluetoothValues.activeTime = totalWheelTime / 1024;  //seconds
 bluetoothValues.distance = ((totalWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137;   //miles
-
 sampleDistance = ((sampleWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137; //miles
-
 bluetoothValues.speedAverage = bluetoothValues.distance / (bluetoothValues.activeTime / 60 / 60);  //mph
-
-
-
-bluetoothValues.speed = sampleDistance / (sampleWheelTime / 60 / 60);  //mph
+bluetoothValues.speed = sampleDistance / (sampleWheelTime / 1024 / 60 / 60);  //mph
+if ((bluetoothValues.speed) ? bluetoothValues.speed : 0.0);
 
 console.log('calcSpeedValues ', sampleWheelTime, sampleWheelRevs, totalWheelTime, totalWheelRevs, sampleDistance);
 console.log('btval ', JSON.stringify(bluetoothValues));
