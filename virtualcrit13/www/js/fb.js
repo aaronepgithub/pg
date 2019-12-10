@@ -31,13 +31,19 @@ function listenRounds() {
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
 
     t2Content = '';
-    t2Content += '<ol>'
+    
 
     _.forEach(arrSpeed, function(value) {
         //console.log(JSON.stringify(value));
-        t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
+        
+        t2Content +=   '<tr>' +
+        '<td class="label-cell">'+String(value.fb_timName).toUpperCase()+'</td>' +
+        '<td class="numeric-cell">'+ret1string(value.a_speedRoundLast) + ' MPH'+'</td>'+
+          '</tr>';
+        
+        //t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
       });
-      t2Content += '</ol>'
+      // t2Content += '</ol>'
       $$('#tab2a').html(t2Content);
 
 

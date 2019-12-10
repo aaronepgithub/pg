@@ -430,6 +430,8 @@ function timerStarter() {
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
     $$('.center-main').html('');
+    $$('.left-main').html('<div class="chip color-green"><div class="chip-label">ON</div></div>');
+
 
     TTS.speak({
         text: 'Here we go!',
@@ -897,7 +899,7 @@ function diffForSample(current, previous, max) {
 var previousCadenceSample;
 var currentCadenceSample = { crankTime: 0.0, crank: 0.0 };
 var totalCrankRevs = 0; var totalCrankTime = 0;
-var crankVals = [1,2,3,4,5,6,7];
+var crankVals = [1, 2, 3, 4, 5, 6, 7];
 
 
 function calculateCadence() {
@@ -911,7 +913,7 @@ function calculateCadence() {
     crankVals.shift();
     console.log('crankVals ', JSON.stringify(crankVals));
 
-    
+
 
     var crankTimeDiff = 0.0;
     var crankDiff = 0.0;
@@ -955,7 +957,7 @@ function calculateCadence() {
     previousCadenceSample = currentCadenceSample;
 }
 
-var wheelVals = [1,2,3,4];
+var wheelVals = [1, 2, 3, 4];
 
 function calculateSpeed() {
 
@@ -1371,26 +1373,64 @@ var popupTab2 = false;
 $$('.tab2').on('click', function () {
     console.log('tab2 click');
 
-    
+
     if (arrRounds.length < 1) {
-        t2Content = 'Waiting for Results';
+        //t2Content = 'Waiting for Results';
+        t2Content = '';
+        t2Content += '<tr>' +
+        '<td class="label-cell">' + 'AWAITING RESULTS' + '</td>' +
+        '<td class="numeric-cell">' + '-' + ' MPH' + '</td>' +
+        '</tr>';
+
     } else {
         t2Content = '';
-        t2Content += '<ol>'
+        // t2Content += '<ol>'
         let v = _.values(arrRounds);
         let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
-    
-        _.forEach(arrSpeed, function(value) {
+
+        _.forEach(arrSpeed, function (value) {
             console.log(JSON.stringify(value));
-            t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
-          });
-          t2Content += '</ol>'
+            // t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
+
+            t2Content += '<tr>' +
+                '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH' + '</td>' +
+                '</tr>';
+
+        });
+        //   t2Content += '</ol>'
     }
 
     var tab2Html = '<div id = "idTab2" class="popup center-popup elem-to-center">' +
-        '<div class="block-header">LEADERS</div>' +
+        '<div class="block-header">CRIT LEADERBOARD</div>' +
         '<div class="block text-align-center">' +
-        '<span id = "tab2a">'+ t2Content +'</span>' +
+
+        '<div class="data-table">' +
+        '<table>' +
+        '<thead>' +
+        '<tr>' +
+        '<th class="label-cell">RACER</th>' +
+        '<th class="numeric-cell">SPEED (MPH)</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+
+        '<span id = "tab2a">' +
+        t2Content +
+        '</span>' +
+
+        //   '<tr>' +
+        // '<td class="label-cell">Frozen yogurt</td>' +
+        // '<td class="numeric-cell">159</td>'+
+        //   '</tr>' +
+
+        '</tbody>' +
+        '</table>' +
+        '</div>' +
+
+
+
+
         '</div>' +
         '<div class="block text-align-center">' +
         '' +
