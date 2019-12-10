@@ -1266,7 +1266,7 @@ var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
     '<div class="block text-align-center">' +
     '<div class="gauge demo-gauge my-gauge"></div>' +
     '</div>' +
-    '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
+    '<div class="block-header-gauge"></div>' +
     '<div class="block text-align-center">' +
     '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
     '</div>' +
