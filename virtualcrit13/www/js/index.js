@@ -48,7 +48,10 @@ function tockCallback() {
 
     totalElapsedTime = _.now() - startTime;
     $$('.total-time').text(timer.msToTimecode(totalElapsedTime));
+    $$('.center-main').html(timer.msToTimecode(totalElapsedTime));
+    // $$('.left-main').html('<i class="fa fa-circle"></i>');
     $$('.system-status').text("Running");
+
 }
 
 //END OF ROUND
@@ -263,28 +266,28 @@ function updateChip(n, i, d) {
     if (i == 0) {
 
         $$('.chip-gps').html('<div class="chip-media bg-color-green">' +
-            '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
+            '<i class="fa fa-globe"></i></div>' +
             ' <div class="chip-label">GPS: ' + String(d) + ' </div>');
     }
 
     if (i == 1) {
 
         $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
-            '<i class="fa fa-heartbeat fa-lg"></i></div>' +
-            ' <div class="chip-label">HR: ' + String(d) + ' </div>');
+            '<i class="fa fa-heartbeat"></i></div>' +
+            ' <div class="chip-label">Heartrate: ' + String(d) + ' </div>');
     }
     if (i == 2) {
 
         $$('.chip-csc').html('<div class="chip-media bg-color-green">' +
-            '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
-            ' <div class="chip-label">Spd: ' + String(d) + ' </div>');
+            '<i class="fa fa-bluetooth-b"></i></div>' +
+            ' <div class="chip-label">Speed: ' + String(d) + ' </div>');
     }
 
     if (i == 3) {
 
         $$('.chip-cad').html('<div class="chip-media bg-color-green">' +
-            '<i class="fa fa-bluetooth-b fa-lg"></i></div>' +
-            ' <div class="chip-label">Cad: ' + String(d) + ' </div>');
+            '<i class="fa fa-bluetooth-b"></i></div>' +
+            ' <div class="chip-label">Cadence: ' + String(d) + ' </div>');
     }
 
 
@@ -426,6 +429,7 @@ function timerStarter() {
     };
     startTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
+    $$('.center-main').html('');
 
     TTS.speak({
         text: 'Here we go!',
@@ -723,6 +727,7 @@ function onBackgroundSuccess(newLocation) {
     if (tim.timMode == 'OFF') {
         totals.speed = ret1num((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
         totals.distance = ret2num(totalDistance * 0.62137);
+        $$('.right-main').html(ret2string(totalDistance * 0.62137) + ' MILES  ');
 
         if (popupGauge) {
             var gauge = app.gauge.get('.my-gauge');
@@ -1027,6 +1032,7 @@ function calculateSpeed() {
         //not using gps
         totals.distance = ret2num(ret2string(bluetoothValues.distance));
         totals.speed = ret1num(ret1string(bluetoothValues.speedAverage));
+        $$('.right-main').html(ret2string(bluetoothValues.distance) + ' MILES');
 
         if (popupGauge) {
             var gauge = app.gauge.get('.my-gauge');
