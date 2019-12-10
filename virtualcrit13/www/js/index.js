@@ -63,23 +63,23 @@ function tockComplete() {
 }
 
 function newRound() {
-    console.log('newRound');
+    console.log('newRound, roundsComplete: ', roundsComplete);
     arrRoundDistances.push(totals.distance);  //already in miles
 
-    console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
+    // console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
 
     let a = _.last(arrRoundDistances);
     let b = _.nth(arrRoundDistances, -2)
-    console.log('a,b', a, b);
+    // console.log('a,b', a, b);
     let distanceInMostRecendRound = a - b;  //miles
-    console.log('distanceInMostRecendRound', distanceInMostRecendRound);
+    // console.log('distanceInMostRecendRound', distanceInMostRecendRound);
 
     //ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
 
     round.speed = ret1num(distanceInMostRecendRound / (tim.timSecondsPerRound / 60 / 60));
-    console.log('round.speed', round.speed);
-    console.log('tim.timAudio', tim.timAudio);
-    console.log('attempt to play audio');
+    // console.log('round.speed', round.speed);
+    // console.log('tim.timAudio', tim.timAudio);
+    // console.log('attempt to play audio');
 
     $$('.main-status-alerts').html('MY LAST CRIT:  ' + round.speed + ' MPH');
 
@@ -210,6 +210,7 @@ function startBluetoothConnection(i) {
                     gauge2.update({
                         value: (data[1] / 2) / 100,
                         valueText: ret0string(data[1]),
+                        labelText: 'BPM',
                     });
                 }
 
@@ -706,7 +707,7 @@ function onBackgroundSuccess(newLocation) {
     var distance = R * c; // Distance in KM
 
     if ((distance * 1000) < 10 || _.now() - lastActivityTime < 2000) {
-        console.log('too short, wait for the next one');
+        //console.log('too short, wait for the next one');
         return;
     }
 
@@ -817,7 +818,7 @@ var sampleWheelTime = 0.0;
 
 
 function calcSpeedCadenceValues(v) {
-    console.log('calcSpeedCadenceValues');
+    // console.log('calcSpeedCadenceValues');
 
     let v0 = new Uint8Array(v);
     let value = new DataView(v);
@@ -831,7 +832,7 @@ function calcSpeedCadenceValues(v) {
     if (hasWheel) {
 
         if (hasCrank) {
-            console.log('wheel and crank');
+            // console.log('wheel and crank');
             currentSample = {
                 wheel: value.getUint32(1, true),
                 wheelTime: value.getUint16(5, true),
@@ -839,7 +840,7 @@ function calcSpeedCadenceValues(v) {
                 crankTime: value.getUint16(9, true),
             };
         } else {
-            console.log('only wheel');
+            // console.log('only wheel');
             currentSample = {
                 wheel: value.getUint32(1, true),
                 wheelTime: value.getUint16(5, true),
@@ -847,7 +848,7 @@ function calcSpeedCadenceValues(v) {
         }
 
     } else {
-        console.log('only crank');
+        // console.log('only crank');
         currentSample = {
             // wheel: value.getUint32(1, true),
             // wheelTime: value.getUint16(5, true),
@@ -858,9 +859,9 @@ function calcSpeedCadenceValues(v) {
         };
     }
 
-    console.log(JSON.stringify(previousSample), JSON.stringify(currentSample));
+    //console.log(JSON.stringify(previousSample), JSON.stringify(currentSample));
     if (!previousSample) {
-        console.log('first time through, prev = current');
+        // console.log('first time through, prev = current');
         previousSample = currentSample;
         timerStarter();
         return;
@@ -871,8 +872,8 @@ function calcSpeedCadenceValues(v) {
             calculateSpeed();
         }
         if (currentSample.crank > 0) {
-            console.log('has crank, process crank/time');
-            console.log(currentSample.crank, currentSample.crankTime);
+            // console.log('has crank, process crank/time');
+            // console.log(currentSample.crank, currentSample.crankTime);
             //TODO:  PROCESS CRANK...
             currentCadenceSample = { crank: currentSample.crank, crankTime: currentSample.crankTime }
             calculateCadence();
@@ -908,10 +909,10 @@ function calculateCadence() {
         return;
     }
 
-    console.log('calcCadence', JSON.stringify(currentCadenceSample));
+    // console.log('calcCadence', JSON.stringify(currentCadenceSample));
     crankVals.push(currentCadenceSample.crank);
     crankVals.shift();
-    console.log('crankVals ', JSON.stringify(crankVals));
+    // console.log('crankVals ', JSON.stringify(crankVals));
 
 
 
@@ -920,12 +921,12 @@ function calculateCadence() {
     crankTimeDiff = diffForSample(currentCadenceSample.crankTime, previousCadenceSample.crankTime, UINT16_MAX);
     crankDiff = diffForSample(currentCadenceSample.crank, previousCadenceSample.crank, UINT16_MAX);
 
-    console.log('crankTimeDiff', crankTimeDiff);
-    console.log('crankDiff', crankDiff);
+    // console.log('crankTimeDiff', crankTimeDiff);
+    // console.log('crankDiff', crankDiff);
 
 
     if (crankDiff < 6) {
-        console.log('get a bigger sample');
+        // console.log('get a bigger sample');
         if (_.head(crankVals) == _.last(crankVals)) {
             updateChip('na', 3, 0 + ' RPM');
             ui('.item-cadence', 0 + ' RPM');
@@ -934,19 +935,19 @@ function calculateCadence() {
     }
 
     if (crankDiff > 15 || crankTimeDiff > 15000) {
-        console.log('too long for crank update, reset, return');
+        // console.log('too long for crank update, reset, return');
         previousCadenceSample = currentCadenceSample;
         return;
     }
 
     totalCrankRevs += crankDiff;
     totalCrankTime += crankTimeDiff;  //raw
-    console.log('totals', totalCrankRevs, totalCrankTime);
+    // console.log('totals', totalCrankRevs, totalCrankTime);
 
     cadence = ((crankDiff) / (crankTimeDiff / 1024 / 60)); // RPM
     bluetoothCadenceAverage = (totalCrankRevs / (totalCrankTime / 1024 / 60)); // RPM TOTAL AVG
     bluetoothValues.cadence = ret1num(cadence);
-    console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
+    // console.log('result', cadence, bluetoothCadenceAverage, bluetoothValues.cadence);
 
 
     if (bluetoothValues.cadence) {
@@ -969,14 +970,13 @@ function calculateSpeed() {
 
     wheelVals.push(currentSample.wheel);
     wheelVals.shift();
-    console.log('wheelVals ', JSON.stringify(wheelVals));
-
-    console.log('calculateSpeed', JSON.stringify(currentSample), JSON.stringify(previousSample));
+    // console.log('wheelVals ', JSON.stringify(wheelVals));
+    // console.log('calculateSpeed', JSON.stringify(currentSample), JSON.stringify(previousSample));
 
     sampleWheelTime = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
     sampleWheelRevs = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
 
-    console.log('sampleWheelRevs', sampleWheelRevs, 'sampleWheelTime', sampleWheelTime);
+    // console.log('sampleWheelRevs', sampleWheelRevs, 'sampleWheelTime', sampleWheelTime);
 
     // if (sampleWheelRevs == 0 || sampleWheelTime == 0) {
     //     console.log('didnt go anywhere, no time passed, return');
@@ -987,13 +987,13 @@ function calculateSpeed() {
     //sampleWheelTime = sampleWheelTime / 1024;  //seconds
 
     if (sampleWheelRevs > 15 || sampleWheelTime > 15000) {  //1024th
-        console.log('too much time, reset');
+        //console.log('too much time, reset');
         previousSample = currentSample;
         return;
     }
     //IF TOO SMALL, JUST RET, NOT RESET
     if (sampleWheelRevs < 5) {
-        console.log('WAIT FOR A BIGGER SAMPLE');
+        //console.log('WAIT FOR A BIGGER SAMPLE');
         if (_.head(wheelVals) == _.last(wheelVals)) {
             ui('.item-speed-bt', 0 + ' MPH');
             updateChip('na', 2, 0 + ' MPH');
@@ -1012,8 +1012,8 @@ function calculateSpeed() {
     bluetoothValues.speed = sampleDistance / (sampleWheelTime / 1024 / 60 / 60);  //mph
     if ((bluetoothValues.speed) ? bluetoothValues.speed : 0.0);
 
-    console.log('calcSpeedValues ', sampleWheelTime, sampleWheelRevs, totalWheelTime, totalWheelRevs, sampleDistance);
-    console.log('btval ', JSON.stringify(bluetoothValues));
+    // console.log('calcSpeedValues ', sampleWheelTime, sampleWheelRevs, totalWheelTime, totalWheelRevs, sampleDistance);
+    // console.log('btval ', JSON.stringify(bluetoothValues));
 
     previousSample = currentSample;
 
@@ -1176,7 +1176,7 @@ function startBleSimulator() {
         currentSample = {};
         currentSample.wheel = bleSimdata[i]["wheel"];
         currentSample.wheelTime = bleSimdata[i]["wheelTime"];
-        console.log('currentSample ', JSON.stringify(currentSample));
+        // console.log('currentSample ', JSON.stringify(currentSample));
 
         calculateSpeed();
     }, 3000);
@@ -1367,104 +1367,69 @@ var popupCounter = 0;
 //         '</div>');
 // }
 
-//TAB2 POPUP
+
+
 var t2Content = '';
-var popupTab2 = false;
-$$('.tab2').on('click', function () {
-    console.log('tab2 click');
-
-
+$$('.my-popup-leaderboard').on('popup:opened', function (e) {
+    console.log('my-popup-leaderboard popup opened');
     if (arrRounds.length < 1) {
-        //t2Content = 'Waiting for Results';
-        t2Content = '';
-        t2Content += '<tr>' +
-        '<td class="label-cell">' + 'AWAITING RESULTS' + '</td>' +
-        '<td class="numeric-cell">' + '-' + ' MPH' + '</td>' +
-        '</tr>';
+        $('#leaderboardTable tbody tr').remove();
+        t2Content = '<tr><td class="label-cell">AWAITING RESULTS</td><td class="numeric-cell"></td><td class="numeric-cell"></td></tr>';
+        $('#leaderboardTable').append(t2Content);
+
+
 
     } else {
-        t2Content = '';
-        // t2Content += '<ol>'
+        
+        $('#leaderboardTable tbody tr').remove();
         let v = _.values(arrRounds);
         let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
+        var e = 1;
         _.forEach(arrSpeed, function (value) {
-            console.log(JSON.stringify(value));
-            // t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
-
-            t2Content += '<tr>' +
+            // console.log(JSON.stringify(value));
+            t2Content = '<tr>' +
                 '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
                 '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH' + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.a_scoreRoundLast) + '%' + '</td>' +
                 '</tr>';
-
+                $('#leaderboardTable').append(t2Content);
+                e++;
+                
         });
-        //   t2Content += '</ol>'
     }
-
-    var tab2Html = '<div id = "idTab2" class="popup center-popup elem-to-center">' +
-        '<div class="block-header">CRIT LEADERBOARD</div>' +
-        '<div class="block text-align-center">' +
-
-        '<div class="data-table">' +
-        '<table>' +
-        '<thead>' +
-        '<tr>' +
-        '<th class="label-cell">RACER</th>' +
-        '<th class="numeric-cell">SPEED (MPH)</th>' +
-        '</tr>' +
-        '</thead>' +
-        '<tbody>' +
-
-        '<span id = "tab2a">' +
-        t2Content +
-        '</span>' +
-
-        //   '<tr>' +
-        // '<td class="label-cell">Frozen yogurt</td>' +
-        // '<td class="numeric-cell">159</td>'+
-        //   '</tr>' +
-
-        '</tbody>' +
-        '</table>' +
-        '</div>' +
+    
+  });
 
 
+  //t3
 
-
-        '</div>' +
-        '<div class="block text-align-center">' +
-        '' +
-        '</div>' +
-        '<div class="block-footer"></div>' +
-        '</div>';
-
-
-    var dynamicPopupTab2 = app.popup.create({
-        content: tab2Html,
-        backdrop: true,
-        closeByBackdropClick: true,
-        swipeToClose: true,
-        // Events
-        on: {
-            open: function (popup) {
-                console.log('Popup open');
-            },
-            opened: function (popup) {
-                console.log('Popup opened');
-                popupTab2 = true;
-            },
-            closed: function (popup) {
-                console.log('Popup closed');
-                popupTab2 = false;
-            },
-        }
-    });
-
-    dynamicPopupTab2.open();
-
-});  //END, TAB2
-
-
-
-
-
+var t3Content = '';
+$$('.my-popup-myrounds').on('popup:opened', function (e) {
+    console.log('my-popup-myrounds popup opened');
+    if (myRounds.length < 1) {
+        $('#myroundsTable tbody tr').remove();
+        t3Content = '<tr><td class="label-cell">AWAITING RESULTS</td><td class="numeric-cell"></td><td class="numeric-cell"></td><td class="numeric-cell"></td></tr>';
+        $('#myroundsTable').append(t3Content);
+    } else {
+        
+        $('#myroundsTable tbody tr').remove();
+        // let v = _.values(arrRounds);
+        // let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
+        var e = 1;
+        _.forEach(myRounds, function (value) {
+            console.log('myRounds:');
+            console.log(JSON.stringify(value));
+            t3Content = '<tr>' +
+                '<td class="label-cell">' + String(value.timer) + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.speed) + ' MPH' + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.heartrate) + ' BPM' + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.score) + '%' + '</td>' +
+                '</tr>';
+                $('#myroundsTable').append(t3Content);
+                e++;
+                
+        });
+    }
+    
+  });

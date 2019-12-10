@@ -30,28 +30,39 @@ function listenRounds() {
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
 
-    t2Content = '';
-    
+    setTimeout(() => {
+      TTS.speak({
+        text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
+        locale: 'en-US',
+        rate: 1.5
+    }, function () {
+        console.log('tts success');
+    }, function (reason) {
+        console.log('tts failed:  ', reason);
+    });
+    }, 5000);
 
+
+
+    $('#leaderboardTable tbody tr').remove();
+    var e = 1;
     _.forEach(arrSpeed, function(value) {
-        //console.log(JSON.stringify(value));
-        
-        t2Content +=   '<tr>' +
-        '<td class="label-cell">'+String(value.fb_timName).toUpperCase()+'</td>' +
-        '<td class="numeric-cell">'+ret1string(value.a_speedRoundLast) + ' MPH'+'</td>'+
+      t2Content = '<tr>' +
+      '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
+      '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH' + '</td>' +
+      '<td class="numeric-cell">' + ret1string(value.a_scoreRoundLast) + ' %MAX' + '</td>' +
           '</tr>';
-        
-        //t2Content += '<li>' + String(value.fb_timName).toUpperCase() + ",  " + ret1string(value.a_speedRoundLast) + ' MPH' + '</li>';
+          $('#leaderboardTable').append(t2Content);
+          e++;
+          
       });
-      // t2Content += '</ol>'
-      $$('#tab2a').html(t2Content);
-
-
-    
-
   });
 
 }
+
+
+
+
 
 var arrRounds = [];
 var arrRoundsHR = [];
@@ -81,7 +92,7 @@ function listenRoundsHR() {
     console.log('arrRoundsHR, arrScore[0]', arrScoreHR[0].fb_timName, arrScoreHR[0].a_scoreRoundLast);
     //console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
     $$('.item-crit-score-name').html(String(arrScoreHR[0].fb_timName).toUpperCase());
-    $$('.item-crit-score-value').html(ret1string(arrScoreHR[0].a_scoreRoundLast) + ' %MAX');
+    $$('.item-crit-score-value').html(ret1string(arrScoreHR[0].a_scoreRoundLast) + '%');
 
     //$$('.main-status-alerts').html(String(arrSpeed[0].fb_timName).toUpperCase() + ",  "+ ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH' );
 
@@ -168,6 +179,26 @@ function postRound() {
   myRounds.push( {'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate)} );
   console.log('myRounds: ', JSON.stringify(myRounds));
   
+//  UPDATE MYROUNDS UI
+$('#myroundsTable tbody tr').remove();
+// let v = _.values(arrRounds);
+// let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
+var e = 1;
+_.forEach(myRounds, function (value) {
+    console.log('myRounds:');
+    console.log(JSON.stringify(value));
+    t3Content = '<tr>' +
+        '<td class="label-cell">' + String(value.timer) + '</td>' +
+        '<td class="numeric-cell">' + ret1string(value.speed) + ' MPH' + '</td>' +
+        '<td class="numeric-cell">' + ret1string(value.heartrate) + ' BPM' + '</td>' +
+        '<td class="numeric-cell">' + ret1string(value.score) + '%' + '</td>' +
+        '</tr>';
+        $('#leaderboardTable').append(t2Content);
+        e++;
+        
+});
+//  END UI UPDATE
+
 
   //TODO  CHANGE THESE VALUES TO PULL FROM LATEST OBJECT STORED IN rounds[]
   firebase.database().ref('rounds/' + getTodaysDate() + '/').push({

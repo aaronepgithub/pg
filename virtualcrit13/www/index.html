@@ -54,7 +54,7 @@
                 <div class="chip-label">OFF</div>
               </div>
             </div>
-            <div class="title make-bold center-main">VIRTUAL CRIT</div>
+            <div class="title center-main">VIRTUAL CRIT</div>
             <div class="right right-main">
               <!-- <a href="#" class="link icon-only">
                 <i class="fa fa-ellipsis-h fa-lg"></i>
@@ -67,8 +67,8 @@
           <div class="subnavbar-inner">
             <div class="segmented segmented-raised">
               <a class="button tab-link tab1 dynamic-pop" href="#tab1">1</a>
-              <a class="button tab-link tab2" href="#tab2">2</a>
-              <a class="button tab-link tab3" href="#tab3">3</a>
+              <a class="button tab-link popup-open" href="#" data-popup=.my-popup-leaderboard>2</a>
+              <a class="button tab-link popup-open" href="#" data-popup=.my-popup-myrounds>3</a>
             </div>
           </div>
         </div>
@@ -365,243 +365,342 @@
 
               </ul>
             </div>
-            
+
             <li class="item-divider">Leaders</li>
             <div class="list-group">
-            <ul>
-              <li>
-                <a href="#" class="item-link item-content no-chevron">
-                  <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
-                  <div class="item-inner">
-                    <div class="item-title">
-                      <div class="item-header">CRIT SPEED</div>
-                      <span class="item-crit-speed-name"></span>
-                      <div class="item-footer"></div>
+              <ul>
+                <li>
+                  <a href="#" class="item-link item-content no-chevron">
+                    <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                    <div class="item-inner">
+                      <div class="item-title">
+                        <div class="item-header">CRIT SPEED</div>
+                        <span class="item-crit-speed-name"></span>
+                        <div class="item-footer"></div>
+                      </div>
+                      <div class="item-after item-crit-speed-value">00 MPH</div>
                     </div>
-                    <div class="item-after item-crit-speed-value">00 MPH</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="item-link item-content no-chevron">
-                  <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
-                  <div class="item-inner">
-                    <div class="item-title">
-                      <div class="item-header">CRIT SCORE</div>
-                      <span class="item-crit-score-name"></span>
-                      <div class="item-footer"></div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="item-link item-content no-chevron">
+                    <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                    <div class="item-inner">
+                      <div class="item-title">
+                        <div class="item-header">CRIT SCORE</div>
+                        <span class="item-crit-score-name"></span>
+                        <div class="item-footer"></div>
+                      </div>
+                      <div class="item-after item-crit-score-value">00 %MAX</div>
                     </div>
-                    <div class="item-after item-crit-score-value">00 %MAX</div>
-                  </div>
-                </a>
-              </li>
-            </ul>
+                  </a>
+                </li>
+              </ul>
             </div>
 
           </div>
         </div>
 
 
+<!-- myRounds START -->
+<div class="popup my-popup-myrounds">
+  <div class="view">
+    <div class="page">
+      <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+          <div class="left">
+          </div>
+          <div class="title">MY CRITS</div>
+          <div class="right">
+            <a class="link popup-close"><i class="fa fa-home fa-2x"></i></a>
+          </div>
+        </div>
+      </div>
 
-        <!-- Bluetooth START -->
-        <div class="popup my-popup-bluetoothdevices">
+
+      <!-- Bottom Toolbar -->
+      <div class="toolbar toolbar-bottom">
+        <div class="toolbar-inner">
+          <div class="block main-status-alerts"></div>
+        </div>
+      </div>
+      <div class="page-content">
+
+        <div class="block-title"></div>
+        <div class="block block-leaderboard">
+
+          <div class="data-table">
+            <table id="myroundsTable">
+              <thead>
+                <tr>
+                  <th class="label-cell">TIME</th>
+                  <th class="numeric-cell">SPEED</th>
+                  <th class="numeric-cell">HR</th>
+                  <th class="numeric-cell">SCORE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  
+                  <td class="label-cell">CRIT TIME</td>
+                  <td class="numeric-cell">0</td>
+                  <td class="numeric-cell">0</td>
+                  <td class="numeric-cell">0</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- myRounds END -->
+
+        <!-- Leaderboard START -->
+        <div class="popup my-popup-leaderboard">
           <div class="view">
             <div class="page">
               <div class="navbar">
                 <div class="navbar-bg"></div>
                 <div class="navbar-inner">
                   <div class="left">
-                    <!-- <a class="link popup-close"><i class="fa fa-chevron-left fa-lg"></i></a> -->
                   </div>
-                  <div class="title">BLUETOOTH SENSORS</div>
+                  <div class="title">CRIT LEADERS</div>
                   <div class="right">
                     <a class="link popup-close"><i class="fa fa-home fa-2x"></i></a>
-                    <!-- <a class="link start-bluetooth-scan"><i class="fa fa-refresh fa-lg"></i></a> -->
                   </div>
                 </div>
               </div>
-
-              <div class="fab fab-center-bottom start-bluetooth-scan">
-                <a href="#">
-                  <i class="fa fa-refresh fa-2x"></i>
-                </a>
-              </div>
-
-              <!-- <div class="fab fab-right-top">
-                <a href="#">
-                  <i class="fa fa-home fa-2x"></i>
-                </a>
-              </div> -->
 
 
               <!-- Bottom Toolbar -->
               <div class="toolbar toolbar-bottom">
                 <div class="toolbar-inner">
-                  <!-- Toolbar links -->
-                  <!-- <div class="left">
-                    <a class="link start-bluetooth-scan">SCAN<i class="fa fa-refresh fa-2x"></i></a>
-                  </div> -->
-                  <div class="block status-alerts">Alerts</div>
+                  <div class="block main-status-alerts"></div>
                 </div>
               </div>
               <div class="page-content">
 
                 <div class="block-title"></div>
-                <div class="block">
+                <div class="block block-leaderboard">
 
-                  <!-- <div class="chip chip-gps">
-                    <div class="chip-media bg-color-red">
-                      <i class="fa fa-globe fa-lg"></i>
-                    </div>
-                    <div class="chip-label">GPS</div>
+                  <div class="data-table">
+                    <table id="leaderboardTable">
+                      <thead>
+                        <tr>
+                          
+                          <th class="label-cell">RACER</th>
+                          <th class="numeric-cell">SPEED (MPH)</th>
+                          <th class="numeric-cell">SCORE (%MAX)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          
+                          <td class="label-cell">RACER</td>
+                          <td class="numeric-cell">0</td>
+                          <td class="numeric-cell">0</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- Leaderboard End -->
+
+
+      <!-- Bluetooth START -->
+      <div class="popup my-popup-bluetoothdevices">
+        <div class="view">
+          <div class="page">
+            <div class="navbar">
+              <div class="navbar-bg"></div>
+              <div class="navbar-inner">
+                <div class="left">
+                  <!-- <a class="link popup-close"><i class="fa fa-chevron-left fa-lg"></i></a> -->
+                </div>
+                <div class="title">BLUETOOTH SENSORS</div>
+                <div class="right">
+                  <a class="link popup-close"><i class="fa fa-home fa-2x"></i></a>
+                  <!-- <a class="link start-bluetooth-scan"><i class="fa fa-refresh fa-lg"></i></a> -->
+                </div>
+              </div>
+            </div>
+
+            <div class="fab fab-center-bottom start-bluetooth-scan">
+              <a href="#">
+                <i class="fa fa-refresh fa-2x"></i>
+              </a>
+            </div>
+
+            <!-- Bottom Toolbar -->
+            <div class="toolbar toolbar-bottom">
+              <div class="toolbar-inner">
+                <!-- Toolbar links -->
+                <!-- <div class="left">
+                    <a class="link start-bluetooth-scan">SCAN<i class="fa fa-refresh fa-2x"></i></a>
                   </div> -->
-                  <div class="chip chip-hr">
-                    <div class="chip-media bg-color-red">
-                      <i class="fa fa-heartbeat"></i>
-                    </div>
-                    <div class="chip-label">Heartrate</div>
-                  </div>
-                  <div class="chip chip-csc">
-                    <div class="chip-media bg-color-red">
-                      <i class="fa fa-bluetooth-b"></i>
-                    </div>
-                    <div class="chip-label">Speed</div>
-                  </div>
-                  <div class="chip chip-cad">
-                    <div class="chip-media bg-color-red">
-                      <i class="fa fa-bluetooth-b"></i>
-                    </div>
-                    <div class="chip-label">Cadence</div>
-                  </div>
+                <div class="block status-alerts">Alerts</div>
+              </div>
+            </div>
+            <div class="page-content">
 
+              <div class="block-title"></div>
+              <div class="block">
+                <div class="chip chip-hr">
+                  <div class="chip-media bg-color-red">
+                    <i class="fa fa-heartbeat"></i>
+                  </div>
+                  <div class="chip-label">Heartrate</div>
                 </div>
+                <div class="chip chip-csc">
+                  <div class="chip-media bg-color-red">
+                    <i class="fa fa-bluetooth-b"></i>
+                  </div>
+                  <div class="chip-label">Speed</div>
+                </div>
+                <div class="chip chip-cad">
+                  <div class="chip-media bg-color-red">
+                    <i class="fa fa-bluetooth-b"></i>
+                  </div>
+                  <div class="chip-label">Cadence</div>
+                </div>
+              </div>
 
-
-                <form>
-                  <div class="list device-list">
-                    <ul class="device-ul">
-                      <li class="device-li">
-                        <a href="#" class="item-link item-content no-chevron">
-                          <!-- <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
-                          <div class="item-inner">
-                            <div class="item-title">
-                              <div class="item-header device-service"></div>
-                              <span class="device-name"></span>
-                              <div class="item-footer device-id"></div>
-                            </div>
-                            <div class="item-after device-status"></div>
+              <form>
+                <div class="list device-list">
+                  <ul class="device-ul">
+                    <li class="device-li">
+                      <a href="#" class="item-link item-content no-chevron">
+                        <!-- <div class="item-media"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
+                        <div class="item-inner">
+                          <div class="item-title">
+                            <div class="item-header device-service"></div>
+                            <span class="device-name"></span>
+                            <div class="item-footer device-id"></div>
                           </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </form>
-              </div>
+                          <div class="item-after device-status"></div>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <!-- Bluetooth END -->
-
-        <!-- T&C START -->
-        <div class="popup my-popup-tandc">
-          <div class="view">
-            <div class="page">
-              <div class="navbar">
-                <div class="navbar-bg"></div>
-                <div class="navbar-inner">
-                  <div class="title">T&C</div>
-                  <div class="right">
-                    <!-- Link to close popup -->
-                    <a class="link popup-close"><i class="fa fa-home fa-lg"></i></a>
-                  </div>
-                </div>
-              </div>
-              <div class="page-content">
-                <div class="block">
-
-                  Disclaimer of Warranties and Liability<br>
-                  <hr>
-                  YOU EXPRESSLY AGREE THAT USING THE VIRTUAL CRIT APPLICATION CARRIES CERTAIN INHERENT AND SIGNIFICANT
-                  RISKS OF PROPERTY DAMAGE, BODILY INJURY OR DEATH AND THAT YOU VOLUNTARILY ASSUME ALL KNOWN AND UNKNOWN
-                  RISKS ASSOCIATED WITH THESE ACTIVITIES, EVEN IF CAUSED IN WHOLE OR PART BY THE ACTION, INACTION OR
-                  NEGLIGENCE OF GRAYBEARD FITNESS LLC, THE DEVELOPER OF VIRTUAL CRIT, OR BY THE ACTION, INACTION OR
-                  NEGLIGENCE OF OTHERS. YOU ALSO EXPRESSLY AGREE THAT VIRTUAL CRIT DOES NOT ASSUME RESPONSIBILITY FOR
-                  THE INSPECTION, SUPERVISION, PREPARATION, OR CONDUCT OF ANY RACE, CONTEST, GROUP RIDE OR EVENT WHERE
-                  PARTICIPANTS USE THE VIRTUAL CRIT APPLICATION. <br><br>
-
-                  YOU EXPRESSLY AGREE TO RELEASE GRAYBEARD FITNESS LLC, OFFICERS, AGENTS, REPRESENTATIVES, EMPLOYEES,
-                  AND PARTNERS FROM ANY AND ALL LIABILITY CONNECTED WITH YOUR ATHLETIC ACTIVITIES, AND PROMISE NOT TO
-                  SUE THE RELEASED PARTIES FOR ANY CLAIMS, ACTIONS, INJURIES, DAMAGES, OR LOSSES ASSOCIATED WITH YOUR
-                  ATHLETIC ACTIVITIES. YOU ALSO AGREE THAT IN NO EVENT SHALL THE RELEASED PARTIES BE LIABLE TO YOU OR
-                  ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, PUNITIVE, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES
-                  ARISING OUT OF OR IN ANY WAY CONNECTED WITH YOUR USE OR MISUSE OF THE VIRTUAL CRIT APPLICATION.<br>
-
-                  Indemnity<br>
-                  <hr>
-                  You agree to indemnify and hold Graybeard Fitness LLC and its officers, agents, representatives,
-                  employees and partners harmless from any claim or demand, including reasonable attorneys’ fees, made
-                  by any third party due to or arising out of any information you make available through the Virtual
-                  Crit application or your use of the VIRTUAL CRIT application.<br>
-
-                  Termination<br>
-                  <hr>
-                  You agree that Graybeard Fitness may, under certain circumstances and without prior notice,
-                  immediately terminate your account and/or access to the application. Cause for such termination shall
-                  include, but not be limited to, (a) breaches or violations of the Terms or other incorporated
-                  agreements or guidelines, (b) requests by law enforcement or other government agencies, (c) a request
-                  by you (self-initiated account deletions), (d) discontinuance or material modification to the Virtual
-                  Crit application (or any portion thereof), (e) unexpected technical or security issues or problems,
-                  (f) extended periods of activity and/or inactivity. Termination of your account may include removal of
-                  access to all offerings and deletion of your information associated with or inside your account, and
-                  barring of further use of the application. Further, you agree that all terminations for cause shall be
-                  made in Graybeard Fitness LLC’s sole discretion and that Graybeard Fitness LLC shall not be liable to
-                  you or any third party for any termination of your account or access to the Virtual Crit
-                  application.<br>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- T&C END-->
-
-
       </div>
-      <!-- End of Page -->
+      <!-- Bluetooth END -->
 
-      <!-- The core Firebase JS SDK is always required and must be listed first -->
-      <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script> -->
+      <!-- T&C START -->
+      <div class="popup my-popup-tandc">
+        <div class="view">
+          <div class="page">
+            <div class="navbar">
+              <div class="navbar-bg"></div>
+              <div class="navbar-inner">
+                <div class="title">T&C</div>
+                <div class="right">
+                  <!-- Link to close popup -->
+                  <a class="link popup-close"><i class="fa fa-home fa-lg"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="block">
 
-      <!-- TODO: Add SDKs for Firebase products that you want to use
+                Disclaimer of Warranties and Liability<br>
+                <hr>
+                YOU EXPRESSLY AGREE THAT USING THE VIRTUAL CRIT APPLICATION CARRIES CERTAIN INHERENT AND SIGNIFICANT
+                RISKS OF PROPERTY DAMAGE, BODILY INJURY OR DEATH AND THAT YOU VOLUNTARILY ASSUME ALL KNOWN AND UNKNOWN
+                RISKS ASSOCIATED WITH THESE ACTIVITIES, EVEN IF CAUSED IN WHOLE OR PART BY THE ACTION, INACTION OR
+                NEGLIGENCE OF GRAYBEARD FITNESS LLC, THE DEVELOPER OF VIRTUAL CRIT, OR BY THE ACTION, INACTION OR
+                NEGLIGENCE OF OTHERS. YOU ALSO EXPRESSLY AGREE THAT VIRTUAL CRIT DOES NOT ASSUME RESPONSIBILITY FOR
+                THE INSPECTION, SUPERVISION, PREPARATION, OR CONDUCT OF ANY RACE, CONTEST, GROUP RIDE OR EVENT WHERE
+                PARTICIPANTS USE THE VIRTUAL CRIT APPLICATION. <br><br>
+
+                YOU EXPRESSLY AGREE TO RELEASE GRAYBEARD FITNESS LLC, OFFICERS, AGENTS, REPRESENTATIVES, EMPLOYEES,
+                AND PARTNERS FROM ANY AND ALL LIABILITY CONNECTED WITH YOUR ATHLETIC ACTIVITIES, AND PROMISE NOT TO
+                SUE THE RELEASED PARTIES FOR ANY CLAIMS, ACTIONS, INJURIES, DAMAGES, OR LOSSES ASSOCIATED WITH YOUR
+                ATHLETIC ACTIVITIES. YOU ALSO AGREE THAT IN NO EVENT SHALL THE RELEASED PARTIES BE LIABLE TO YOU OR
+                ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, PUNITIVE, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES
+                ARISING OUT OF OR IN ANY WAY CONNECTED WITH YOUR USE OR MISUSE OF THE VIRTUAL CRIT APPLICATION.<br>
+
+                Indemnity<br>
+                <hr>
+                You agree to indemnify and hold Graybeard Fitness LLC and its officers, agents, representatives,
+                employees and partners harmless from any claim or demand, including reasonable attorneys’ fees, made
+                by any third party due to or arising out of any information you make available through the Virtual
+                Crit application or your use of the VIRTUAL CRIT application.<br>
+
+                Termination<br>
+                <hr>
+                You agree that Graybeard Fitness may, under certain circumstances and without prior notice,
+                immediately terminate your account and/or access to the application. Cause for such termination shall
+                include, but not be limited to, (a) breaches or violations of the Terms or other incorporated
+                agreements or guidelines, (b) requests by law enforcement or other government agencies, (c) a request
+                by you (self-initiated account deletions), (d) discontinuance or material modification to the Virtual
+                Crit application (or any portion thereof), (e) unexpected technical or security issues or problems,
+                (f) extended periods of activity and/or inactivity. Termination of your account may include removal of
+                access to all offerings and deletion of your information associated with or inside your account, and
+                barring of further use of the application. Further, you agree that all terminations for cause shall be
+                made in Graybeard Fitness LLC’s sole discretion and that Graybeard Fitness LLC shall not be liable to
+                you or any third party for any termination of your account or access to the Virtual Crit
+                application.<br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- T&C END-->
+
+
+    </div>
+    <!-- End of Page -->
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script> -->
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-      <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script> -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script> -->
 
-      <script type="text/javascript" src="lib/firebase-app.js"></script>
-      <script type="text/javascript" src="lib/firebase-database.js"></script>
+    <script type="text/javascript" src="lib/firebase-app.js"></script>
+    <script type="text/javascript" src="lib/firebase-database.js"></script>
 
-      <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-          apiKey: "AIzaSyCuhaCedpqmXIxIfiZtvH2lNIyq1WqehvQ",
-          authDomain: "virtualcrit-47b94.firebaseapp.com",
-          databaseURL: "https://virtualcrit-47b94.firebaseio.com",
-          projectId: "virtualcrit-47b94",
-          storageBucket: "virtualcrit-47b94.appspot.com",
-          messagingSenderId: "454506348897",
-          appId: "1:454506348897:web:c8b9f4becf7e2c29034520"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-      </script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCuhaCedpqmXIxIfiZtvH2lNIyq1WqehvQ",
+        authDomain: "virtualcrit-47b94.firebaseapp.com",
+        databaseURL: "https://virtualcrit-47b94.firebaseio.com",
+        projectId: "virtualcrit-47b94",
+        storageBucket: "virtualcrit-47b94.appspot.com",
+        messagingSenderId: "454506348897",
+        appId: "1:454506348897:web:c8b9f4becf7e2c29034520"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
 
 
-      <script type="text/javascript" src="cordova.js"></script>
-      <script type="text/javascript" src="lib/framework7/js/framework7.bundle.min.js"></script>
-      <script type="text/javascript" src="lib/jquery-3.4.1.min.js"></script>
-      <script type="text/javascript" src="lib/lodash.js"></script>
-      <script type="text/javascript" src="lib/tock.min.js"></script>
-      <script type="text/javascript" src="js/fb.js"></script>
-      <script type="text/javascript" src="js/user.js"></script>
-      <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="lib/framework7/js/framework7.bundle.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="lib/lodash.js"></script>
+    <script type="text/javascript" src="lib/tock.min.js"></script>
+    <script type="text/javascript" src="js/fb.js"></script>
+    <script type="text/javascript" src="js/user.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 
 
 </body>
