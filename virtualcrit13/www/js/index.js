@@ -90,6 +90,10 @@ function newRound() {
     //ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
 
     round.speed = ret1num(distanceInMostRecendRound / (tim.timSecondsPerRound / 60 / 60));
+
+    if (round.speed > 35) {
+        round.speed = 0;
+    }
     // console.log('round.speed', round.speed);
     // console.log('tim.timAudio', tim.timAudio);
     // console.log('attempt to play audio');
@@ -727,8 +731,28 @@ function onBackgroundSuccess(newLocation) {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var distance = R * c; // Distance in KM
 
-    if ((distance * 1000) < 10 || _.now() - lastActivityTime < 2000) {
+    // console.log('geodistance, reading:  ' +  ret2string(distance * 1000));  //meters
+    // console.log('geotime, reading:  ' +  ret0string(_.now() - lastActivityTime));  //ms
+    
+
+    if ((distance * 1000) < 2 || _.now() - lastActivityTime < 1500) {
         //console.log('too short, wait for the next one');
+        return;
+    }
+
+    if (distance * 1000 > 50) {
+        console.log('distance is too far, reset');
+        lastLatitude = newLocation.latitude;
+        lastLongitude = newLocation.longitude;
+        lastActivityTime = _.now();
+        return;
+    }
+
+    if (_.now() - lastActivityTime > 10000) {
+        console.log('too long between readings, reset');
+        lastLatitude = newLocation.latitude;
+        lastLongitude = newLocation.longitude;
+        lastActivityTime = _.now();
         return;
     }
 
