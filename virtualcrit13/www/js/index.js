@@ -738,6 +738,12 @@ function onBackgroundSuccess(newLocation) {
                 value: (parseFloat(gpsSpeed) * 3.75) / 100,
                 valueText: gpsSpeed,
             });
+
+            var gauge3 = app.gauge.get('.my-gauge3');
+            gauge3.update({
+                value: (parseFloat(gpsSpeed) * 3.75) / 100,
+                valueText: gpsSpeed,
+            });
         }
         if (popupGauge && totals.heartrate < 1) {
             if (popupGauge) {
@@ -1261,93 +1267,93 @@ function ui(k, v) {
 
 //DYANMIC POPUPS
 //POPUP GAUGE
-var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
-    // '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
-    '<div class="block text-align-center">' +
-    '<div class="gauge demo-gauge my-gauge"></div>' +
-    '</div>' +
-    '<div class="block-header-gauge"></div>' +
-    '<div class="block text-align-center">' +
-    '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
-    '</div>' +
-    '<div class="block-footer"></div>' +
-    '</div>';
+// var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
+//     // '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
+//     '<div class="block text-align-center">' +
+//     '<div class="gauge demo-gauge my-gauge"></div>' +
+//     '</div>' +
+//     '<div class="block-header-gauge"></div>' +
+//     '<div class="block text-align-center">' +
+//     '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
+//     '</div>' +
+//     '<div class="block-footer"></div>' +
+//     '</div>';
 
 
 // Create dynamic Popup
-var dynamicPopup = app.popup.create({
-    content: popupHtml,
-    backdrop: true,
-    closeByBackdropClick: true,
-    swipeToClose: true,
-    // Events
-    on: {
-        open: function (popup) {
-            console.log('Popup open');
+// var dynamicPopup = app.popup.create({
+//     content: popupHtml,
+//     backdrop: true,
+//     closeByBackdropClick: true,
+//     swipeToClose: true,
+//     // Events
+//     on: {
+//         open: function (popup) {
+//             console.log('Popup open');
 
-            var gauge = app.gauge.create({
-                el: '.gauge',
-                type: 'circle',
-                value: 0.1,
-                size: 220,
-                borderColor: '#ff0000',
-                borderWidth: 20,
-                valueText: '0',
-                valueFontSize: 55,
-                valueTextColor: '#ff0000',
-                valueFontWeight: 700,
-                labelFontSize: 20,
-                labelText: 'MPH',
-                // valueText: 'Speed',
-                on: {
-                    beforeDestroy: function () {
-                        console.log('Gauge will be destroyed')
-                    },
-                }
-            })
+//             var gauge = app.gauge.create({
+//                 el: '.gauge',
+//                 type: 'circle',
+//                 value: 0.1,
+//                 size: 220,
+//                 borderColor: '#ff0000',
+//                 borderWidth: 20,
+//                 valueText: '0',
+//                 valueFontSize: 55,
+//                 valueTextColor: '#ff0000',
+//                 valueFontWeight: 700,
+//                 labelFontSize: 20,
+//                 labelText: 'MPH',
+//                 // valueText: 'Speed',
+//                 on: {
+//                     beforeDestroy: function () {
+//                         console.log('Gauge will be destroyed')
+//                     },
+//                 }
+//             })
 
 
 
-            var gauge2 = app.gauge.create({
-                el: '.gauge2',
-                type: 'circle',
-                value: 0.1,
-                size: 220,
-                borderColor: '#ff0000',
-                borderWidth: 20,
-                valueText: '0',
-                valueFontSize: 55,
-                valueTextColor: '#ff0000',
-                valueFontWeight: 700,
-                labelFontSize: 20,
-                labelText: 'BPM',
-                on: {
-                    beforeDestroy: function () {
-                        console.log('Gauge will be destroyed')
-                    }
-                }
-            })
+//             var gauge2 = app.gauge.create({
+//                 el: '.gauge2',
+//                 type: 'circle',
+//                 value: 0.1,
+//                 size: 220,
+//                 borderColor: '#ff0000',
+//                 borderWidth: 20,
+//                 valueText: '0',
+//                 valueFontSize: 55,
+//                 valueTextColor: '#ff0000',
+//                 valueFontWeight: 700,
+//                 labelFontSize: 20,
+//                 labelText: 'BPM',
+//                 on: {
+//                     beforeDestroy: function () {
+//                         console.log('Gauge will be destroyed')
+//                     }
+//                 }
+//             })
 
-        },
-        opened: function (popup) {
-            console.log('Popup opened');
-            popupGauge = true;
-        },
-    }
-});
-// Events also can be assigned on instance later
-dynamicPopup.on('close', function (popup) {
-    console.log('Popup close');
-});
-dynamicPopup.on('closed', function (popup) {
-    popupGauge = false;
-    console.log('Popup closed');
-});
+//         },
+//         opened: function (popup) {
+//             console.log('Popup opened');
+//             popupGauge = true;
+//         },
+//     }
+// });
+// // Events also can be assigned on instance later
+// dynamicPopup.on('close', function (popup) {
+//     console.log('Popup close');
+// });
+// dynamicPopup.on('closed', function (popup) {
+//     popupGauge = false;
+//     console.log('Popup closed');
+// });
 
-// Open dynamic popup from menu bars 
-$$('.dynamic-pop').on('click', function () {
-    dynamicPopup.open();
-});
+// // Open dynamic popup from menu bars 
+// $$('.dynamic-pop').on('click', function () {
+//     dynamicPopup.open();
+// });
 
 var popupGauge = false;
 var popupCounter = 0;
@@ -1433,3 +1439,84 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
     }
     
   });
+
+
+  var firstOpenDashboard = true;
+
+  $$('.my-popup-dashboard').on('popup:opened', function (e) {
+    console.log('my-popup-dashboard popup opened');
+
+    if (firstOpenDashboard == true) {
+        var swiper = app.swiper.create('.swiper-container', {
+            speed: 400,
+            spaceBetween: 100
+        });
+    }
+    firstOpenDashboard = false;
+    popupGauge = true;
+
+
+    var gauge = app.gauge.create({
+        el: '.gauge',
+        type: 'circle',
+        value: 0.1,
+        size: 220,
+        borderColor: '#ff0000',
+        borderWidth: 20,
+        valueText: '0',
+        valueFontSize: 55,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 20,
+        labelText: 'MPH',
+        // valueText: 'Speed',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            },
+        }
+    })
+
+    var gauge2 = app.gauge.create({
+        el: '.gauge2',
+        type: 'circle',
+        value: 0.1,
+        size: 220,
+        borderColor: '#ff0000',
+        borderWidth: 20,
+        valueText: '0',
+        valueFontSize: 55,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 20,
+        labelText: 'BPM',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            }
+        }
+    })
+
+    var gauge3 = app.gauge.create({
+        el: '.gauge3',
+        type: 'semicircle',
+        value: 0.1,
+        size: 220,
+        borderColor: '#ff0000',
+        borderWidth: 20,
+        valueText: '0',
+        valueFontSize: 55,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 20,
+        labelText: 'MPH',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            }
+        }
+    })
+    
+  });
+
+
