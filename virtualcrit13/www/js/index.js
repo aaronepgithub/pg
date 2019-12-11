@@ -52,6 +52,19 @@ function tockCallback() {
     // $$('.left-main').html('<i class="fa fa-circle"></i>');
     $$('.system-status').text("Running");
 
+    var rd = 0;
+    if (totals.distance && arrRoundDistances.length > 0) {
+        rd = totals.distance - _.last(arrRoundDistances);
+        let rds = rd / (((countdownTime - tim.timSecondsPerRound) / 1000) / 60 / 60);
+
+        if (_.isFinite(rd) && _.isFinite(rds)) {
+            $$('.card1-content').html(ret1num(rd) + ' MILES/ROUND,  ' + ret1num(rds) + '  MPH/ROUND');
+        }
+    }
+
+    $$('.card1-header').html('ROUND ' + roundsComplete);
+    $$('.card1-footer').html(timer.msToTimecode(countdownTime));
+
 }
 
 //END OF ROUND
@@ -1449,7 +1462,20 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
     if (firstOpenDashboard == true) {
         var swiper = app.swiper.create('.swiper-container', {
             speed: 400,
-            spaceBetween: 100
+            spaceBetween: 100,
+            // direction: 'vertical',
+            // loop: true,
+        
+            // If we need pagination
+            // pagination: {
+            //   el: '.swiper-pagination',
+            // },
+        
+            // Navigation arrows
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
         });
     }
     firstOpenDashboard = false;
@@ -1503,9 +1529,9 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         value: 0.1,
         size: 220,
         borderColor: '#ff0000',
-        borderWidth: 20,
+        borderWidth: 5,
         valueText: '0',
-        valueFontSize: 55,
+        valueFontSize: 45,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,

@@ -22,7 +22,7 @@
 
 
 
-#elem-to-center {
+/* #elem-to-center {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,6 +40,36 @@
   text-align: center;
   min-height: 100vh;
   
+} */
+
+.block-dashboard {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+/* .my-popup-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+} */
+
+.swiper-slide {
+  /* font-size: 25px;
+  font-weight: 300; */
+  /* margin-top: 16px;
+  margin-bottom: 16px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  color: #000;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* text-align: center; */
+  /* min-height: 80vh; */
 }
 
 
