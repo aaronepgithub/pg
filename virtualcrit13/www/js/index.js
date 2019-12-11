@@ -438,8 +438,12 @@ $$('.start-system').on('click', function (e) {
     // }, 10000);
 });
 
+
+var physicalScreenHeight = 1136;
 function timerStarter() {
     console.log('timerStarter');
+    physicalScreenHeight = window.screen.height * window.devicePixelRatio;
+    console.log('physicalScreenHeight ', physicalScreenHeight);
 
     if (startTime) {
         console.log('already running');
@@ -567,7 +571,6 @@ $$('.item-timMode').on('click', function (e) {
 //SET MAXHR
 $$('.item-timMaxHeartate').on('click', function (e) {
     console.log('click timMaxHeartate');
-
     tim.timMaxHeartate += 5;
     console.log('tim.timMaxHeartate  ', tim.timMaxHeartate);
     if (tim.timMaxHeartate > 210) {
