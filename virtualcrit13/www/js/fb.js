@@ -30,37 +30,73 @@ function listenRounds() {
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
 
-    setTimeout(() => {
-      TTS.speak({
-        text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
-        locale: 'en-US',
-        rate: 1.5
-    }, function () {
-        console.log('tts success');
-    }, function (reason) {
-        console.log('tts failed:  ', reason);
-    });
-    }, 5000);
+    if (fastestRoundSpeed) {
+      console.log('a local fastestRoundSpeed does exist, check for new leader/score');
+      if (fastestRoundName !== String(arrSpeed[0].fb_timName).toUpperCase() || fastestRoundSpeed !== ret1string(arrSpeed[0].a_speedRoundLast)) {
+        console.log('this is a unique name or speed, continue');
+        fastestRoundName = String(arrSpeed[0].fb_timName).toUpperCase();
+        fastestRoundSpeed = fastestRoundSpeed != ret1string(arrSpeed[0].a_speedRoundLast);
+        console.log('if audio is on, will speak');
+        
+        if (tim.timAudio == "ON") {
+          setTimeout(() => {
+
+            TTS.speak({
+              text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
+              locale: 'en-US',
+              rate: 1.5
+            }, function () {
+              console.log('tts success');
+            }, function (reason) {
+              console.log('tts failed:  ', reason);
+            });
+          }, 5000);
+        }
+      } else {
+        console.log('not a new leader, no speaking');
+        
+      }
+    } else {
+      console.log('local leaderboard is empty, speak');
+      fastestRoundName = String(arrSpeed[0].fb_timName).toUpperCase();
+      fastestRoundSpeed = ret1string(arrSpeed[0].a_speedRoundLast);
+      if (tim.timAudio == "ON") {
+        setTimeout(() => {
+
+          TTS.speak({
+            text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
+            locale: 'en-US',
+            rate: 1.5
+          }, function () {
+            console.log('tts success');
+          }, function (reason) {
+            console.log('tts failed:  ', reason);
+          });
+        }, 5000);
+      }
+    }
+
 
 
 
     $('#leaderboardTable tbody tr').remove();
     var e = 1;
-    _.forEach(arrSpeed, function(value) {
+    _.forEach(arrSpeed, function (value) {
       t2Content = '<tr>' +
-      '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
-      '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH' + '</td>' +
-      '<td class="numeric-cell">' + ret1string(value.a_scoreRoundLast) + ' %MAX' + '</td>' +
-          '</tr>';
-          $('#leaderboardTable').append(t2Content);
-          e++;
-          
-      });
+        '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
+        '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH' + '</td>' +
+        '<td class="numeric-cell">' + ret1string(value.a_scoreRoundLast) + ' %MAX' + '</td>' +
+        '</tr>';
+      $('#leaderboardTable').append(t2Content);
+      e++;
+
+    });
   });
 
 }
 
-
+var fastestRoundSpeed;
+var fastestRoundName;
 
 
 
@@ -174,30 +210,30 @@ function postTotals() {
 
 function postRound() {
   console.log('postRound');
-  
+
   // my rounds
-  myRounds.push( {'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate)} );
+  myRounds.push({ 'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate) });
   console.log('myRounds: ', JSON.stringify(myRounds));
-  
-//  UPDATE MYROUNDS UI
-$('#myroundsTable tbody tr').remove();
-// let v = _.values(arrRounds);
-// let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
-var e = 1;
-_.forEach(myRounds, function (value) {
+
+  //  UPDATE MYROUNDS UI
+  $('#myroundsTable tbody tr').remove();
+  // let v = _.values(arrRounds);
+  // let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
+  var e = 1;
+  _.forEach(myRounds, function (value) {
     console.log('myRounds:');
     console.log(JSON.stringify(value));
     t3Content = '<tr>' +
-        '<td class="label-cell">' + String(value.timer) + '</td>' +
-        '<td class="numeric-cell">' + ret1string(value.speed) + ' MPH' + '</td>' +
-        '<td class="numeric-cell">' + ret1string(value.heartrate) + ' BPM' + '</td>' +
-        '<td class="numeric-cell">' + ret1string(value.score) + '%' + '</td>' +
-        '</tr>';
-        $('#leaderboardTable').append(t2Content);
-        e++;
-        
-});
-//  END UI UPDATE
+      '<td class="label-cell">' + String(value.timer) + '</td>' +
+      '<td class="numeric-cell">' + ret1string(value.speed) + ' MPH' + '</td>' +
+      '<td class="numeric-cell">' + ret1string(value.heartrate) + ' BPM' + '</td>' +
+      '<td class="numeric-cell">' + ret1string(value.score) + '%' + '</td>' +
+      '</tr>';
+    $('#leaderboardTable').append(t2Content);
+    e++;
+
+  });
+  //  END UI UPDATE
 
 
   //TODO  CHANGE THESE VALUES TO PULL FROM LATEST OBJECT STORED IN rounds[]
