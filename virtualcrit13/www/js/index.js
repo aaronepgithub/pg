@@ -459,16 +459,24 @@ function timerStarter() {
 
 
     setTimeout(function () {
+        console.log('listenTotals');
         listenTotals();
     }, 10000);
 
     setTimeout(function () {
+        console.log('listenRounds');
         listenRounds();
-    }, 10000);
+    }, 15000);
 
     setTimeout(function () {
+        console.log('listenRoundsLeader');
+        listenRoundsLeader();
+    }, 20000);
+
+    setTimeout(function () {
+        console.log('listenRoundsHR');
         listenRoundsHR();
-    }, 15000);
+    }, 25000);
 }
 
 

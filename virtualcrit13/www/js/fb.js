@@ -1,5 +1,48 @@
 var database = firebase.database();
 
+//TODO:  LISTEN FOR ONLY LEADER, THEN SPEAK...
+//TODO:  CHANGE FROM DISTANCE FILTER LOGIC
+
+//single round leader
+function listenRoundsLeader() {
+  console.log('Listen for RoundLeader Change');
+
+  var roundsLeaderRef = firebase.database().ref('rounds/' + getTodaysDate());
+  roundsLeaderRef.limitToLast(1).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
+    //console.log('RoundsDB\n'+JSON.stringify(snapshot));
+    arrRoundLeader = [];
+    snapshot.forEach(function (childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      arrRoundLeader.push(childData);
+    });
+    //console.log('arrRoundLeader: ', JSON.stringify(arrRoundLeader));
+    let v = _.values(arrRoundLeader);
+    //console.log('arrRoundLeader - values: ', JSON.stringify(v));
+    let name = String(v[0].fb_timName).toUpperCase();
+    let speed = ret1string(v[0].a_speedRoundLast) + ' Miles Per Hour';
+    console.log('single leader, name, speed:  ', name, speed);
+    
+
+    if (tim.timAudio == "ON") {
+      setTimeout(() => {
+        TTS.speak({
+          text: 'The new leader is, ' + name + ',. ' + speed,
+          locale: 'en-US',
+          rate: 1.5
+        }, function () {
+          console.log('tts success');
+        }, function (reason) {
+          console.log('tts failed:  ', reason);
+        });
+      }, 5000);
+    }
+
+
+  });
+
+}
+
 //speed
 function listenRounds() {
   console.log('Listen for Rounds Changes');
@@ -30,51 +73,51 @@ function listenRounds() {
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
 
-    if (fastestRoundSpeed) {
-      console.log('a local fastestRoundSpeed does exist, check for new leader/score');
-      if (fastestRoundName !== String(arrSpeed[0].fb_timName).toUpperCase() || fastestRoundSpeed !== ret1string(arrSpeed[0].a_speedRoundLast)) {
-        console.log('this is a unique name or speed, continue');
-        fastestRoundName = String(arrSpeed[0].fb_timName).toUpperCase();
-        fastestRoundSpeed = fastestRoundSpeed != ret1string(arrSpeed[0].a_speedRoundLast);
-        console.log('if audio is on, will speak');
-        
-        if (tim.timAudio == "ON") {
-          setTimeout(() => {
+    // if (fastestRoundSpeed) {
+    //   console.log('a local fastestRoundSpeed does exist, check for new leader/score');
+    //   if (fastestRoundName !== String(arrSpeed[0].fb_timName).toUpperCase() || fastestRoundSpeed !== ret1string(arrSpeed[0].a_speedRoundLast)) {
+    //     console.log('this is a unique name or speed, continue');
+    //     fastestRoundName = String(arrSpeed[0].fb_timName).toUpperCase();
+    //     fastestRoundSpeed = fastestRoundSpeed != ret1string(arrSpeed[0].a_speedRoundLast);
+    //     console.log('if audio is on, will speak');
 
-            TTS.speak({
-              text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
-              locale: 'en-US',
-              rate: 1.5
-            }, function () {
-              console.log('tts success');
-            }, function (reason) {
-              console.log('tts failed:  ', reason);
-            });
-          }, 5000);
-        }
-      } else {
-        console.log('not a new leader, no speaking');
-        
-      }
-    } else {
-      console.log('local leaderboard is empty, speak');
-      fastestRoundName = String(arrSpeed[0].fb_timName).toUpperCase();
-      fastestRoundSpeed = ret1string(arrSpeed[0].a_speedRoundLast);
-      if (tim.timAudio == "ON") {
-        setTimeout(() => {
+    //     if (tim.timAudio == "ON") {
+    //       setTimeout(() => {
 
-          TTS.speak({
-            text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
-            locale: 'en-US',
-            rate: 1.5
-          }, function () {
-            console.log('tts success');
-          }, function (reason) {
-            console.log('tts failed:  ', reason);
-          });
-        }, 5000);
-      }
-    }
+    //         TTS.speak({
+    //           text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
+    //           locale: 'en-US',
+    //           rate: 1.5
+    //         }, function () {
+    //           console.log('tts success');
+    //         }, function (reason) {
+    //           console.log('tts failed:  ', reason);
+    //         });
+    //       }, 5000);
+    //     }
+    //   } else {
+    //     console.log('not a new leader, no speaking');
+
+    //   }
+    // } else {
+    //   console.log('local leaderboard is empty, speak');
+    //   fastestRoundName = String(arrSpeed[0].fb_timName).toUpperCase();
+    //   fastestRoundSpeed = ret1string(arrSpeed[0].a_speedRoundLast);
+    //   if (tim.timAudio == "ON") {
+    //     setTimeout(() => {
+
+    //       TTS.speak({
+    //         text: 'New Leader, ' + String(arrSpeed[0].fb_timName) + '.  at , ' + ret1string(arrSpeed[0].a_speedRoundLast) + '  Miles per hour.',
+    //         locale: 'en-US',
+    //         rate: 1.5
+    //       }, function () {
+    //         console.log('tts success');
+    //       }, function (reason) {
+    //         console.log('tts failed:  ', reason);
+    //       });
+    //     }, 5000);
+    //   }
+    // }
 
 
 
@@ -95,8 +138,8 @@ function listenRounds() {
 
 }
 
-var fastestRoundSpeed;
-var fastestRoundName;
+// var fastestRoundSpeed;
+// var fastestRoundName;
 
 
 
@@ -226,8 +269,8 @@ function postRound() {
     t3Content = '<tr>' +
       '<td class="label-cell">' + String(value.timer) + '</td>' +
       '<td class="numeric-cell">' + ret1string(value.speed) + ' MPH' + '</td>' +
-      '<td class="numeric-cell">' + ret1string(value.heartrate) + ' BPM' + '</td>' +
-      '<td class="numeric-cell">' + ret1string(value.score) + '%' + '</td>' +
+      '<td class="numeric-cell">' + ret0string(value.heartrate) + ' BPM' + '</td>' +
+      '<td class="numeric-cell">' + ret0string(value.score) + '%' + '</td>' +
       '</tr>';
     $('#leaderboardTable').append(t2Content);
     e++;
