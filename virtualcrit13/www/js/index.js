@@ -360,6 +360,7 @@ function changeLi(i, v) {
 }
 
 var arrRoundDistances = [];
+var deviceType = 'ios';
 
 var startTime;
 function startup() {
@@ -369,6 +370,15 @@ function startup() {
     arrRoundDistances.push(0);
     $$('.total-time').text(totalTime);
     $$('.system-status').text(systemStatus);
+
+    if (app.device.android) {
+        console.log('It is android device');
+        deviceType = 'android';
+        console.log('andriod device ', deviceType);
+      } else {
+          console.log('device type ', deviceType);
+          
+      }
 
     //LOCAL STORAGE ON STARTUP
     //name
@@ -595,13 +605,20 @@ $$('.item-timWheelSize').on('click', function (e) {
 
 
 // START LOCATION CALC
+//locationProvider ActivityProvider = 1
+
+var lp = 1;
+
 
 function startGPSTracking() {
     console.log('startGPSTracking');
-
+    if (deviceType == 'ios') {
+        lp = 0;
+    }
 
     BackgroundGeolocation.configure({
-        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        // locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        locationProvider: lp,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
         activityType: 'Fitness',
         //TODO...THIS IS TOO AGRESSIVE??
@@ -610,6 +627,7 @@ function startGPSTracking() {
         notificationTitle: 'Background tracking',
         notificationText: 'enabled',
         //debug: true,
+        stopOnTerminate: true,
         interval: 5000,
         fastestInterval: 2000,
         activitiesInterval: 5000,
@@ -677,6 +695,9 @@ function startGPSTracking() {
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
         //$$('.main-status-alerts').text('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('BackgroundGeo is Running');
+        BackgroundGeolocation.getConfig(function(config) {
+            console.log(JSON.stringify(config));
+          });
 
 
         // you don't need to check status before start (this is just the example)
@@ -712,13 +733,17 @@ function onBackgroundSuccess(newLocation) {
         lastLongitude = newLocation.longitude;
         lastActivityTime = _.now();  //ms
 
+        BackgroundGeolocation.getConfig(function(config) {
+            console.log(JSON.stringify(config));
+          });
+
         timerStarter();
         return;
     }
     //console.log('onBackgroundSuccess - new, good reading');
 
     //STOP THE CLOCK
-    if (lastActivityTime - _.now() > 15000) {
+    if (lastActivityTime - _.now() > 30000) {
         lastActivityTime = _.now();
         return;
     }
@@ -734,8 +759,8 @@ function onBackgroundSuccess(newLocation) {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var distance = R * c; // Distance in KM
 
-    // console.log('geodistance, reading:  ' +  ret2string(distance * 1000));  //meters
-    // console.log('geotime, reading:  ' +  ret0string(_.now() - lastActivityTime));  //ms
+    console.log('geodistance, reading:  ' +  ret2string(distance * 1000));  //meters
+    console.log('geotime, reading:  ' +  ret0string(_.now() - lastActivityTime));  //ms
     
 
     if ((distance * 1000) < 2 || _.now() - lastActivityTime < 1500) {
@@ -743,7 +768,7 @@ function onBackgroundSuccess(newLocation) {
         return;
     }
 
-    if (distance * 1000 > 50) {
+    if (distance * 1000 > 250) {
         console.log('distance is too far, reset');
         lastLatitude = newLocation.latitude;
         lastLongitude = newLocation.longitude;
@@ -751,7 +776,7 @@ function onBackgroundSuccess(newLocation) {
         return;
     }
 
-    if (_.now() - lastActivityTime > 10000) {
+    if (_.now() - lastActivityTime > 20000) {
         console.log('too long between readings, reset');
         lastLatitude = newLocation.latitude;
         lastLongitude = newLocation.longitude;
