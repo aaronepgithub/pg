@@ -601,10 +601,10 @@ function startGPSTracking() {
 
 
     BackgroundGeolocation.configure({
-        // locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
+        locationProvider: BackgroundGeolocation.ACTIVITY_PROVIDER,
         desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
         activityType: 'Fitness',
-        //TODO...THIS IS TOO AGRESSIVE
+        //TODO...THIS IS TOO AGRESSIVE??
         stationaryRadius: 5,
         distanceFilter: 5,
         notificationTitle: 'Background tracking',
