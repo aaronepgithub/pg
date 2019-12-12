@@ -1582,4 +1582,3 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
 
 
 //TODO:  CHANGE FROM DISTANCE FILTER LOGIC
-//TODO:  MAKE TEXT ON LIST SMALLER
