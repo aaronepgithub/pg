@@ -1444,8 +1444,8 @@ $$('.my-popup-leaderboard').on('popup:opened', function (e) {
             // console.log(JSON.stringify(value));
             t2Content = '<tr>' +
                 '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
-                '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH' + '</td>' +
-                '<td class="numeric-cell">' + ret1string(value.a_scoreRoundLast) + '%' + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.a_speedRoundLast) + ' MPH' + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.a_scoreRoundLast) + '%' + '</td>' +
                 '</tr>';
                 $('#leaderboardTable').append(t2Content);
                 e++;
@@ -1476,9 +1476,9 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
             console.log(JSON.stringify(value));
             t3Content = '<tr>' +
                 '<td class="label-cell">' + String(value.timer) + '</td>' +
-                '<td class="numeric-cell">' + ret1string(value.speed) + ' MPH' + '</td>' +
-                '<td class="numeric-cell">' + ret1string(value.heartrate) + ' BPM' + '</td>' +
-                '<td class="numeric-cell">' + ret1string(value.score) + '%' + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.speed) + ' MPH' + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.heartrate) + ' BPM' + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.score) + '%' + '</td>' +
                 '</tr>';
                 $('#myroundsTable').append(t3Content);
                 e++;
@@ -1521,7 +1521,7 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         el: '.gauge',
         type: 'circle',
         value: 0.1,
-        size: 200,
+        size: 190,
         borderColor: '#ff0000',
         borderWidth: 15,
         valueText: '0',
@@ -1542,7 +1542,7 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         el: '.gauge2',
         type: 'circle',
         value: 0.1,
-        size: 200,
+        size: 190,
         borderColor: '#ff0000',
         borderWidth: 15,
         valueText: '0',
@@ -1581,3 +1581,5 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
   });
 
 
+//TODO:  CHANGE FROM DISTANCE FILTER LOGIC
+//TODO:  MAKE TEXT ON LIST SMALLER

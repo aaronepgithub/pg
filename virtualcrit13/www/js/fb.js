@@ -1,8 +1,5 @@
 var database = firebase.database();
 
-//TODO:  LISTEN FOR ONLY LEADER, THEN SPEAK...
-//TODO:  CHANGE FROM DISTANCE FILTER LOGIC
-
 //single round leader
 function listenRoundsLeader() {
   console.log('Listen for RoundLeader Change');
