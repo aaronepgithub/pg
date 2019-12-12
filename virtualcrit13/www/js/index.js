@@ -1521,7 +1521,7 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         el: '.gauge',
         type: 'circle',
         value: 0.1,
-        size: 190,
+        size: largeGaugeSize,
         borderColor: '#ff0000',
         borderWidth: 15,
         valueText: '0',
@@ -1542,7 +1542,7 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         el: '.gauge2',
         type: 'circle',
         value: 0.1,
-        size: 190,
+        size: largeGaugeSize,
         borderColor: '#ff0000',
         borderWidth: 15,
         valueText: '0',
@@ -1562,7 +1562,7 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         el: '.gauge3',
         type: 'semicircle',
         value: 0.1,
-        size: 220,
+        size: smallGaugeSize,
         borderColor: '#ff0000',
         borderWidth: 5,
         valueText: '0',
@@ -1580,5 +1580,46 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
     
   });
 
+  var largeGaugeSize = 185;
+  var smallGaugeSize = 220;
+
+
+$$('.size-click-plus').on('click', function (e) {
+    console.log('click plus');
+    console.log('increaseGaugeSize');
+
+    var gauge3 = app.gauge.get('.my-gauge3');
+    gauge3.update({
+      size: smallGaugeSize += 5,
+    });
+
+    var gauge2 = app.gauge.get('.my-gauge2');
+    gauge2.update({
+      size: largeGaugeSize += 5,
+    });
+    var gauge = app.gauge.get('.my-gauge');
+    gauge.update({
+      size: largeGaugeSize += 5,
+    });   
+});
+
+$$('.size-click-minus').on('click', function (e) {
+    console.log('click minus');
+    console.log('decreaseGaugeSize');
+
+    var gauge3 = app.gauge.get('.my-gauge3');
+    gauge3.update({
+      size: smallGaugeSize -= 5,
+    });
+    var gauge2 = app.gauge.get('.my-gauge2');
+    gauge2.update({
+      size: largeGaugeSize -= 5,
+    });
+    var gauge = app.gauge.get('.my-gauge');
+    gauge.update({
+      size: largeGaugeSize -= 5,
+    });  
+});
 
 //TODO:  CHANGE FROM DISTANCE FILTER LOGIC
+//TODO:  USER SETTINGS TO SET SIZE OF GAUGES
