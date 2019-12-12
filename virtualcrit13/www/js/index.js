@@ -55,10 +55,10 @@ function tockCallback() {
     var rd = 0;
     if (totals.distance && arrRoundDistances.length > 0) {
         rd = totals.distance - _.last(arrRoundDistances);
-        let rds = rd / (((countdownTime - tim.timSecondsPerRound) / 1000) / 60 / 60);
+        let rds = rd / (((countdownTime) / 1000) / 60 / 60);
 
         if (_.isFinite(rd) && _.isFinite(rds)) {
-            $$('.card1-content').html(ret1num(rd) + ' MILES/ROUND,  ' + ret1num(rds) + '  MPH/ROUND');
+            $$('.card1-content').html(ret1num(rd) + ' MILES/ROUND,  ' + ret2num(rds) + '  MPH/ROUND');
         }
     }
 
@@ -101,7 +101,7 @@ function newRound() {
     $$('.main-status-alerts').html('MY LAST CRIT:  ' + round.speed + ' MPH');
 
     if (tim.timAudio == "ON") {
-        if (round.speed > 0) {
+        if (round.speed > 2) {
             TTS.speak({
                 text: ret1string(round.speed) + ' Miles Per Hour.',
                 locale: 'en-US',
@@ -375,10 +375,10 @@ function startup() {
         console.log('It is android device');
         deviceType = 'android';
         console.log('andriod device ', deviceType);
-      } else {
-          console.log('device type ', deviceType);
-          
-      }
+    } else {
+        console.log('device type ', deviceType);
+
+    }
 
     //LOCAL STORAGE ON STARTUP
     //name
@@ -695,9 +695,9 @@ function startGPSTracking() {
         console.log('[INFO] BackgroundGeolocation auth status: ' + status.authorization);
         //$$('.main-status-alerts').text('[INFO] BackgroundGeolocation service is running', status.isRunning);
         console.log('BackgroundGeo is Running');
-        BackgroundGeolocation.getConfig(function(config) {
+        BackgroundGeolocation.getConfig(function (config) {
             console.log(JSON.stringify(config));
-          });
+        });
 
 
         // you don't need to check status before start (this is just the example)
@@ -733,9 +733,9 @@ function onBackgroundSuccess(newLocation) {
         lastLongitude = newLocation.longitude;
         lastActivityTime = _.now();  //ms
 
-        BackgroundGeolocation.getConfig(function(config) {
+        BackgroundGeolocation.getConfig(function (config) {
             console.log(JSON.stringify(config));
-          });
+        });
 
         timerStarter();
         return;
@@ -759,9 +759,9 @@ function onBackgroundSuccess(newLocation) {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var distance = R * c; // Distance in KM
 
-    console.log('geodistance, reading:  ' +  ret2string(distance * 1000));  //meters
-    console.log('geotime, reading:  ' +  ret0string(_.now() - lastActivityTime));  //ms
-    
+    console.log('geodistance, reading:  ' + ret2string(distance * 1000));  //meters
+    console.log('geotime, reading:  ' + ret0string(_.now() - lastActivityTime));  //ms
+
 
     if ((distance * 1000) < 2 || _.now() - lastActivityTime < 1500) {
         //console.log('too short, wait for the next one');
@@ -1459,7 +1459,7 @@ $$('.my-popup-leaderboard').on('popup:opened', function (e) {
 
 
     } else {
-        
+
         $('#leaderboardTable tbody tr').remove();
         let v = _.values(arrRounds);
         let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
@@ -1469,19 +1469,19 @@ $$('.my-popup-leaderboard').on('popup:opened', function (e) {
             // console.log(JSON.stringify(value));
             t2Content = '<tr>' +
                 '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
-                '<td class="numeric-cell">' + ret0string(value.a_speedRoundLast) + ' MPH' + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.a_speedRoundLast) + '</td>' +
                 '<td class="numeric-cell">' + ret0string(value.a_scoreRoundLast) + '%' + '</td>' +
                 '</tr>';
-                $('#leaderboardTable').append(t2Content);
-                e++;
-                
+            $('#leaderboardTable').append(t2Content);
+            e++;
+
         });
     }
-    
-  });
+
+});
 
 
-  //t3
+//t3
 
 var t3Content = '';
 $$('.my-popup-myrounds').on('popup:opened', function (e) {
@@ -1491,7 +1491,7 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
         t3Content = '<tr><td class="label-cell">AWAITING RESULTS</td><td class="numeric-cell"></td><td class="numeric-cell"></td><td class="numeric-cell"></td></tr>';
         $('#myroundsTable').append(t3Content);
     } else {
-        
+
         $('#myroundsTable tbody tr').remove();
         // let v = _.values(arrRounds);
         // let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
@@ -1501,22 +1501,22 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
             console.log(JSON.stringify(value));
             t3Content = '<tr>' +
                 '<td class="label-cell">' + String(value.timer) + '</td>' +
-                '<td class="numeric-cell">' + ret0string(value.speed) + ' MPH' + '</td>' +
-                '<td class="numeric-cell">' + ret0string(value.heartrate) + ' BPM' + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.speed) + '</td>' +
+                '<td class="numeric-cell">' + ret0string(value.heartrate) + '</td>' +
                 '<td class="numeric-cell">' + ret0string(value.score) + '%' + '</td>' +
                 '</tr>';
-                $('#myroundsTable').append(t3Content);
-                e++;
-                
+            $('#myroundsTable').prepend(t3Content);
+            e++;
+
         });
     }
-    
-  });
+
+});
 
 
-  var firstOpenDashboard = true;
+var firstOpenDashboard = true;
 
-  $$('.my-popup-dashboard').on('popup:opened', function (e) {
+$$('.my-popup-dashboard').on('popup:opened', function (e) {
     console.log('my-popup-dashboard popup opened');
 
     if (firstOpenDashboard == true) {
@@ -1525,16 +1525,16 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
             spaceBetween: 100,
             // direction: 'vertical',
             // loop: true,
-        
+
             // If we need pagination
             // pagination: {
             //   el: '.swiper-pagination',
             // },
-        
+
             // Navigation arrows
             navigation: {
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev',
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
         });
     }
@@ -1602,11 +1602,11 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
             }
         }
     })
-    
-  });
 
-  var largeGaugeSize = 185;
-  var smallGaugeSize = 220;
+});
+
+var largeGaugeSize = 185;
+var smallGaugeSize = 220;
 
 
 $$('.size-click-plus').on('click', function (e) {
@@ -1615,17 +1615,17 @@ $$('.size-click-plus').on('click', function (e) {
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
-      size: smallGaugeSize += 5,
+        size: smallGaugeSize += 5,
     });
 
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
-      size: largeGaugeSize += 5,
+        size: largeGaugeSize += 5,
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
-      size: largeGaugeSize += 5,
-    });   
+        size: largeGaugeSize += 5,
+    });
 });
 
 $$('.size-click-minus').on('click', function (e) {
@@ -1634,16 +1634,16 @@ $$('.size-click-minus').on('click', function (e) {
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
-      size: smallGaugeSize -= 5,
+        size: smallGaugeSize -= 5,
     });
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
-      size: largeGaugeSize -= 5,
+        size: largeGaugeSize -= 5,
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
-      size: largeGaugeSize -= 5,
-    });  
+        size: largeGaugeSize -= 5,
+    });
 });
 
 //TODO:  CHANGE FROM DISTANCE FILTER LOGIC

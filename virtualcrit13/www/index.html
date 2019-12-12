@@ -65,7 +65,7 @@
             <div class="segmented segmented-raised">
               <!-- <a class="button tab-link tab1 dynamic-pop" href="#tab1">1</a> -->
               <a class="button tab-link popup-open" href="#" data-popup=.my-popup-dashboard>1</a>
-              <a class="button tab-link popup-open" href="#" data-popup=.my-popup-leaderboard>2</a>
+              <a class="button tab-link popup-open open-my-leaderboard" href="#" data-popup=.my-popup-leaderboard>2</a>
               <a class="button tab-link popup-open" href="#" data-popup=.my-popup-myrounds>3</a>
             </div>
           </div>
@@ -433,9 +433,9 @@
                       <thead>
                         <tr>
                           <th class="label-cell">TIME</th>
-                          <th class="numeric-cell">SPEED</th>
-                          <th class="numeric-cell">HR</th>
-                          <th class="numeric-cell">SCORE</th>
+                          <th class="numeric-cell">SPEED (MPH)</th>
+                          <th class="numeric-cell">HR (BPM)</th>
+                          <th class="numeric-cell">SCORE (%MAX)</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -485,18 +485,18 @@
               </div>
 
 
-                <!-- Floating Action Button -->
-  <div class="fab fab-right-bottom size-click-plus">
-    <a href="#">
-      +
-    </a>
-  </div>
-  <!-- Another Floating Action Button -->
-  <div class="fab fab-left-bottom size-click-minus">
-    <a href="#">
-      -
-    </a>
-  </div>
+              <!-- Floating Action Button -->
+              <div class="fab fab-right-bottom size-click-plus">
+                <a href="#">
+                  +
+                </a>
+              </div>
+              <!-- Another Floating Action Button -->
+              <div class="fab fab-left-bottom size-click-minus">
+                <a href="#">
+                  -
+                </a>
+              </div>
 
 
               <div class="page-content">
@@ -504,7 +504,7 @@
                   <div class="swiper-wrapper">
                     <!-- SWIPE1 -->
                     <div class="swiper-slide">
-                    <!-- <div class="swiper-slide elem-to-center"></div> -->
+                      <!-- <div class="swiper-slide elem-to-center"></div> -->
 
                       <!-- <div class="block-title"></div> -->
                       <div class="block block-dashboard">
@@ -546,13 +546,15 @@
 
                         <div class="block">
                           <!-- <div class="gauge demo-gauge my-gauge"></div> -->
-                        
+
                           <div class="card">
-                              <div class="card-header card1-header">Card header</div>
-                              <div class="card-content card-content-padding card1-content">Card with header and footer. Card headers are used to display card titles and footers for additional information or just for custom actions.</div>
-                              <div class="card-footer card1-footer">Card Footer</div>
-                            </div>
-                        
+                            <div class="card-header card1-header">Card header</div>
+                            <div class="card-content card-content-padding card1-content">Card with header and footer.
+                              Card headers are used to display card titles and footers for additional information or
+                              just for custom actions.</div>
+                            <div class="card-footer card1-footer">Card Footer</div>
+                          </div>
+
                         </div>
 
                         <!-- <div class="block-footer">SWIPE3 FOOTER</div> -->
@@ -627,8 +629,8 @@
                         <tr>
 
                           <th class="label-cell">RACER</th>
-                          <th class="numeric-cell">SPEED</th>
-                          <th class="numeric-cell">SCORE</th>
+                          <th class="numeric-cell">SPEED (MPH)</th>
+                          <th class="numeric-cell">SCORE (%MAX)</th>
                         </tr>
                       </thead>
                       <tbody>
