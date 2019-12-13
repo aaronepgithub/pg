@@ -53,29 +53,54 @@ function tockCallback() {
     $$('.system-status').text("Running");
 
     var rd = 0;
+    var rds = 0;
     if (totals.distance && arrRoundDistances.length > 0) {
         rd = totals.distance - _.last(arrRoundDistances);
-        let rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
+        let secElapsedInRound = tim.timSecondsPerRound - (countdownTime/1000);
+        console.log('rd, ', rd);
+        console.log('secElapsedInRound, ', secElapsedInRound);
+        
+//        rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
+    if (rd < .01) {
+        console.log('not far enough, return');
+        return;
+    }
+    if (secElapsedInRound < 2 || secElapsedInRound > (tim.timSecondsPerRound - 2)) {
+        console.log('not enough or too much time, return');
+        return;
+    }
 
-        if (_.isFinite(rd) && _.isFinite(rds)) {
-            $$('.card1-content').html('  MPH/ROUND:  ' + ret2num(rds));
+        if (_.isFinite(rd)) {
+            console.log('rd is a number, ', rd);
+
+            if (_.isFinite(rd / (secElapsedInRound / 60 / 60))) {
+                rds = ret2num(rd / (secElapsedInRound / 60 / 60));
+                console.log('rds, ', rds);
+                
+            // $$('.card1-content').html('  MPH/ROUND:  ' + ret2num(rds));
             // $$('.card1-header').html('ROUND ' + roundsComplete + ' : ' + ret2num(rd) + ' MILES/CRIT');
-            $$('.card1-header').html(ret2num(rd) + ' MILES/CRIT');
+            $$('.card1-header').html(ret2string(rd) + ' MILES/CRIT');
             // $$('.card1-footer').html(timer.msToTimecode(countdownTime) + ', ' + ret0string(countdownTime / 1000) + ', ' + ret0string(tim.timSecondsPerRound - (countdownTime / 1000))  );
             $$('.card1-footer').html(timer.msToTimecode(countdownTime));
 
-            var gauge4 = app.gauge.get('.my-gauge4');
-            gauge4.update({
-                value: ret1num(tim.timSecondsPerRound - (countdownTime / 1000)) / tim.timSecondsPerRound,
-                valueText: ret1string(rds),
-            });
+            if (popupGauge) {
+                var gauge4 = app.gauge.get('.my-gauge4');
+                gauge4.update({
+                    value: ret1num(secElapsedInRound/tim.timSecondsPerRound),
+                    valueText: ret1string(rds),
+                });
+                } else {
+                    console.log('something bad happend');
+                    return;
+                    
+                }
+            }
+
+            
+
 
         }
     }
-
-    // $$('.card1-header').html('ROUND ' + roundsComplete);
-    // $$('.card1-footer').html(timer.msToTimecode(countdownTime) + ', ' + ret0string(countdownTime / 1000) + ', ' + ret0string(tim.timSecondsPerRound - (countdownTime / 1000))  );
-
 }
 
 //END OF ROUND
