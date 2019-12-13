@@ -58,12 +58,23 @@ function tockCallback() {
         let rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
 
         if (_.isFinite(rd) && _.isFinite(rds)) {
-            $$('.card1-content').html(ret2num(rd) + ' MILES/ROUND,  ' + ret2num(rds) + '  MPH/ROUND');
+            $$('.card1-content').html('  MPH/ROUND:  ' + ret2num(rds));
+            // $$('.card1-header').html('ROUND ' + roundsComplete + ' : ' + ret2num(rd) + ' MILES/CRIT');
+            $$('.card1-header').html(ret2num(rd) + ' MILES/CRIT');
+            // $$('.card1-footer').html(timer.msToTimecode(countdownTime) + ', ' + ret0string(countdownTime / 1000) + ', ' + ret0string(tim.timSecondsPerRound - (countdownTime / 1000))  );
+            $$('.card1-footer').html(timer.msToTimecode(countdownTime));
+
+            var gauge4 = app.gauge.get('.my-gauge4');
+            gauge4.update({
+                value: ret1num(tim.timSecondsPerRound - (countdownTime / 1000)) / tim.timSecondsPerRound,
+                valueText: ret1string(rds),
+            });
+
         }
     }
 
-    $$('.card1-header').html('ROUND ' + roundsComplete);
-    $$('.card1-footer').html(timer.msToTimecode(countdownTime));
+    // $$('.card1-header').html('ROUND ' + roundsComplete);
+    // $$('.card1-footer').html(timer.msToTimecode(countdownTime) + ', ' + ret0string(countdownTime / 1000) + ', ' + ret0string(tim.timSecondsPerRound - (countdownTime / 1000))  );
 
 }
 
@@ -1425,6 +1436,26 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         }
     })
 
+    var gauge4 = app.gauge.create({
+        el: '.gauge4',
+        type: 'circle',
+        value: 0.1,
+        size: largeGaugeSize,
+        borderColor: '#ff0000',
+        borderWidth: 10,
+        valueText: '0',
+        valueFontSize: 45,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 15,
+        labelText: 'MPH/CRIT',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            }
+        }
+    })
+
 });
 
 var largeGaugeSize = 185;
@@ -1434,6 +1465,11 @@ var smallGaugeSize = 220;
 $$('.size-click-plus').on('click', function (e) {
     console.log('click plus');
     console.log('increaseGaugeSize');
+
+    var gauge4 = app.gauge.get('.my-gauge4');
+    gauge4.update({
+        size: largeGaugeSize += 5,
+    });
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
@@ -1453,6 +1489,11 @@ $$('.size-click-plus').on('click', function (e) {
 $$('.size-click-minus').on('click', function (e) {
     console.log('click minus');
     console.log('decreaseGaugeSize');
+
+    var gauge4 = app.gauge.get('.my-gauge4');
+    gauge4.update({
+        size: largeGaugeSize -= 5,
+    });
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
