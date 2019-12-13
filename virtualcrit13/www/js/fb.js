@@ -221,7 +221,7 @@ function updateMyRoundsTable() {
       '<td class="numeric-cell">' + ret0string(value.heartrate) + '</td>' +
       '<td class="numeric-cell">' + ret0string(value.score) + '%</td>' +
       '</tr>';
-    $('#myroundsTable').prepend(t2Content);
+    $('#myroundsTable').prepend(t3Content);
     e++;
   });
 }
@@ -247,7 +247,7 @@ function postRound() {
       '<td class="numeric-cell">' + ret0string(value.heartrate) + '</td>' +
       '<td class="numeric-cell">' + ret0string(value.score) + '%</td>' +
       '</tr>';
-    $('#myroundsTable').prepend(t2Content);
+    $('#myroundsTable').prepend(t3Content);
     e++;
 
   });

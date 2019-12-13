@@ -55,10 +55,10 @@ function tockCallback() {
     var rd = 0;
     if (totals.distance && arrRoundDistances.length > 0) {
         rd = totals.distance - _.last(arrRoundDistances);
-        let rds = rd / (((countdownTime) / 1000) / 60 / 60);
+        let rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
 
         if (_.isFinite(rd) && _.isFinite(rds)) {
-            $$('.card1-content').html(ret1num(rd) + ' MILES/ROUND,  ' + ret2num(rds) + '  MPH/ROUND');
+            $$('.card1-content').html(ret2num(rd) + ' MILES/ROUND,  ' + ret2num(rds) + '  MPH/ROUND');
         }
     }
 
@@ -759,8 +759,8 @@ function onBackgroundSuccess(newLocation) {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var distance = R * c; // Distance in KM
 
-    console.log('geodistance, reading:  ' + ret2string(distance * 1000));  //meters
-    console.log('geotime, reading:  ' + ret0string(_.now() - lastActivityTime));  //ms
+    // console.log('geodistance, reading:  ' + ret2string(distance * 1000));  //meters
+    // console.log('geotime, reading:  ' + ret0string(_.now() - lastActivityTime));  //ms
 
 
     if ((distance * 1000) < 2 || _.now() - lastActivityTime < 1500) {
@@ -1145,84 +1145,6 @@ function calculateSpeed() {
 
 }
 
-// function OLDcalculateStatsOLD() {
-//     console.log('calculateStats Start');
-
-//     if (!previousSample) {
-//         console.log('!preiousSample');
-//         startDistance = currentSample.wheel * tim.timWheelSize / 1000 / 1000; // km
-//         previousSample = currentSample;
-//         return;
-//     }
-
-//     var distance, cadence, speed;
-//     if (hasWheel) {
-//         console.log('hasWheel');
-//         let wheelTimeDiff = diffForSample(currentSample.wheelTime, previousSample.wheelTime, UINT16_MAX);
-//         console.log('wheelTimeDiff', wheelTimeDiff);
-
-//         wheelTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
-//         let wheelDiff = diffForSample(currentSample.wheel, previousSample.wheel, UINT32_MAX);
-//         console.log('wheelDiff', wheelDiff);
-
-
-//         var sampleDistance = wheelDiff * tim.timWheelSize / 1000; // distance in meters
-//         console.log('sampleDistance', sampleDistance);
-
-//         if (wheelTimeDiff < 10 && sampleDistance > 0 && sampleDistance < 10) {
-//             totalWheelTime += wheelTimeDiff;
-//             totalWheelRevs += wheelDiff;
-//             console.log('totalWheelTime, totalWheelRevs ', totalWheelTime, totalWheelRevs);
-
-
-//             //speed = (wheelTimeDiff == 0) ? 0 : sampleDistance / totalWheelTime * 3.6; // km/hr
-//             speed = (sampleDistance / 1000 * 0.62137) / (wheelTimeDiff / 60 / 60);
-//             distance = ((totalWheelRevs * tim.timWheelSize) / 1000 / 1000) * 0.62137;  //mi
-//             bluetoothSpeedAverage = distance / (totalWheelTime / 60 / 60) * 0.62137;  //mi/hr
-//             console.log('spd, dist, avg ', speed, distance, bluetoothSpeedAverage);
-
-//         }
-
-//     }
-
-//     if (hasCrank) {
-//         console.log('hasCrank');
-
-//         let crankTimeDiff = diffForSample(currentSample.crankTime, previousSample.crankTime, UINT16_MAX);
-//         crankTimeDiff /= 1024; // Convert from fractional seconds (roughly ms) -> full seconds
-//         let crankDiff = diffForSample(currentSample.crank, previousSample.crank, UINT16_MAX);
-
-//         totalCrankRevs += crankDiff;
-//         totalCrankTime += crankTimeDiff;
-
-//         cadence = (crankTimeDiff == 0) ? 0 : (60 * crankDiff / crankTimeDiff); // RPM
-//         bluetoothCadenceAverage = (60 * totalCrankRevs / totalCrankTime); // RPM
-//     }
-
-//     if (bluetoothStats) {
-//         console.log('bluetoothStats has a value');
-
-//         bluetoothStats = {
-//             cadence: bluetoothStats.cadence * (1 - updateRatio) + cadence * updateRatio,
-//             distance: distance,
-//             speed: bluetoothStats.speed * (1 - updateRatio) + speed * updateRatio,
-//             avgSpeed: bluetoothSpeedAverage,
-//             avgCadence: bluetoothCadenceAverage,
-//             activeTime: bluetoothSpeedActiveTime
-//         };
-//         console.log('bluetoothStats1: ' + JSON.stringify(bluetoothStats));
-
-//     } else {
-//         bluetoothStats = {
-//             cadence: cadence,
-//             distance: distance,
-//             speed: speed
-//         };
-//         console.log('bluetoothStats2: ' + JSON.stringify(bluetoothStats));
-//     }
-//     previousSample = currentSample;
-// }
-// END BLUETOOTH CALC
 
 //  BLE SIMULATOR
 
@@ -1338,113 +1260,13 @@ function ui(k, v) {
 }
 
 
-//DYANMIC POPUPS
-//POPUP GAUGE
-// var popupHtml = '<div id = "elem-to-center" class="popup center-popup">' +
-//     // '<div class="block-header-gauge">SWIPE UP/DOWN TO DISMISS</div>' +
-//     '<div class="block text-align-center">' +
-//     '<div class="gauge demo-gauge my-gauge"></div>' +
-//     '</div>' +
-//     '<div class="block-header-gauge"></div>' +
-//     '<div class="block text-align-center">' +
-//     '<div class="gauge2 demo-gauge2 my-gauge2"></div>' +
-//     '</div>' +
-//     '<div class="block-footer"></div>' +
-//     '</div>';
-
-
-// Create dynamic Popup
-// var dynamicPopup = app.popup.create({
-//     content: popupHtml,
-//     backdrop: true,
-//     closeByBackdropClick: true,
-//     swipeToClose: true,
-//     // Events
-//     on: {
-//         open: function (popup) {
-//             console.log('Popup open');
-
-//             var gauge = app.gauge.create({
-//                 el: '.gauge',
-//                 type: 'circle',
-//                 value: 0.1,
-//                 size: 220,
-//                 borderColor: '#ff0000',
-//                 borderWidth: 20,
-//                 valueText: '0',
-//                 valueFontSize: 55,
-//                 valueTextColor: '#ff0000',
-//                 valueFontWeight: 700,
-//                 labelFontSize: 20,
-//                 labelText: 'MPH',
-//                 // valueText: 'Speed',
-//                 on: {
-//                     beforeDestroy: function () {
-//                         console.log('Gauge will be destroyed')
-//                     },
-//                 }
-//             })
 
 
 
-//             var gauge2 = app.gauge.create({
-//                 el: '.gauge2',
-//                 type: 'circle',
-//                 value: 0.1,
-//                 size: 220,
-//                 borderColor: '#ff0000',
-//                 borderWidth: 20,
-//                 valueText: '0',
-//                 valueFontSize: 55,
-//                 valueTextColor: '#ff0000',
-//                 valueFontWeight: 700,
-//                 labelFontSize: 20,
-//                 labelText: 'BPM',
-//                 on: {
-//                     beforeDestroy: function () {
-//                         console.log('Gauge will be destroyed')
-//                     }
-//                 }
-//             })
-
-//         },
-//         opened: function (popup) {
-//             console.log('Popup opened');
-//             popupGauge = true;
-//         },
-//     }
-// });
-// // Events also can be assigned on instance later
-// dynamicPopup.on('close', function (popup) {
-//     console.log('Popup close');
-// });
-// dynamicPopup.on('closed', function (popup) {
-//     popupGauge = false;
-//     console.log('Popup closed');
-// });
-
-// // Open dynamic popup from menu bars 
-// $$('.dynamic-pop').on('click', function () {
-//     dynamicPopup.open();
-// });
 
 var popupGauge = false;
 var popupCounter = 0;
 
-//NOT USING...
-// function changePopupContent() {
-//     console.log('changePopupContent');
-//     if (popupCounter == 0) { popupCounter += 1; return; }
-//     popupCounter += 1;
-//     var gauge = app.gauge.get('.my-gauge');
-//     gauge.destroy();
-//     var gauge2 = app.gauge.get('.my-gauge2');
-//     gauge2.destroy();
-//     $('#elem-to-center').html('<div class="block-header">NEW</div>' +
-//         '<div class="block text-align-center">' +
-//         '<div> SOMETHING IN THE MIDDLE </div>' +
-//         '</div>');
-// }
 
 
 
@@ -1469,8 +1291,8 @@ $$('.my-popup-leaderboard').on('popup:opened', function (e) {
             // console.log(JSON.stringify(value));
             t2Content = '<tr>' +
                 '<td class="label-cell">' + String(value.fb_timName).toUpperCase() + '</td>' +
-                '<td class="numeric-cell">' + ret0string(value.a_speedRoundLast) + '</td>' +
-                '<td class="numeric-cell">' + ret0string(value.a_scoreRoundLast) + '%' + '</td>' +
+                '<td class="numeric-cell">' + ret1string(value.a_speedRoundLast) + ' MPH</td>' +
+                '<td class="numeric-cell">' + ret1string(value.a_scoreRoundLast) + '%MAX' + '</td>' +
                 '</tr>';
             $('#leaderboardTable').append(t2Content);
             e++;
