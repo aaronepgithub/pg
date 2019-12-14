@@ -1576,36 +1576,36 @@ $$('.size-click-plus').on('click', function (e) {
     var gauge5 = app.gauge.get('.my-gauge5');
     gauge5.update({
         size: smallGaugeSize += 5,
-        valueFontSize: valFontSize +=5,
+        
     });
 
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
         size: largeGaugeSize += 5,
-        valueFontSize: valFontSize +=5,
+        
     });
 
     var gauge3b = app.gauge.get('.my-gauge3b');
     gauge3b.update({
         size: largeGaugeSize += 5,
-        valueFontSize: valFontSize +=5,
+        
     });
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
         size: smallGaugeSize += 5,
-        valueFontSize: valFontSize +=5,
+        
     });
 
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
         size: largeGaugeSize += 5,
-        valueFontSize: valFontSize +=5,
+        
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
         size: largeGaugeSize += 5,
-        valueFontSize: valFontSize +=5,
+        
     });
 });
 
@@ -1616,35 +1616,35 @@ $$('.size-click-minus').on('click', function (e) {
     var gauge5 = app.gauge.get('.my-gauge5');
     gauge5.update({
         size: smallGaugeSize -= 5,
-        valueFontSize: valFontSize -=5,
+        
     });
 
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
         size: largeGaugeSize -= 5,
-        valueFontSize: valFontSize -=5,
+        
     });
 
     var gauge3b = app.gauge.get('.my-gauge3b');
     gauge3b.update({
         size: largeGaugeSize -= 5,
-        valueFontSize: valFontSize -=5,
+        
     });
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
         size: smallGaugeSize -= 5,
-        valueFontSize: valFontSize -=5,
+        
     });
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
         size: largeGaugeSize -= 5,
-        valueFontSize: valFontSize -=5,
+        
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
         size: largeGaugeSize -= 5,
-        valueFontSize: valFontSize -=5,
+        
     });
 });
 
