@@ -57,30 +57,29 @@ function tockCallback() {
     if (totals.distance && arrRoundDistances.length > 0) {
         rd = totals.distance - _.last(arrRoundDistances);
         let secElapsedInRound = tim.timSecondsPerRound - (countdownTime/1000);
-        console.log('rd, ', rd);
-        console.log('secElapsedInRound, ', secElapsedInRound);
+        // console.log('rd, ', rd);
+        // console.log('secElapsedInRound, ', secElapsedInRound);
         
 //        rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
     if (rd < .01) {
-        console.log('not far enough, return');
+        // console.log('not far enough, return');
         return;
     }
     if (secElapsedInRound < 2 || secElapsedInRound > (tim.timSecondsPerRound - 2)) {
-        console.log('not enough or too much time, return');
+        // console.log('not enough or too much time, return');
         return;
     }
 
         if (_.isFinite(rd)) {
-            console.log('rd is a number, ', rd);
+            // console.log('rd is a number, ', rd);
 
             if (_.isFinite(rd / (secElapsedInRound / 60 / 60))) {
                 rds = ret2num(rd / (secElapsedInRound / 60 / 60));
-                console.log('rds, ', rds);
+                // console.log('rds, ', rds);
                 
             // $$('.card1-content').html('  MPH/ROUND:  ' + ret2num(rds));
             // $$('.card1-header').html('ROUND ' + roundsComplete + ' : ' + ret2num(rd) + ' MILES/CRIT');
             $$('.card1-header').html(ret2string(rd) + ' MILES/CRIT');
-            // $$('.card1-footer').html(timer.msToTimecode(countdownTime) + ', ' + ret0string(countdownTime / 1000) + ', ' + ret0string(tim.timSecondsPerRound - (countdownTime / 1000))  );
             $$('.card1-footer').html(timer.msToTimecode(countdownTime));
 
             if (popupGauge) {
@@ -90,7 +89,7 @@ function tockCallback() {
                     valueText: ret1string(rds),
                 });
                 } else {
-                    console.log('something bad happend');
+                    // console.log('something bad happend');
                     return;
                     
                 }
@@ -250,21 +249,30 @@ function startBluetoothConnection(i) {
             ble.startNotification(deviceClicked.id, "180d", "2a37", function (b) {
                 var data = new Uint8Array(b);
                 console.log('notify success HR: ' + data[1]);
-
+                let hrVal = data[1];
                 updateChip(p.name, 1, data[1]);
                 ui('.item-hr', ret0string(data[1]) + ' BPM');
                 heartrateReadings.push(data[1]);
                 heartrateReadingsRound.push(data[1]);
                 ui('.item-hr-avg', (_.mean(heartrateReadings).toFixed(1)) + ' BPM (AVG)');
                 totals.heartrate = ret1num(_.mean(heartrateReadings));
+                
 
                 if (popupGauge) {
                     var gauge2 = app.gauge.get('.my-gauge2');
                     gauge2.update({
-                        value: (data[1] / 2) / 100,
-                        valueText: ret0string(data[1]),
+                        value: (hrVal / 2) / 100,
+                        valueText: ret0string(hrVal),
                         labelText: 'BPM',
                     });
+
+                    var gauge5 = app.gauge.get('.my-gauge5');
+                    gauge5.update({
+                        value: (Math.round(hrVal / tim.timMaxHeartate * 100 * 10) / 10) / 100,
+                        valueText: ret0string(hrVal),
+                        labelText: 'BPM',
+                    });
+
                 }
 
 
@@ -470,18 +478,6 @@ function startup() {
 $$('.start-system').on('click', function (e) {
     console.log('click start-system');
     timerStarter();
-    // if (startTime) {
-    //     console.log('running');
-    //     return;
-    // };
-
-    // startTime = _.now();
-    // timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
-    // listenTotals();
-
-    // setTimeout(function() {
-    //     listenRounds();
-    // }, 10000);
 });
 
 
@@ -1069,6 +1065,20 @@ function calculateCadence() {
         console.log('hasCadence...ui update');
         updateChip('na', 3, ret0string(bluetoothValues.cadence) + ' RPM');
         ui('.item-cadence', ret0string(bluetoothValues.cadence) + ' RPM');
+
+
+        if (popupGauge) {
+            if (bluetoothValues.cadence > 10) {
+                var gauge3b = app.gauge.get('.my-gauge3b');
+                gauge3b.update({
+                    value: (bluetoothValues.cadence) / 100,
+                    valueText: ret0string(ret0string(bluetoothValues.cadence)),
+                    labelText: 'BPM',
+                });
+            }
+        }
+
+
     }
     previousCadenceSample = currentCadenceSample;
 }
@@ -1158,6 +1168,12 @@ function calculateSpeed() {
                 valueText: ret1string(bluetoothValues.speed),
             });
 
+            var gauge3 = app.gauge.get('.my-gauge3');
+            gauge3.update({
+                value: (bluetoothValues.speed * 3.75) / 100,
+                valueText: ret1string(bluetoothValues.speed),
+            });
+
 
             if (totals.heartrate < 1) {
                 if (popupGauge) {
@@ -1202,7 +1218,7 @@ function startBleSimulator() {
         wt += (1000 + Math.round(Math.random() * 1000));
         bleSimdata.push({ 'wheel': w, 'wheelTime': wt });
     }
-    console.log('bleSimdata', JSON.stringify(bleSimdata));
+    // console.log('bleSimdata', JSON.stringify(bleSimdata));
 
 
     i = 0;
@@ -1461,6 +1477,29 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         }
     })
 
+    //CADENCE
+    var gauge3b = app.gauge.create({
+        el: '.gauge3b',
+        type: 'circle',
+        value: 0.1,
+        size: largeGaugeSize,
+        borderColor: '#ff0000',
+        borderWidth: 5,
+        valueText: '0',
+        valueFontSize: 45,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 20,
+        labelText: 'RPM',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            }
+        }
+    })
+
+
+
     var gauge4 = app.gauge.create({
         el: '.gauge4',
         type: 'circle',
@@ -1481,6 +1520,27 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         }
     })
 
+    //CRIT, SMALL GAUGE
+    var gauge5 = app.gauge.create({
+        el: '.gauge5',
+        type: 'semicircle',
+        value: 0.1,
+        size: smallGaugeSize,
+        borderColor: '#ff0000',
+        borderWidth: 5,
+        valueText: '0',
+        valueFontSize: 45,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 15,
+        labelText: 'HEARTRATE',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            }
+        }
+    })
+
 });
 
 var largeGaugeSize = 185;
@@ -1491,8 +1551,18 @@ $$('.size-click-plus').on('click', function (e) {
     console.log('click plus');
     console.log('increaseGaugeSize');
 
+    var gauge5 = app.gauge.get('.my-gauge5');
+    gauge5.update({
+        size: smallGaugeSize += 5,
+    });
+
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
+        size: largeGaugeSize += 5,
+    });
+
+    var gauge3b = app.gauge.get('.my-gauge3b');
+    gauge3b.update({
         size: largeGaugeSize += 5,
     });
 
@@ -1515,8 +1585,18 @@ $$('.size-click-minus').on('click', function (e) {
     console.log('click minus');
     console.log('decreaseGaugeSize');
 
+    var gauge5 = app.gauge.get('.my-gauge5');
+    gauge5.update({
+        size: smallGaugeSize -= 5,
+    });
+
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
+        size: largeGaugeSize -= 5,
+    });
+
+    var gauge3b = app.gauge.get('.my-gauge3b');
+    gauge3b.update({
         size: largeGaugeSize -= 5,
     });
 
