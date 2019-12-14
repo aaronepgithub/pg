@@ -44,16 +44,18 @@ var totalElapsedTime;
 var roundStartTime;
 
 function tockCallback() {
-    //console.log('tockCallback');
+    console.log('tockCallback');
     var countdownTime = timer.lap();  //elapsed in milli, per round
     totalElapsedTime = _.now() - startTime;
 
-    // console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 1) * 1000));
+    console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 1) * 5000));
     
     if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 1) * 1000)) {
         console.log('lost time, reset');
-        timer.stop();
-        tockComplete();
+        $$('.main-status-alerts').html('LOST TIME...');
+        $$('.system-status').text("LOST TIME...");
+        // timer.stop();
+        // tockComplete();
     }
 
     $$('.total-time').text(timer.msToTimecode(totalElapsedTime));
@@ -258,7 +260,7 @@ function startBluetoothConnection(i) {
             changeLi(i, 'HR');
             ble.startNotification(deviceClicked.id, "180d", "2a37", function (b) {
                 var data = new Uint8Array(b);
-                console.log('notify success HR: ' + data[1]);
+                // console.log('notify success HR: ' + data[1]);
                 let hrVal = data[1];
                 updateChip(p.name, 1, data[1]);
                 ui('.item-hr', ret0string(data[1]) + ' BPM');
