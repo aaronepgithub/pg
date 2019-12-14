@@ -41,12 +41,21 @@ var timer = new Tock({
 //var secondsPerRound = 60;
 var roundsComplete = 0;
 var totalElapsedTime;
+var roundStartTime;
 
 function tockCallback() {
     //console.log('tockCallback');
     var countdownTime = timer.lap();  //elapsed in milli, per round
-
     totalElapsedTime = _.now() - startTime;
+
+    // console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 1) * 1000));
+    
+    if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 1) * 1000)) {
+        console.log('lost time, reset');
+        timer.stop();
+        tockComplete();
+    }
+
     $$('.total-time').text(timer.msToTimecode(totalElapsedTime));
     $$('.center-main').html(timer.msToTimecode(totalElapsedTime));
     // $$('.left-main').html('<i class="fa fa-circle"></i>');
@@ -112,6 +121,7 @@ function tockComplete() {
 
 function newRound() {
     console.log('newRound, roundsComplete: ', roundsComplete);
+    roundStartTime = _.now();
     arrRoundDistances.push(totals.distance);  //already in miles
 
     // console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
@@ -492,6 +502,7 @@ function timerStarter() {
         return;
     };
     startTime = _.now();
+    roundStartTime = _.now();
     timer.start(tim.timSecondsPerRound * 1000); //Set round duration for cb
     $$('.center-main').html('');
     $$('.left-main').html('<div class="chip color-green"><div class="chip-label">ON</div></div>');
@@ -750,8 +761,18 @@ var totalActivyTime = 0;
 var gpsAvgSpeed = -1;
 var gpsSpeed = -1;
 
+var savedLocations = [];
+
+function publishSavedLocations() {
+    console.log('publishSavedLocations');
+    if (savedLocations.length < 20) {return;}
+
+}
+
 function onBackgroundSuccess(newLocation) {
     // console.log('onBackgroundSuccess');
+
+    savedLocations.push(newLocation);
 
     if (lastLatitude == -2) {
         lastLatitude = -1;
@@ -1422,9 +1443,9 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         value: 0.1,
         size: largeGaugeSize,
         borderColor: '#ff0000',
-        borderWidth: 15,
+        borderWidth: 10,
         valueText: '0',
-        valueFontSize: 45,
+        valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,
@@ -1443,9 +1464,9 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         value: 0.1,
         size: largeGaugeSize,
         borderColor: '#ff0000',
-        borderWidth: 15,
+        borderWidth: 10,
         valueText: '0',
-        valueFontSize: 45,
+        valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,
@@ -1465,7 +1486,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         borderColor: '#ff0000',
         borderWidth: 5,
         valueText: '0',
-        valueFontSize: 45,
+        valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,
@@ -1486,7 +1507,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         borderColor: '#ff0000',
         borderWidth: 5,
         valueText: '0',
-        valueFontSize: 45,
+        valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,
@@ -1508,7 +1529,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         borderColor: '#ff0000',
         borderWidth: 10,
         valueText: '0',
-        valueFontSize: 45,
+        valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 15,
@@ -1529,7 +1550,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         borderColor: '#ff0000',
         borderWidth: 5,
         valueText: '0',
-        valueFontSize: 45,
+        valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 15,
@@ -1543,8 +1564,9 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
 
 });
 
-var largeGaugeSize = 185;
-var smallGaugeSize = 220;
+var largeGaugeSize = 190;
+var smallGaugeSize = 200;
+var valFontSize = 45;
 
 
 $$('.size-click-plus').on('click', function (e) {
@@ -1554,30 +1576,36 @@ $$('.size-click-plus').on('click', function (e) {
     var gauge5 = app.gauge.get('.my-gauge5');
     gauge5.update({
         size: smallGaugeSize += 5,
+        valueFontSize: valFontSize +=5,
     });
 
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
         size: largeGaugeSize += 5,
+        valueFontSize: valFontSize +=5,
     });
 
     var gauge3b = app.gauge.get('.my-gauge3b');
     gauge3b.update({
         size: largeGaugeSize += 5,
+        valueFontSize: valFontSize +=5,
     });
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
         size: smallGaugeSize += 5,
+        valueFontSize: valFontSize +=5,
     });
 
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
         size: largeGaugeSize += 5,
+        valueFontSize: valFontSize +=5,
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
         size: largeGaugeSize += 5,
+        valueFontSize: valFontSize +=5,
     });
 });
 
@@ -1588,29 +1616,35 @@ $$('.size-click-minus').on('click', function (e) {
     var gauge5 = app.gauge.get('.my-gauge5');
     gauge5.update({
         size: smallGaugeSize -= 5,
+        valueFontSize: valFontSize -=5,
     });
 
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
         size: largeGaugeSize -= 5,
+        valueFontSize: valFontSize -=5,
     });
 
     var gauge3b = app.gauge.get('.my-gauge3b');
     gauge3b.update({
         size: largeGaugeSize -= 5,
+        valueFontSize: valFontSize -=5,
     });
 
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
         size: smallGaugeSize -= 5,
+        valueFontSize: valFontSize -=5,
     });
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
         size: largeGaugeSize -= 5,
+        valueFontSize: valFontSize -=5,
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
         size: largeGaugeSize -= 5,
+        valueFontSize: valFontSize -=5,
     });
 });
 

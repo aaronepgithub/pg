@@ -231,7 +231,7 @@ function postRound() {
   console.log('postRound');
 
   // my rounds
-  myRounds.push({ 'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate) });
+  myRounds.push({ 'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate), 'timeInMilli': _.now() - startTime });
   console.log('myRounds: ', JSON.stringify(myRounds));
 
   //  UPDATE MYROUNDS UI
