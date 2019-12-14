@@ -48,9 +48,9 @@ function tockCallback() {
     var countdownTime = timer.lap();  //elapsed in milli, per round
     totalElapsedTime = _.now() - startTime;
 
-    console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 1) * 5000));
+    console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 5) * 1000));
     
-    if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 1) * 1000)) {
+    if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 5) * 1000)) {
         console.log('lost time, reset');
         $$('.main-status-alerts').html('LOST TIME...');
         $$('.system-status').text("LOST TIME...");
