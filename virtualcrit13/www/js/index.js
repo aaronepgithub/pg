@@ -44,7 +44,7 @@ var totalElapsedTime;
 var roundStartTime;
 
 function tockCallback() {
-    console.log('tockCallback');
+    // console.log('tockCallback');
     var countdownTime = timer.lap();  //elapsed in milli, per round
     totalElapsedTime = _.now() - startTime;
 
@@ -1570,9 +1570,9 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
 
 });
 
-var largeGaugeSize = 190;
-var smallGaugeSize = 200;
-var valFontSize = 45;
+var largeGaugeSize = 180;
+var smallGaugeSize = 180;
+var valFontSize = 40;
 
 
 $$('.size-click-plus').on('click', function (e) {
