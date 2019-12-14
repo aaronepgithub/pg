@@ -48,7 +48,7 @@ function tockCallback() {
     var countdownTime = timer.lap();  //elapsed in milli, per round
     totalElapsedTime = _.now() - startTime;
 
-    console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 5) * 1000));
+    // console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 5) * 1000));
     
     if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 5) * 1000)) {
         console.log('lost time, reset');
@@ -146,6 +146,8 @@ function newRound() {
     // console.log('attempt to play audio');
 
     $$('.main-status-alerts').html('MY LAST CRIT:  ' + round.speed + ' MPH');
+    $$('.item-lastround-speed').html(round.speed + ' MPH');
+
 
     if (tim.timAudio == "ON") {
         if (round.speed > 2) {
@@ -163,6 +165,8 @@ function newRound() {
 
     if (heartrateReadingsRound.length > 0) {
         round.heartrate = ret1num(_.mean(heartrateReadingsRound));
+        $$('.item-lastround-score').html(getScoreFromHeartate(round.heartrate) + ' %MAX');
+
         //console.log('round.heartrate:', round.heartrate);
         heartrateReadingsRound = [];
     }
@@ -341,27 +345,27 @@ function updateChip(n, i, d) {
 
         $$('.chip-gps').html('<div class="chip-media bg-color-green">' +
             '<i class="fa fa-globe"></i></div>' +
-            ' <div class="chip-label">GPS: ' + String(d) + ' </div>');
+            ' <div class="chip-label">SPEED: ' + String(d) + ' </div>');
     }
 
     if (i == 1) {
 
         $$('.chip-hr').html('<div class="chip-media bg-color-green">' +
             '<i class="fa fa-heartbeat"></i></div>' +
-            ' <div class="chip-label">Heartrate: ' + String(d) + ' </div>');
+            ' <div class="chip-label">HEARTRATE: ' + String(d) + ' </div>');
     }
     if (i == 2) {
 
         $$('.chip-csc').html('<div class="chip-media bg-color-green">' +
             '<i class="fa fa-bluetooth-b"></i></div>' +
-            ' <div class="chip-label">Speed: ' + String(d) + ' </div>');
+            ' <div class="chip-label">SPEED (BT): ' + String(d) + ' </div>');
     }
 
     if (i == 3) {
 
         $$('.chip-cad').html('<div class="chip-media bg-color-green">' +
             '<i class="fa fa-bluetooth-b"></i></div>' +
-            ' <div class="chip-label">Cadence: ' + String(d) + ' </div>');
+            ' <div class="chip-label">CADENCE: ' + String(d) + ' </div>');
     }
 
 
@@ -848,7 +852,7 @@ function onBackgroundSuccess(newLocation) {
 
     gpsAvgSpeed = ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
     gpsSpeed = ret1string((distance * 0.62137) / (activityTime / 1000 / 60 / 60));
-    updateChip('gpsSpeed', 0, gpsSpeed + ' Mph');
+    updateChip('gpsSpeed', 0, gpsSpeed + ' MPH');
 
     ui('.item-speed', gpsSpeed + ' MPH');
     ui('.item-average-speed', gpsAvgSpeed + 'MPH (AVG)');
@@ -1445,7 +1449,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         value: 0.1,
         size: largeGaugeSize,
         borderColor: '#ff0000',
-        borderWidth: 10,
+        borderWidth: 5,
         valueText: '0',
         valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
@@ -1466,7 +1470,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         value: 0.1,
         size: largeGaugeSize,
         borderColor: '#ff0000',
-        borderWidth: 10,
+        borderWidth: 5,
         valueText: '0',
         valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
@@ -1529,7 +1533,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         value: 0.1,
         size: largeGaugeSize,
         borderColor: '#ff0000',
-        borderWidth: 10,
+        borderWidth: 5,
         valueText: '0',
         valueFontSize: valFontSize,
         valueTextColor: '#ff0000',
