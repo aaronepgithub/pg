@@ -282,6 +282,12 @@ function startBluetoothConnection(i) {
                         labelText: 'BPM',
                     });
 
+                    gauge3c.update({
+                        value: (hrVal / 2) / 100,
+                        valueText: ret0string(hrVal),
+                        labelText: 'BPM',
+                    });
+
                     var gauge5 = app.gauge.get('.my-gauge5');
                     gauge5.update({
                         value: (Math.round(hrVal / tim.timMaxHeartate * 100 * 10) / 10) / 100,
@@ -1507,13 +1513,13 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
     //CADENCE
     var gauge3b = app.gauge.create({
         el: '.gauge3b',
-        type: 'circle',
+        type: 'semicircle',
         value: 0.1,
-        size: largeGaugeSize,
+        size: smallGaugeSize,
         borderColor: '#ff0000',
         borderWidth: 5,
         valueText: '0',
-        valueFontSize: valFontSize,
+        valueFontSize: valFontSize - 5,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,
@@ -1525,6 +1531,26 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         }
     })
 
+    //HR
+    var gauge3c = app.gauge.create({
+        el: '.gauge3c',
+        type: 'semicircle',
+        value: 0.1,
+        size: smallGaugeSize,
+        borderColor: '#ff0000',
+        borderWidth: 5,
+        valueText: '0',
+        valueFontSize: valFontSize - 5,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 20,
+        labelText: 'BPM',
+        on: {
+            beforeDestroy: function () {
+                console.log('Gauge will be destroyed')
+            }
+        }
+    })
 
 
     var gauge4 = app.gauge.create({
@@ -1593,8 +1619,12 @@ $$('.size-click-plus').on('click', function (e) {
 
     var gauge3b = app.gauge.get('.my-gauge3b');
     gauge3b.update({
-        size: largeGaugeSize += 5,
-        
+        size: smallGaugeSize += 5,
+    });
+
+    var gauge3c = app.gauge.get('.my-gauge3c');
+    gauge3c.update({
+        size: smallGaugeSize += 5,
     });
 
     var gauge3 = app.gauge.get('.my-gauge3');
@@ -1633,8 +1663,12 @@ $$('.size-click-minus').on('click', function (e) {
 
     var gauge3b = app.gauge.get('.my-gauge3b');
     gauge3b.update({
-        size: largeGaugeSize -= 5,
-        
+        size: smallGaugeSize -= 5,
+    });
+
+    var gauge3c = app.gauge.get('.my-gauge3c');
+    gauge3c.update({
+        size: smallGaugeSize -= 5,
     });
 
     var gauge3 = app.gauge.get('.my-gauge3');
