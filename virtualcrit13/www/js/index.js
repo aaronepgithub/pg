@@ -282,6 +282,7 @@ function startBluetoothConnection(i) {
                         labelText: 'BPM',
                     });
 
+                    var gauge3c = app.gauge.get('.my-gauge3c');
                     gauge3c.update({
                         value: (hrVal / 2) / 100,
                         valueText: ret0string(hrVal),
@@ -290,7 +291,7 @@ function startBluetoothConnection(i) {
 
                     var gauge5 = app.gauge.get('.my-gauge5');
                     gauge5.update({
-                        value: (Math.round(hrVal / tim.timMaxHeartate * 100 * 10) / 10) / 100,
+                        value: getScoreFromHeartate(hrVal/tim.timMaxHeartate),
                         valueText: ret0string(hrVal),
                         labelText: 'BPM',
                     });
@@ -1635,7 +1636,7 @@ $$('.size-click-plus').on('click', function (e) {
 
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
-        size: largeGaugeSize += 5,
+        size: smallGaugeSize += 5,
         
     });
     var gauge = app.gauge.get('.my-gauge');
@@ -1678,7 +1679,7 @@ $$('.size-click-minus').on('click', function (e) {
     });
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
-        size: largeGaugeSize -= 5,
+        size: smallGaugeSize -= 5,
         
     });
     var gauge = app.gauge.get('.my-gauge');
