@@ -56,14 +56,16 @@
             </div>
             <div class="title center-main">VIRTUAL CRIT</div>
             <div class="right right-main">
+              <!-- <a class="button tab-link popup-open" href="#" data-popup=.my-popup-dashboard><i
+                class="fa fa-dashboard fa-2x"></i></a>
+              </a> -->
             </div>
           </div>
         </div>
 
-        <div class="subnavbar">
+        <!-- <div class="subnavbar">
           <div class="subnavbar-inner">
             <div class="segmented segmented-raised">
-              <!-- <a class="button tab-link tab1 dynamic-pop" href="#tab1">1</a> -->
               <a class="button tab-link popup-open" href="#" data-popup=.my-popup-dashboard><i
                   class="fa fa-dashboard fa-lg"></i></a>
               <a class="button tab-link popup-open open-my-leaderboard" href="#" data-popup=.my-popup-leaderboard><i
@@ -72,7 +74,7 @@
                   class="fa fa-user fa-lg"></i></a>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Bottom Toolbar -->
         <div class="toolbar toolbar-bottom">
@@ -87,7 +89,12 @@
         <!-- Scrollable page content -->
         <div class="page-content">
 
-          <div class="block-title"></div>
+          <div class="fab fab-center-bottom">
+            <a class="button tab-link popup-open" href="#" data-popup=.my-popup-dashboard><i
+                class="fa fa-bars fa-2x"></i></a>
+          </div>
+
+          <!-- <div class="block-title"></div> -->
           <!-- <div class="block">
             <div class="chip chip-gps">
               <div class="chip-media bg-color-red">
@@ -518,7 +525,7 @@
 
 
 
-        
+
 
         <!-- Dashboard START -->
         <div class="popup my-popup-dashboard">
@@ -549,13 +556,13 @@
               <!-- Floating Action Button -->
               <div class="fab fab-right-bottom size-click-plus">
                 <a href="#">
-                  +
+                  <i class="fa fa-plus fa-2x"></i>
                 </a>
               </div>
               <!-- Another Floating Action Button -->
               <div class="fab fab-left-bottom size-click-minus">
                 <a href="#">
-                  -
+                  <i class="fa fa-minus fa-2x"></i>
                 </a>
               </div>
 
@@ -572,11 +579,16 @@
                         <div class="text-align-center">
                           <div class="gauge demo-gauge my-gauge"></div>
                         </div>
+                        <!-- avgspd -->
                         <div class="block-header card1-font"></div>
-                        <div class="text-align-center">
+                        <div class="block text-align-center">
+                          <div class="gauge1a demo-gauge1a my-gauge1a"></div>
+                        </div>
+                        <!-- hr -->
+                        <div class="block-header card1-font">HEARTRATE</div>
+                        <div class="block text-align-center">
                           <div class="gauge2 demo-gauge2 my-gauge2"></div>
                         </div>
-
                       </div>
                     </div>
 
@@ -605,7 +617,8 @@
                     <!-- SWIPE3 -->
                     <div class="swiper-slide">
                       <div class="block">
-                        <div class="block-header card1-font"><span class="card1-header card1-font">CRIT STATS</span> <span>
+                        <div class="block-header card1-font"><span class="card1-header card1-font">CRIT STATS</span>
+                          <span>
                           </span>
                           <span class="card1-font card1-footer"></span><span> </span> </div>
                         <div class="block text-align-center">
@@ -623,11 +636,9 @@
                     <div class="swiper-slide">
                       <div class="block">
                         <div class="block-header card1-font">MY ROUNDS</div>
-                        <!-- <div class="block"> -->
 
-                          <div class="timeline rounds-timeline">
-                            
-                            <div class="timeline-item">
+                        <div class="timeline rounds-timeline">
+                          <!-- <div class="timeline-item">
                               <div class="timeline-item-date">12:30<small></small></div>
                               <div class="timeline-item-divider"></div>
                               <div class="timeline-item-content">
@@ -637,23 +648,48 @@
                                   <div class="timeline-item-text">Text</div>
                                 </div>
                               </div>
-                            </div>
-
-
-
-                          </div>
-
-
-
-
-                        <!-- </div> -->
+                            </div> -->
+                        </div>
                       </div>
                     </div>
-                    
                     <!-- END SWIPE4 -->
 
 
+                    <!-- SWIPE5 -->
+                    <div class="swiper-slide">
+                      <div class="block">
+                        <div class="block-header card1-font">LEADERBOARD</div>
 
+                        <div class="block block-leaderboard">
+
+                          <div class="data-table">
+                            <table id="leaderboardTable">
+                              <thead>
+                                <tr>
+
+                                  <th class="label-cell">RACER</th>
+                                  <th class="numeric-cell">SPEED (MPH)</th>
+                                  <th class="numeric-cell">SCORE (%MAX)</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+
+                                  <td class="label-cell"></td>
+                                  <td class="numeric-cell"></td>
+                                  <td class="numeric-cell"></td>
+                                </tr>
+
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <!-- END SWIPE5 -->
 
 
 
@@ -715,7 +751,7 @@
               <div class="page-content">
 
                 <div class="block-title"></div>
-                <div class="block block-leaderboard">
+                <!-- <div class="block block-leaderboard">
 
                   <div class="data-table">
                     <table id="leaderboardTable">
@@ -738,7 +774,8 @@
                       </tbody>
                     </table>
                   </div>
-                </div>
+
+                </div> -->
 
               </div>
             </div>

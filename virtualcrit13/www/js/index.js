@@ -49,7 +49,7 @@ function tockCallback() {
     totalElapsedTime = _.now() - startTime;
 
     // console.log('test: ', _.now() - roundStartTime, ((tim.timSecondsPerRound + 5) * 1000));
-    
+
     if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 5) * 1000)) {
         console.log('lost time, reset');
         $$('.main-status-alerts').html('LOST TIME...');
@@ -67,19 +67,19 @@ function tockCallback() {
     var rds = 0;
     if (totals.distance && arrRoundDistances.length > 0) {
         rd = totals.distance - _.last(arrRoundDistances);
-        let secElapsedInRound = tim.timSecondsPerRound - (countdownTime/1000);
+        let secElapsedInRound = tim.timSecondsPerRound - (countdownTime / 1000);
         // console.log('rd, ', rd);
         // console.log('secElapsedInRound, ', secElapsedInRound);
-        
-//        rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
-    if (rd < .01) {
-        // console.log('not far enough, return');
-        return;
-    }
-    if (secElapsedInRound < 2 || secElapsedInRound > (tim.timSecondsPerRound - 2)) {
-        // console.log('not enough or too much time, return');
-        return;
-    }
+
+        //        rds = rd / (((tim.timSecondsPerRound - (countdownTime / 1000))) / 60 / 60);
+        if (rd < .01) {
+            // console.log('not far enough, return');
+            return;
+        }
+        if (secElapsedInRound < 2 || secElapsedInRound > (tim.timSecondsPerRound - 2)) {
+            // console.log('not enough or too much time, return');
+            return;
+        }
 
         if (_.isFinite(rd)) {
             // console.log('rd is a number, ', rd);
@@ -87,26 +87,26 @@ function tockCallback() {
             if (_.isFinite(rd / (secElapsedInRound / 60 / 60))) {
                 rds = ret2num(rd / (secElapsedInRound / 60 / 60));
                 // console.log('rds, ', rds);
-                
-            // $$('.card1-content').html('  MPH/ROUND:  ' + ret2num(rds));
-            // $$('.card1-header').html('ROUND ' + roundsComplete + ' : ' + ret2num(rd) + ' MILES/CRIT');
-            $$('.card1-header').html(ret2string(rd) + ' MILES/CRIT');
-            $$('.card1-footer').html(timer.msToTimecode(countdownTime));
 
-            if (popupGauge) {
-                var gauge4 = app.gauge.get('.my-gauge4');
-                gauge4.update({
-                    value: ret1num(secElapsedInRound/tim.timSecondsPerRound),
-                    valueText: ret1string(rds),
-                });
+                // $$('.card1-content').html('  MPH/ROUND:  ' + ret2num(rds));
+                // $$('.card1-header').html('ROUND ' + roundsComplete + ' : ' + ret2num(rd) + ' MILES/CRIT');
+                $$('.card1-header').html(ret2string(rd) + ' MILES/CRIT');
+                $$('.card1-footer').html(timer.msToTimecode(countdownTime));
+
+                if (popupGauge) {
+                    var gauge4 = app.gauge.get('.my-gauge4');
+                    gauge4.update({
+                        value: ret1num(secElapsedInRound / tim.timSecondsPerRound),
+                        valueText: ret1string(rds),
+                    });
                 } else {
                     // console.log('something bad happend');
                     return;
-                    
+
                 }
             }
 
-            
+
 
 
         }
@@ -125,6 +125,8 @@ function newRound() {
     console.log('newRound, roundsComplete: ', roundsComplete);
     roundStartTime = _.now();
     arrRoundDistances.push(totals.distance);  //already in miles
+
+    let rank = (_.sortedIndex((_.sortBy(arrRoundDistances)), totals.distance)) + 1
 
     // console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
 
@@ -152,7 +154,7 @@ function newRound() {
     if (tim.timAudio == "ON") {
         if (round.speed > 2) {
             TTS.speak({
-                text: ret1string(round.speed) + ' Miles Per Hour.',
+                text: ret1string(round.speed) + ' Miles Per Hour.  Number,' + rank,
                 locale: 'en-US',
                 rate: 1.5
             }, function () {
@@ -272,7 +274,7 @@ function startBluetoothConnection(i) {
                 heartrateReadingsRound.push(data[1]);
                 ui('.item-hr-avg', (_.mean(heartrateReadings).toFixed(1)) + ' BPM (AVG)');
                 totals.heartrate = ret1num(_.mean(heartrateReadings));
-                
+
 
                 if (popupGauge) {
                     var gauge2 = app.gauge.get('.my-gauge2');
@@ -291,7 +293,7 @@ function startBluetoothConnection(i) {
 
                     var gauge5 = app.gauge.get('.my-gauge5');
                     gauge5.update({
-                        value: getScoreFromHeartate(hrVal/tim.timMaxHeartate),
+                        value: getScoreFromHeartate(hrVal / tim.timMaxHeartate),
                         valueText: ret0string(hrVal),
                         labelText: 'BPM',
                     });
@@ -438,7 +440,7 @@ function startup() {
     $$('.total-time').text(totalTime);
     $$('.system-status').text(systemStatus);
     var popup = app.popup.create({
-    el: $('.my-popup-dashboard'),
+        el: $('.my-popup-dashboard'),
     })
 
     if (app.device.android) {
@@ -781,7 +783,7 @@ var savedLocations = [];
 
 function publishSavedLocations() {
     console.log('publishSavedLocations');
-    if (savedLocations.length < 20) {return;}
+    if (savedLocations.length < 20) { return; }
 
 }
 
@@ -881,22 +883,28 @@ function onBackgroundSuccess(newLocation) {
                 valueText: gpsSpeed,
             });
 
+            var gauge1a = app.gauge.get('.my-gauge1a');
+            gauge1a.update({
+                value: (parseFloat(gpsAvgSpeed) * 3.75) / 100,
+                valueText: gpsAvgSpeed,
+            });
+
             var gauge3 = app.gauge.get('.my-gauge3');
             gauge3.update({
                 value: (parseFloat(gpsSpeed) * 3.75) / 100,
                 valueText: gpsSpeed,
             });
         }
-        if (popupGauge && totals.heartrate < 1) {
-            if (popupGauge) {
-                var gauge2 = app.gauge.get('.my-gauge2');
-                gauge2.update({
-                    value: (parseFloat(gpsSpeed) * 3.75) / 100,
-                    valueText: gpsAvgSpeed,
-                    labelText: 'AVG MPH',
-                });
-            }
-        }
+        // if (popupGauge && totals.heartrate < 1) {
+        //     if (popupGauge) {
+        //         var gauge2 = app.gauge.get('.my-gauge2');
+        //         gauge2.update({
+        //             value: (parseFloat(gpsSpeed) * 3.75) / 100,
+        //             valueText: gpsAvgSpeed,
+        //             labelText: 'AVG MPH',
+        //         });
+        //     }
+        // }
     }
 
 
@@ -1204,6 +1212,11 @@ function calculateSpeed() {
                 value: (bluetoothValues.speed * 3.75) / 100,
                 valueText: ret1string(bluetoothValues.speed),
             });
+            var gauge1a = app.gauge.get('.my-gauge1a');
+            gauge1a.update({
+                value: (bluetoothValues.speedAverage * 3.75) / 100,
+                valueText: ret1string(bluetoothValues.speedAverage),
+            });
 
             var gauge3 = app.gauge.get('.my-gauge3');
             gauge3.update({
@@ -1212,16 +1225,16 @@ function calculateSpeed() {
             });
 
 
-            if (totals.heartrate < 1) {
-                if (popupGauge) {
-                    var gauge2 = app.gauge.get('.my-gauge2');
-                    gauge2.update({
-                        value: (parseFloat(ret1string(bluetoothValues.speedAverage)) * 3.75) / 100,
-                        valueText: ret1string(bluetoothValues.speedAverage),
-                        labelText: 'AVG MPH',
-                    });
-                }
-            }
+            // if (totals.heartrate < 1) {
+            //     if (popupGauge) {
+            //         var gauge2 = app.gauge.get('.my-gauge2');
+            //         gauge2.update({
+            //             value: (parseFloat(ret1string(bluetoothValues.speedAverage)) * 3.75) / 100,
+            //             valueText: ret1string(bluetoothValues.speedAverage),
+            //             labelText: 'AVG MPH',
+            //         });
+            //     }
+            // }
         }
 
 
@@ -1398,18 +1411,18 @@ $$('.my-popup-leaderboard').on('popup:opened', function (e) {
 
 function publishRoundTimelineItem() {
     var item = '' +
-    '<div class="timeline-item">' +
-    '<div class="timeline-item-date">'+  _.last(myRounds).timer  +'<small></small></div>' +
-    '<div class="timeline-item-divider"></div>' +
-    '<div class="timeline-item-content">' +
-      '<div class="timeline-item-inner">' +
-        '<div class="timeline-item-title">'+  _.last(myRounds).speed  + ' MPH</div>' +
-        '<div class="timeline-item-subtitle">'+  _.last(myRounds).heartrate  + ' BPM</div>' +
-        '<div class="timeline-item-text">'+  _.last(myRounds).score  +' %MAX</div>' +
-      '</div>' +
-    '</div>' +
-  '</div>' +
-    '';
+        '<div class="timeline-item">' +
+        '<div class="timeline-item-date">' + _.last(myRounds).timer + '<small></small></div>' +
+        '<div class="timeline-item-divider"></div>' +
+        '<div class="timeline-item-content">' +
+        '<div class="timeline-item-inner">' +
+        '<div class="timeline-item-title">' + _.last(myRounds).speed + ' MPH</div>' +
+        '<div class="timeline-item-subtitle">' + _.last(myRounds).heartrate + ' BPM</div>' +
+        '<div class="timeline-item-text">' + _.last(myRounds).score + ' %MAX</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '';
 
     $$('.rounds-timeline').prepend(item);
 }
@@ -1444,14 +1457,29 @@ $$('.my-popup-myrounds').on('popup:opened', function (e) {
 
 });
 
-
+var swiper;
 var firstOpenDashboard = true;
+function swiperCallbacks() {
+    swiper.on('slideChange', function () {
+        console.log('slide changed');
+        console.log('Slide Index, ', swiper.realIndex);
+        if (swiper.realIndex == 3 || swiper.realIndex == 4) {
+            $('.fab-right-bottom').hide();
+            $('.fab-left-bottom').hide();
+        } else {
+            $('.fab-right-bottom').show();
+            $('.fab-left-bottom').show();
+        }
+    });
+
+}
 
 $$('.my-popup-dashboard').on('popup:opened', function (e) {
     console.log('my-popup-dashboard popup opened');
 
     if (firstOpenDashboard == true) {
-        var swiper = app.swiper.create('.swiper-container', {
+        // var swiper = app.swiper.create('.swiper-container', {
+        swiper = app.swiper.create('.swiper-container', {
             speed: 400,
             spaceBetween: 100,
             // direction: 'vertical',
@@ -1468,6 +1496,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
                 prevEl: '.swiper-button-prev',
             },
         });
+        swiperCallbacks();
     }
     firstOpenDashboard = false;
     popupGauge = true;
@@ -1491,6 +1520,26 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
             beforeDestroy: function () {
                 console.log('Gauge will be destroyed')
             },
+        }
+    })
+
+    var gauge1a = app.gauge.create({
+        el: '.gauge1a',
+        type: 'semicircle',
+        value: 0.1,
+        size: smallGaugeSize,
+        borderColor: '#ff0000',
+        borderWidth: 5,
+        valueText: '0',
+        valueFontSize: valFontSize - 5,
+        valueTextColor: '#ff0000',
+        valueFontWeight: 700,
+        labelFontSize: 12,
+        labelText: 'MPH (AVERAGE)',
+        on: {
+            beforeDestroy: function () {
+                console.log('gauge1a will be destroyed')
+            }
         }
     })
 
@@ -1522,7 +1571,7 @@ $$('.my-popup-dashboard').on('popup:opened', function (e) {
         borderColor: '#ff0000',
         borderWidth: 5,
         valueText: '0',
-        valueFontSize: valFontSize  - 5,
+        valueFontSize: valFontSize - 5,
         valueTextColor: '#ff0000',
         valueFontWeight: 700,
         labelFontSize: 20,
@@ -1632,13 +1681,13 @@ $$('.size-click-plus').on('click', function (e) {
     var gauge5 = app.gauge.get('.my-gauge5');
     gauge5.update({
         size: smallGaugeSize += 5,
-        
+
     });
 
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
         size: largeGaugeSize += 5,
-        
+
     });
 
     var gauge3b = app.gauge.get('.my-gauge3b');
@@ -1654,18 +1703,24 @@ $$('.size-click-plus').on('click', function (e) {
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
         size: smallGaugeSize += 5,
-        
+
     });
 
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
         size: smallGaugeSize += 5,
-        
+
     });
+
+    var gauge1a = app.gauge.get('.my-gauge1a');
+    gauge1a.update({
+        size: smallGaugeSize += 5,
+    });
+
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
         size: largeGaugeSize += 5,
-        
+
     });
 });
 
@@ -1676,13 +1731,13 @@ $$('.size-click-minus').on('click', function (e) {
     var gauge5 = app.gauge.get('.my-gauge5');
     gauge5.update({
         size: smallGaugeSize -= 5,
-        
+
     });
 
     var gauge4 = app.gauge.get('.my-gauge4');
     gauge4.update({
         size: largeGaugeSize -= 5,
-        
+
     });
 
     var gauge3b = app.gauge.get('.my-gauge3b');
@@ -1698,17 +1753,20 @@ $$('.size-click-minus').on('click', function (e) {
     var gauge3 = app.gauge.get('.my-gauge3');
     gauge3.update({
         size: smallGaugeSize -= 5,
-        
+
     });
     var gauge2 = app.gauge.get('.my-gauge2');
     gauge2.update({
         size: smallGaugeSize -= 5,
-        
+    });
+    var gauge1a = app.gauge.get('.my-gauge1a');
+    gauge1a.update({
+        size: smallGaugeSize -= 5,
     });
     var gauge = app.gauge.get('.my-gauge');
     gauge.update({
         size: largeGaugeSize -= 5,
-        
+
     });
 });
 

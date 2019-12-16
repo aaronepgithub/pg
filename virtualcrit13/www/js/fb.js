@@ -14,7 +14,7 @@ function listenRoundsLeader() {
       arrRoundLeader.push(childData);
     });
     //console.log('arrRoundLeader: ', JSON.stringify(arrRoundLeader));
-    if (arrRoundLeader.length < 1) {return;}
+    if (arrRoundLeader.length < 1) { return; }
     let v = _.values(arrRoundLeader);
     //console.log('arrRoundLeader - values: ', JSON.stringify(v));
     let name = String(v[0].fb_timName).toUpperCase();
@@ -253,7 +253,9 @@ function postRound() {
     e++;
 
   });
-  //  END UI UPDATE
+  //  END UI UPDATE FOR DATA TABLE
+
+
 
 
   //TODO  CHANGE THESE VALUES TO PULL FROM LATEST OBJECT STORED IN rounds[]
