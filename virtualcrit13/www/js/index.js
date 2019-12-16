@@ -437,6 +437,9 @@ function startup() {
     arrRoundDistances.push(0);
     $$('.total-time').text(totalTime);
     $$('.system-status').text(systemStatus);
+    var popup = app.popup.create({
+    el: $('.my-popup-dashboard'),
+    })
 
     if (app.device.android) {
         console.log('It is android device');
@@ -1247,7 +1250,7 @@ function startBleSimulator() {
     var i;
     var w = 582; var wt = 6000;
 
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < 500; i++) {
         w += 2;
         wt += (1000 + Math.round(Math.random() * 1000));
         bleSimdata.push({ 'wheel': w, 'wheelTime': wt });
@@ -1389,7 +1392,27 @@ $$('.my-popup-leaderboard').on('popup:opened', function (e) {
 });
 
 
-//t3
+// var popup = app.popup.create({
+//     el: $('.my-popup-dashboard'),
+//   })
+
+function publishRoundTimelineItem() {
+    var item = '' +
+    '<div class="timeline-item">' +
+    '<div class="timeline-item-date">'+  _.last(myRounds).timer  +'<small></small></div>' +
+    '<div class="timeline-item-divider"></div>' +
+    '<div class="timeline-item-content">' +
+      '<div class="timeline-item-inner">' +
+        '<div class="timeline-item-title">'+  _.last(myRounds).speed  + ' MPH</div>' +
+        '<div class="timeline-item-subtitle">'+  _.last(myRounds).heartrate  + ' BPM</div>' +
+        '<div class="timeline-item-text">'+  _.last(myRounds).score  +' %MAX</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>' +
+    '';
+
+    $$('.rounds-timeline').prepend(item);
+}
 
 var t3Content = '';
 $$('.my-popup-myrounds').on('popup:opened', function (e) {

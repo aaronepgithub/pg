@@ -233,6 +233,7 @@ function postRound() {
   // my rounds
   myRounds.push({ 'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate), 'timeInMilli': _.now() - startTime });
   console.log('myRounds: ', JSON.stringify(myRounds));
+  publishRoundTimelineItem();
 
   //  UPDATE MYROUNDS UI
   $('#myroundsTable tbody tr').remove();
