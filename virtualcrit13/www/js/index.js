@@ -296,7 +296,7 @@ function startBluetoothConnection(i) {
 
                     var gauge5 = app.gauge.get('.my-gauge5');
                     gauge5.update({
-                        value: getScoreFromHeartate(hrVal / tim.timMaxHeartate),
+                        value: (hrVal / 2) / 100,
                         valueText: ret0string(getScoreFromHeartate(hrVal)),
                         labelText: ' %MAX',
                     });
