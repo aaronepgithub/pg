@@ -54,7 +54,7 @@ function listenRounds() {
       arrRounds.push(childData);
     });
     //console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
-    console.log('arrRounds.length:  ', arrRounds.length);
+    //console.log('arrRounds.length:  ', arrRounds.length);
 
 
     let v = _.values(arrRounds);
@@ -65,7 +65,7 @@ function listenRounds() {
 
     //console.log('New Rounds Leader');
     //console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
-    console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
+    //console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
 
     $$('.main-status-alerts').html('LEADING:  ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",   " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
@@ -108,7 +108,7 @@ function listenRoundsHR() {
       arrRoundsHR.push(childData);
     });
     //console.log('\n\narrRounds:\n', JSON.stringify(arrRounds));
-    console.log('arrRoundsHR.length:  ', arrRoundsHR.length);
+    //console.log('arrRoundsHR.length:  ', arrRoundsHR.length);
 
 
     let v = _.values(arrRoundsHR);
@@ -118,7 +118,7 @@ function listenRoundsHR() {
     //let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
 
     //console.log('New Rounds Leader');
-    console.log('arrRoundsHR, arrScore[0]', arrScoreHR[0].fb_timName, arrScoreHR[0].a_scoreRoundLast);
+    //console.log('arrRoundsHR, arrScore[0]', arrScoreHR[0].fb_timName, arrScoreHR[0].a_scoreRoundLast);
     //console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
     $$('.item-crit-score-name').html(String(arrScoreHR[0].fb_timName).toUpperCase());
     $$('.item-crit-score-value').html(ret1string(arrScoreHR[0].a_scoreRoundLast) + '%');
@@ -155,10 +155,10 @@ function listenTotals() {
     if (arrTotals.length < 1) { return; }
 
     let i = _.orderBy(arrTotals, ['a_speedTotal'], ['desc']);
-    console.log('arrTotals, i.name, i.a_speedTotal, ' + i[0].a_speedTotal + ' MPH, ' + i[0].fb_timName);
+    //console.log('arrTotals, i.name, i.a_speedTotal, ' + i[0].a_speedTotal + ' MPH, ' + i[0].fb_timName);
 
     let s = _.orderBy(arrTotals, ['a_scoreHRTotal'], ['desc']);
-    console.log('arrTotals, i.name, i.a_scoreHRTotal, ' + s[0].a_scoreHRTotal + ' %MAX, ' + s[0].fb_timName);
+    //console.log('arrTotals, i.name, i.a_scoreHRTotal, ' + s[0].a_scoreHRTotal + ' %MAX, ' + s[0].fb_timName);
 
   });
 }
@@ -195,7 +195,7 @@ function postTotals() {
 
       } else {
         console.log('postTotals success');
-        console.log(JSON.stringify(totals));
+        //console.log(JSON.stringify(totals));
       }
     });
 }
@@ -214,8 +214,8 @@ function updateMyRoundsTable() {
   // let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
   var e = 1;
   _.forEach(myRounds, function (value) {
-    console.log('myRounds:');
-    console.log(JSON.stringify(value));
+    // console.log('myRounds:');
+    // console.log(JSON.stringify(value));
     t3Content = '<tr>' +
       '<td class="label-cell">' + String(value.timer) + '</td>' +
       '<td class="numeric-cell">' + ret1string(value.speed) + '</td>' +
@@ -232,7 +232,7 @@ function postRound() {
 
   // my rounds
   myRounds.push({ 'speed': round.speed, 'heartrate': round.heartrate, 'timer': timer.msToTimecode(totalElapsedTime), 'score': getScoreFromHeartate(round.heartrate), 'timeInMilli': _.now() - startTime });
-  console.log('myRounds: ', JSON.stringify(myRounds));
+  // console.log('myRounds: ', JSON.stringify(myRounds));
   publishRoundTimelineItem();
 
   //  UPDATE MYROUNDS UI
@@ -241,8 +241,8 @@ function postRound() {
   // let arrSpeed = _.orderBy(v, 'a_speedRoundLast', 'desc');
   var e = 1;
   _.forEach(myRounds, function (value) {
-    console.log('myRounds:');
-    console.log(JSON.stringify(value));
+    // console.log('myRounds:');
+    // console.log(JSON.stringify(value));
     t3Content = '<tr>' +
       '<td class="label-cell">' + String(value.timer) + '</td>' +
       '<td class="numeric-cell">' + ret1string(value.speed) + '</td>' +
@@ -287,7 +287,7 @@ function postRound() {
 
       } else {
         console.log('postRound success');
-        console.log(JSON.stringify(round));
+        // console.log(JSON.stringify(round));
         postTotals();
       }
     });

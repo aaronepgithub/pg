@@ -121,20 +121,23 @@ function tockComplete() {
     newRound();
 }
 
+var actualDistancesPerRound = [];
 function newRound() {
     console.log('newRound, roundsComplete: ', roundsComplete);
     roundStartTime = _.now();
     arrRoundDistances.push(totals.distance);  //already in miles
 
-    let rank = (_.sortedIndex((_.sortBy(arrRoundDistances)), totals.distance)) + 1
-
-    // console.log('arrRoundDistances\n', JSON.stringify(arrRoundDistances));
-
     let a = _.last(arrRoundDistances);
     let b = _.nth(arrRoundDistances, -2)
     // console.log('a,b', a, b);
+
     let distanceInMostRecendRound = a - b;  //miles
-    // console.log('distanceInMostRecendRound', distanceInMostRecendRound);
+    console.log('distanceInMostRecendRound', distanceInMostRecendRound);
+    
+    actualDistancesPerRound.push(distanceInMostRecendRound);
+    let rank = actualDistancesPerRound.length - (_.sortedIndex((_.sortBy(actualDistancesPerRound)), distanceInMostRecendRound))
+    console.log('actualDistancesPerRound:  ', JSON.stringify(actualDistancesPerRound));
+    console.log('rank, ', rank);
 
     //ret1string((totalDistance * 0.62137) / (totalActivyTime / 1000 / 60 / 60));
 
