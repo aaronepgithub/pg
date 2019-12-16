@@ -297,8 +297,8 @@ function startBluetoothConnection(i) {
                     var gauge5 = app.gauge.get('.my-gauge5');
                     gauge5.update({
                         value: getScoreFromHeartate(hrVal / tim.timMaxHeartate),
-                        valueText: ret0string(hrVal),
-                        labelText: 'BPM',
+                        valueText: ret0string(getScoreFromHeartate(hrVal)),
+                        labelText: ' %MAX',
                     });
 
                 }
@@ -895,7 +895,7 @@ function onBackgroundSuccess(newLocation) {
     updateChip('gpsSpeed', 0, gpsSpeed + ' MPH');
 
     ui('.item-speed', gpsSpeed + ' MPH');
-    ui('.item-average-speed', gpsAvgSpeed + 'MPH (AVG)');
+    ui('.item-average-speed', gpsAvgSpeed + ' MPH (AVG)');
     ui('.item-distance', ret2string(totalDistance * 0.62137) + ' MILES');
 
 
@@ -1222,10 +1222,10 @@ function calculateSpeed() {
 
     if (bluetoothValues.distance) {
         ui('.item-distance-bt', ret2string(bluetoothValues.distance) + ' MPH');
-        $$('.item-distance-bt').text((ret2string(bluetoothValues.distance)) + ' Miles');
+        $$('.item-distance-bt').text((ret2string(bluetoothValues.distance)) + ' MILES');
     }
     if (bluetoothValues.speedAverage) {
-        ui('.item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH');
+        ui('.item-average-speed-bt', ret1string(bluetoothValues.speedAverage) + ' MPH (AVG)');
     } //convert to mph
 
     if (tim.timMode == 'ON') {
