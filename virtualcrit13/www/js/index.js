@@ -52,8 +52,8 @@ function tockCallback() {
 
     if (_.now() - roundStartTime > ((tim.timSecondsPerRound + 5) * 1000)) {
         console.log('lost time, reset');
-        $$('.main-status-alerts').html('LOST TIME...');
-        $$('.system-status').text("LOST TIME...");
+        // $$('.main-status-alerts').html('LOST TIME...');
+        // $$('.system-status').text("LOST TIME...");
         // timer.stop();
         // tockComplete();
     }
@@ -157,7 +157,7 @@ function newRound() {
     if (tim.timAudio == "ON") {
         if (round.speed > 2) {
             TTS.speak({
-                text: ret1string(round.speed) + ' Miles Per Hour.  Number,' + rank,
+                text: ret1string(round.speed) + ' Miles Per Hour.  Ranking,' + rank,
                 locale: 'en-US',
                 rate: 1.5
             }, function () {
@@ -476,6 +476,16 @@ function startup() {
         $$(".span-timAudio").text(tim.timAudio);
     };
 
+    //sport
+    if (localStorage.getItem('timSport')) {
+        tim.timSport = localStorage.getItem('timSport');
+        $$(".span-timSport").text(tim.timSport);
+    } else {
+        localStorage.setItem('timSport', tim.timSport);
+        $$(".span-timSport").text(tim.timSport);
+    };
+
+
     //mode
     if (localStorage.getItem('timMode')) {
         tim.timMode = localStorage.getItem('timMode');
@@ -621,7 +631,22 @@ $$('.item-timAudio').on('click', function (e) {
         tim.timAudio = "OFF";
     }
     console.log('timAudio: ', tim.timAudio);
+});
 
+//SET SPORT
+$$('.item-timSport').on('click', function (e) {
+    console.log('timSport: ', tim.timSport, $$('.span-timSport').text());
+
+    if ($$('.span-timSport').text() == "BIKE") {
+        $$('.span-timSport').text("RUN");
+        localStorage.setItem('timSport', "RUN");
+        tim.timSport = "RUN";
+    } else {
+        $$('.span-timSport').text("BIKE");
+        localStorage.setItem('timSport', "BIKE");
+        tim.timSport = "BIKE";
+    }
+    console.log('timSport: ', tim.timSport);
 });
 
 //SET MODE
@@ -736,7 +761,7 @@ function startGPSTracking() {
 
     BackgroundGeolocation.on('stationary', function (stationaryLocation) {
         console.log('[INFO] stationary');
-        $$('.main-status-alerts').text('Stationary');
+        $$('.main-status-alerts').text('Waiting for Movement...');
     });
 
     //   BackgroundGeolocation.on('authorization', function(status) {

@@ -1,10 +1,19 @@
 var database = firebase.database();
 
+
 //single round leader
 function listenRoundsLeader() {
   console.log('Listen for RoundLeader Change');
+  if (tim.timSport == "BIKE") {
+
+  }
 
   var roundsLeaderRef = firebase.database().ref('rounds/' + getTodaysDate());
+
+  if (tim.timSport == "RUN") {
+    roundsLeaderRef = firebase.database().ref('rounds/run/' + getTodaysDate());
+  }
+
   roundsLeaderRef.limitToLast(1).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRoundLeader = [];
@@ -45,6 +54,10 @@ function listenRoundsLeader() {
 function listenRounds() {
   console.log('Listen for Rounds Changes');
   var roundsRef = firebase.database().ref('rounds/' + getTodaysDate());
+  if (tim.timSport == "RUN") {
+    roundsRef = firebase.database().ref('rounds/run/' + getTodaysDate());
+  }
+
   roundsRef.limitToLast(100).orderByChild('a_speedRoundLast').on('value', function (snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRounds = [];
@@ -67,10 +80,13 @@ function listenRounds() {
     //console.log('arrRounds, arrScore[0]', arrScore[0].fb_timName, arrScore[0].a_scoreRoundLast);
     //console.log('arrRounds, arrSpeed[0]', arrSpeed[0].fb_timName, arrSpeed[0].a_speedRoundLast);
 
-    $$('.main-status-alerts').html('LEADING:  ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",   " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+    //$$('.main-status-alerts').html('LEADING:  ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",   " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
     $$('.item-crit-speed-name').html(String(arrSpeed[0].fb_timName).toUpperCase());
     $$('.item-crit-speed-value').html(ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
 
+    setTimeout(() => {
+      $$('.main-status-alerts').html('LEADING:  ' + String(arrSpeed[0].fb_timName).toUpperCase() + ",   " + ret1string(arrSpeed[0].a_speedRoundLast) + ' MPH');
+    }, 15000);
 
 
     $('#leaderboardTable tbody tr').remove();
@@ -99,6 +115,9 @@ var arrRoundsHR = [];
 function listenRoundsHR() {
   console.log('Listen for Rounds Changes, sorted by HR');
   var roundsRefHR = firebase.database().ref('rounds/' + getTodaysDate());
+  if (tim.timSport == "RUN") {
+    roundsRefHR = firebase.database().ref('rounds/run' + getTodaysDate());
+  }
   roundsRefHR.limitToLast(3).orderByChild('a_scoreRoundLast').on('value', function (snapshot) {
     //console.log('RoundsDB\n'+JSON.stringify(snapshot));
     arrRoundsHR = [];
@@ -140,6 +159,9 @@ function listenTotals() {
   console.log('Listen for Totals Changes ' + getTodaysDate());
   //var totalsRef = database.ref('totals/' + getTodaysDate());
   var totalsRef = firebase.database().ref('totals/' + getTodaysDate());
+  if (tim.timSport == "RUN") {
+    totalsRef = firebase.database().ref('totals/run/' + getTodaysDate());
+  }
   totalsRef.on('value', function (snapshot) {
     //console.log('TotalsDB\n'+JSON.stringify(snapshot));
     arrTotals = [];
@@ -169,8 +191,13 @@ var arrTotals = [];
 
 function postTotals() {
   console.log('postTotals');
+   
+  var u = 'totals/';
+  if (tim.timSport == "RUN") {
+    u = 'totals/run/'
+  }
 
-  firebase.database().ref('totals/' + getTodaysDate() + '/' + tim.timName + '/').set({
+  firebase.database().ref(u + getTodaysDate() + '/' + tim.timName + '/').set({
     a_scoreHRTotal: getScoreFromHeartate(totals.heartrate),
     a_scoreHRRoundLast: getScoreFromHeartate(totals.heartrate),
     a_speedTotal: totals.speed,
@@ -255,11 +282,12 @@ function postRound() {
   });
   //  END UI UPDATE FOR DATA TABLE
 
+  var u = 'rounds/';
+  if (tim.timSport == "RUN") {
+    u = 'rounds/run/'
+  }
 
-
-
-  //TODO  CHANGE THESE VALUES TO PULL FROM LATEST OBJECT STORED IN rounds[]
-  firebase.database().ref('rounds/' + getTodaysDate() + '/').push({
+  firebase.database().ref(u + getTodaysDate() + '/').push({
     a_scoreRoundLast: getScoreFromHeartate(round.heartrate),
     a_speedRoundLast: round.speed,
     a_calcDurationPost: timer.msToTimecode(totalElapsedTime),

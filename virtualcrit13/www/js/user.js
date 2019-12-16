@@ -7,6 +7,7 @@ var tim = {
     timMaxHeartate: 185,
     timSecondsPerRound: 300,
     timMode: 'OFF',
+    timSport: 'BIKE',
 }
 
 //STRINGS AND IMPERIAL?
