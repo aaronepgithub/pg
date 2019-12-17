@@ -133,7 +133,7 @@ function newRound() {
 
     let distanceInMostRecendRound = a - b;  //miles
     console.log('distanceInMostRecendRound', distanceInMostRecendRound);
-    
+
     actualDistancesPerRound.push(distanceInMostRecendRound);
     let rank = actualDistancesPerRound.length - (_.sortedIndex((_.sortBy(actualDistancesPerRound)), distanceInMostRecendRound))
     console.log('actualDistancesPerRound:  ', JSON.stringify(actualDistancesPerRound));
@@ -222,19 +222,35 @@ $$('.device-ul').on('taphold', 'li', function (e) {
 function startBluetoothDisconnection(i) {
     var deviceClicked = scannedDevices[i];
     console.log('startBluetoothDisconnection:  ' + scannedDevices[i].name);
-    //TODO:  CHANGE TO SERVICES/CHAR INUSE
+    $$('.main-status-alerts').text("Requesting to release HR device");
+
     ble.stopNotification(deviceClicked.id, "180d", "2a37", function (s) {
         console.log('stop notify success, calling disconnect');
-        ble.disconnect(deviceClicked.id, function () { console.log('disconnect success'); }, function () { console.log('disconnect failed'); });
+        $$('.main-status-alerts').text("Stop notify successful, requesting disconnect");
+        ble.disconnect(deviceClicked.id, function () {
+            console.log('disconnect success');
+            $$('.main-status-alerts').text("Disconnected");
+        }, function () {
+            console.log('disconnect failed');
+        });
     }, function (e) {
         console.log('stop notify failure');
     });
 
     ble.stopNotification(deviceClicked.id, "1816", "2A5B", function (s) {
         console.log('stop notify success, calling disconnect CSC');
-        ble.disconnect(deviceClicked.id, function () { console.log('disconnect success CSC'); }, function () { console.log('disconnect failed CSC'); });
+        $$('.main-status-alerts').text("Stopped CSC notification, Requesting to release CSC");
+        ble.disconnect(deviceClicked.id, function () {
+            console.log('disconnect success CSC');
+            $$('.main-status-alerts').text("Successful CSC disconnection");
+        }, function () {
+            console.log('disconnect failed CSC');
+            $$('.main-status-alerts').text("Disconnect HR failed.");
+        });
     }, function (e) {
         console.log('stop notify failure CSC');
+        $$('.main-status-alerts').text("Disconnect failed.");
+        $$('.main-status-alerts').text("Disconnect, CSC, failed.");
     });
 
 }
