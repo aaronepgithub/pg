@@ -834,7 +834,7 @@ function publishSavedLocations() {
 function onBackgroundSuccess(newLocation) {
     // console.log('onBackgroundSuccess');
 
-    savedLocations.push(newLocation);
+    // savedLocations.push(newLocation);
 
     if (lastLatitude == -2) {
         lastLatitude = -1;
