@@ -7,42 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-battery-status": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-ble-central": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-geolocation": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-globalization": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-media-capture": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
-    "cordova-plugin-vibration": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
-    },
     "cordova-plugin-background-geolocation": {
       "GOOGLE_PLAY_SERVICES_VERSION": "11+",
       "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
@@ -52,13 +16,49 @@
       "ACCOUNT_LABEL": "@string/app_name",
       "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
       "CONTENT_AUTHORITY": "$PACKAGE_NAME",
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
+    "cordova-plugin-battery-status": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-ble-central": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-media-capture": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
     },
     "cordova-plugin-tts": {
-      "PACKAGE_NAME": "com.phonegap.virtualcrit"
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.virtualcrit.virtualcritii"
     }
   },
   "dependent_plugins": {}

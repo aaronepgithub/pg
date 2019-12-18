@@ -41,8 +41,8 @@
       "cordova-plugin-tts": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   },
   "dependencies": {
